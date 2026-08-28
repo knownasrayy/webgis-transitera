@@ -1,0 +1,75 @@
+# 🚆 TransitERA WebGIS
+**MAPID WebGIS Competition 2026 Submission**
+
+![TransitERA Preview](webdev/frontend/public/assets/landing/LOGO.png)
+
+TransitERA adalah platform WebGIS analitik berbasis **Kecerdasan Buatan (Spatial AI)** dan **Ekonometrika Spasial** untuk mengukur, memprediksi, dan mengoptimalkan kawasan *Transit-Oriented Development* (TOD) di Surabaya Raya. Platform ini dirancang untuk menjembatani kesenjangan informasi antara tiga pilar utama pembangunan kota: **Pemerintah**, **Investor/Bisnis**, dan **Masyarakat/Komuter**.
+
+---
+
+## ✨ Fitur Utama
+
+### 1. Spatial Engine & 5D TOD Scoring
+TransitERA tidak menggunakan radius lingkaran konvensional, melainkan **H3 Hexagonal Grid (Resolusi 8 & 9)** dari Uber untuk partisi spasial yang presisi. Kami mengukur *TOD Readiness Score* (0-100) menggunakan **Analytic Hierarchy Process (AHP)** pada 5 Dimensi Utama (5D):
+- **Density:** Kepadatan penduduk & intensitas bangunan.
+- **Diversity:** Percampuran guna lahan (*Land Use Mix*).
+- **Design:** Kualitas jalur pedestrian & *walkability index* (berbasis OSMnx).
+- **Destination:** Aksesibilitas dalam 15 menit.
+- **Distance to Transit:** Jarak ke simpul SRRL dan Feeder WiraWiri.
+
+### 2. Spatial Durbin Model (SDM) untuk Prediksi Nilai Tanah
+TransitERA tidak hanya mengukur infrastruktur, tapi juga potensi ekonomi. Menggunakan ekonometrika spasial (SDM via PySAL), platform ini memprediksi **% Kenaikan Nilai Jual Objek Pajak (NJOP Premium)** dari sebuah parsel tanah akibat efek langsung (*direct effect*) dan efek limpahan tata ruang tetangga (*spatial spillover*).
+
+### 3. Asisten Spatial AI (Gemini)
+Dilengkapi dengan asisten obrolan cerdas bertenaga Google Gemini. AI ini memahami konteks spasial (RAG), mampu menjawab pertanyaan terkait kelayakan investasi stasiun tertentu, membandingkan antar-koridor, dan **secara otomatis menggerakkan viewport peta (FlyTo)** serta mengubah *layer* sesuai instruksi pengguna.
+
+### 4. Tri-Persona Dashboard
+Tampilan dan alat analisis disesuaikan untuk 3 persona spesifik:
+- 🏛️ **Government:** Fokus pada *policy recommendations*, pendeteksian titik buta pejalan kaki, dan skor TOD per stasiun.
+- 🏢 **Business:** Fokus pada *tenant mix*, keramaian (Activity Data MAPID), dan estimasi kenaikan NJOP lahan komersial.
+- 🚶 **Commuter:** Fokus pada integrasi rute feeder, *Menu Go* (POI sekitar stasiun), dan estimasi waktu tempuh.
+
+---
+
+## 🛠️ Arsitektur Teknologi
+
+### Frontend (User Interface & Map Client)
+- **Framework:** Next.js 15 (App Router) + React 19
+- **Map Engine:** MapLibre GL JS + MAPID MAPS Basemap
+- **Styling:** Tailwind CSS + Framer Motion (untuk animasi *Mission Control*)
+- **Data Visualizations:** Recharts (Radar Chart & Gauge)
+
+### Backend (Spatial Engine & AI)
+- **Framework:** FastAPI (Python)
+- **Geospatial Processing:** PostGIS, `h3-py`, `geopandas`, `osmnx`
+- **Econometrics:** PySAL (`spreg`)
+- **AI Integration:** Google Gemini API (*Function Calling*)
+
+---
+
+## 🚀 Cara Menjalankan Secara Lokal
+
+### 1. Prasyarat
+- Node.js (v18+)
+- Python (3.10+) & PostgreSQL (dengan ekstensi PostGIS)
+
+### 2. Menjalankan Frontend
+```bash
+cd webdev/frontend
+npm install
+npm run dev
+```
+Aplikasi frontend akan berjalan di `http://localhost:3030`.
+
+### 3. Menjalankan Backend (Tahap Pengembangan)
+```bash
+cd webdev/backend
+pip install -r requirements.txt
+uvicorn app.main:app --reload --port 8000
+```
+
+---
+
+## 📄 Lisensi & Kredit
+Dibangun dengan 💚 untuk **MAPID WebGIS Competition 2026**.
+Data spasial (Basemap, Activity, Menu Go) disediakan oleh **MAPID GEO API**.
