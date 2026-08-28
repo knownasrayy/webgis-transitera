@@ -90,9 +90,10 @@ function BasemapGrid({ basemapStyle, onChangeBasemapStyle }: { basemapStyle: Bas
     <>
       <SectionHeader label="Basemap" />
       <div className="px-3">
-        <div className="grid grid-cols-3 gap-1">
+        <div className="grid grid-cols-2 gap-1">
           {([
-            { key: 'street', label: 'Street' },
+            { key: 'street', label: 'Street 3D' },
+            { key: 'street-2d', label: 'Street 2D' },
             { key: 'dark', label: 'Dark' },
             { key: 'satellite', label: 'Satellite' },
           ] as const).map(({ key, label }) => (
@@ -381,7 +382,7 @@ export const SidebarContainer: React.FC<SidebarContainerProps> = ({
                       </div>
                     </div>
                   </div>
-                  <div className="grid grid-cols-3 gap-1.5">
+                  <div className="grid grid-cols-2 gap-1.5">
                     <div className="bg-slate-800/50 rounded-lg p-2 text-center">
                       <div className="text-sm font-bold text-slate-200">{demographics.householdCount.toLocaleString()}</div>
                       <div className="text-[9px] text-slate-500">Rumah Tangga</div>
@@ -427,7 +428,7 @@ export const SidebarContainer: React.FC<SidebarContainerProps> = ({
                     </div>
                   </div>
                   {/* Green Space & Noise */}
-                  <div className="grid grid-cols-3 gap-1.5">
+                  <div className="grid grid-cols-2 gap-1.5">
                     <div className="bg-slate-800/50 rounded-lg p-2 text-center">
                       <TreePine className="w-4 h-4 text-emerald-400 mx-auto mb-1" />
                       <div className="text-sm font-bold text-emerald-400">{environment.greenSpacePct}%</div>
@@ -632,6 +633,7 @@ export const SidebarContainer: React.FC<SidebarContainerProps> = ({
     </aside>
   );
 };
+
 
 
 
