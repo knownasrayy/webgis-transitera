@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import React, { useState } from 'react';
 import { StationId } from '@/types';
@@ -136,7 +136,7 @@ export const SidebarContainer: React.FC<SidebarContainerProps> = ({
   const [h3RingFilter, setH3RingFilter] = useState<number>(3);
 
   // Business state
-  const [bizActiveTab, setBizActiveTab] = useState<'mapview' | 'demographics' | 'environment' | 'filters'>('mapview');
+  const [bizActiveTab, setBizActiveTab] = useState<'mapview' | 'demographics' | 'environment' | 'filters' | 'layers'>('mapview');
   const [showEconomicPOI, setShowEconomicPOI] = useState(true);
   const [showNJOPZone, setShowNJOPZone] = useState(true);
   const [showPropertiGo, setShowPropertiGo] = useState(false);
@@ -144,7 +144,7 @@ export const SidebarContainer: React.FC<SidebarContainerProps> = ({
   const [propertyType, setPropertyType] = useState('all');
 
   // Commuter state
-  const [commuterActiveTab, setCommuterActiveTab] = useState<'train' | 'bus' | 'tourist'>('train');
+  const [commuterActiveTab, setCommuterActiveTab] = useState<'train' | 'bus' | 'tourist' | 'layers'>('train');
 
   const demographics = getDemographicsForStation(activeStation);
   const environment = getEnvironmentForStation(activeStation);
@@ -262,7 +262,9 @@ export const SidebarContainer: React.FC<SidebarContainerProps> = ({
               </div>
             )}
 
-            <SectionHeader label="Active Overlays" />
+            {govActiveTab === 'layers' && (
+              <>
+                <SectionHeader label="Active Overlays" />
             <div className="px-3 space-y-1">
               <Toggle active={choroplethMode === 'tod_score'} onToggle={() => onChangeChoroplethMode('tod_score')} label="H3 TOD Grid" />
               <Toggle active={showSurveyPoints} onToggle={onToggleSurveyPoints} label="Survei #PakSibukGa" />
@@ -299,6 +301,8 @@ export const SidebarContainer: React.FC<SidebarContainerProps> = ({
                 </div>
               )}
             </div>
+            </>
+            )}
           </>
         )}
 
@@ -311,6 +315,7 @@ export const SidebarContainer: React.FC<SidebarContainerProps> = ({
               <NavItem icon={Users} label="Demographics" active={bizActiveTab === 'demographics'} onClick={() => setBizActiveTab('demographics')} />
               <NavItem icon={TreePine} label="Environment" active={bizActiveTab === 'environment'} onClick={() => setBizActiveTab('environment')} />
               <NavItem icon={SlidersHorizontal} label="Filters" active={bizActiveTab === 'filters'} onClick={() => setBizActiveTab('filters')} />
+              <NavItem icon={Layers} label="Layers & Basemap" active={bizActiveTab === 'layers'} onClick={() => setBizActiveTab('layers')} />
             </div>
 
             {/* Map View Panel */}
@@ -471,7 +476,9 @@ export const SidebarContainer: React.FC<SidebarContainerProps> = ({
               </div>
             )}
 
-            <SectionHeader label="Activate Datasets" />
+            {bizActiveTab === 'layers' && (
+              <>
+                <SectionHeader label="Activate Datasets" />
             <div className="px-3 space-y-1">
               <Toggle active={showEconomicPOI} onToggle={() => setShowEconomicPOI(!showEconomicPOI)} label="Economic POIs" />
               <Toggle active={showNJOPZone} onToggle={() => { setShowNJOPZone(!showNJOPZone); if (!showNJOPZone) onChangeChoroplethMode('njop_premium'); }} label="Land Value Zone (NJOP)" />
@@ -480,6 +487,8 @@ export const SidebarContainer: React.FC<SidebarContainerProps> = ({
             </div>
 
             <BasemapGrid basemapStyle={basemapStyle} onChangeBasemapStyle={onChangeBasemapStyle} />
+            </>
+            )}
           </>
         )}
 
@@ -491,6 +500,7 @@ export const SidebarContainer: React.FC<SidebarContainerProps> = ({
               <NavItem icon={TrainIcon} label="Train Schedules" active={commuterActiveTab === 'train'} onClick={() => setCommuterActiveTab('train')} badge={`${trainSchedules.length}`} />
               <NavItem icon={Bus} label="Feeder Suroboyo Bus" active={commuterActiveTab === 'bus'} onClick={() => setCommuterActiveTab('bus')} badge={`${busRoutes.length}`} />
               <NavItem icon={MapPin} label="Tourist Destinations" active={commuterActiveTab === 'tourist'} onClick={() => setCommuterActiveTab('tourist')} badge={`${touristSpots.length}`} />
+              <NavItem icon={Layers} label="Basemap" active={commuterActiveTab === 'layers'} onClick={() => setCommuterActiveTab('layers')} />
             </div>
 
             {/* Train Schedules */}
@@ -607,7 +617,9 @@ export const SidebarContainer: React.FC<SidebarContainerProps> = ({
               </div>
             )}
 
-            <BasemapGrid basemapStyle={basemapStyle} onChangeBasemapStyle={onChangeBasemapStyle} />
+            {commuterActiveTab === 'layers' && (
+              <BasemapGrid basemapStyle={basemapStyle} onChangeBasemapStyle={onChangeBasemapStyle} />
+            )}
           </>
         )}
       </div>
