@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import React from 'react';
 import Link from 'next/link';
@@ -39,12 +39,14 @@ export const HeaderNav: React.FC<HeaderNavProps> = ({
         {/* â”€â”€ Brand / Logo â”€â”€ */}
         <div className="flex items-center gap-3">
           <Link href="/" className="flex items-center gap-2.5 group">
-            <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-brand-lime via-[#8CE0C4] to-brand-teal flex items-center justify-center shadow-lg shadow-brand-lime/20 ring-1 ring-white/10 group-hover:scale-105 transition-transform">
-              <Train className="w-5 h-5 text-white" />
-            </div>
+            <img
+              alt="TransitERA Logo"
+              className="h-8 w-auto object-contain group-hover:scale-105 transition-transform"
+              src="/assets/landing/LOGO.png"
+            />
             <div className="hidden sm:block">
-              <span className="font-bold text-lg tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-brand-lime via-brand-teal to-brand-lime">
-                TransitERA
+              <span className="font-bold text-lg tracking-tight text-white">
+                Transit<span className="text-brand-lime">ERA</span>
               </span>
             </div>
           </Link>
