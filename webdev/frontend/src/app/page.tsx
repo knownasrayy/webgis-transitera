@@ -300,7 +300,7 @@ export default function LandingPage() {
               <img
                 alt="Investor Dashboard Background"
                 className="w-full rounded-lg shadow-xl"
-                src="https://lh3.googleusercontent.com/aida-public/AB6AXuCsl1tBvCLZv6VWWuYrtS2COWhdwYJ6BShDhM-YjiQ7tUsNjeuHEBUTZFcoCo5g6B8NBw1Smp643KptdHIF_jxgLw1hC4gC0PDIr0xOOEJwgH9DDVxzZh4YZf75-patZvIu0SuwFOt4VnqCJFsgMbQ3BLDX6QuTy9sG-gsvj7z_Ag0H87pp6JaxakzCN9bcrgtl3VQvKwf8BGDOC_H6_xduJUb-tiQZQ7b3w504su8MeHJnqFzmeSpd7A"
+                src="/assets/landing/screen.png"
               />
             </motion.div>
 
@@ -312,7 +312,7 @@ export default function LandingPage() {
               <img
                 alt="Commuter Dashboard Background"
                 className="w-full rounded-lg shadow-xl"
-                src="https://lh3.googleusercontent.com/aida-public/AB6AXuCsl1tBvCLZv6VWWuYrtS2COWhdwYJ6BShDhM-YjiQ7tUsNjeuHEBUTZFcoCo5g6B8NBw1Smp643KptdHIF_jxgLw1hC4gC0PDIr0xOOEJwgH9DDVxzZh4YZf75-patZvIu0SuwFOt4VnqCJFsgMbQ3BLDX6QuTy9sG-gsvj7z_Ag0H87pp6JaxakzCN9bcrgtl3VQvKwf8BGDOC_H6_xduJUb-tiQZQ7b3w504su8MeHJnqFzmeSpd7A"
+                src="/assets/landing/screen.png"
               />
             </motion.div>
 
@@ -324,7 +324,7 @@ export default function LandingPage() {
               <img
                 alt="Platform Dashboard Showcase"
                 className="w-full rounded-lg shadow-[0_20px_50px_rgba(0,0,0,0.5)] border border-white/5"
-                src="https://lh3.googleusercontent.com/aida-public/AB6AXuCsl1tBvCLZv6VWWuYrtS2COWhdwYJ6BShDhM-YjiQ7tUsNjeuHEBUTZFcoCo5g6B8NBw1Smp643KptdHIF_jxgLw1hC4gC0PDIr0xOOEJwgH9DDVxzZh4YZf75-patZvIu0SuwFOt4VnqCJFsgMbQ3BLDX6QuTy9sG-gsvj7z_Ag0H87pp6JaxakzCN9bcrgtl3VQvKwf8BGDOC_H6_xduJUb-tiQZQ7b3w504su8MeHJnqFzmeSpd7A"
+                src="/assets/landing/screen.png"
               />
             </motion.div>
           </div>
