@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import React, { useState } from 'react';
 import { StationId } from '@/types';
@@ -36,7 +36,7 @@ interface SidebarContainerProps {
   onOpenFeedback?: () => void;
 }
 
-/* â”€â”€ Orange Toggle â”€â”€ */
+/* Ã¢â€â‚¬Ã¢â€â‚¬ Orange Toggle Ã¢â€â‚¬Ã¢â€â‚¬ */
 function Toggle({ active, onToggle, label }: { active: boolean; onToggle: () => void; label: string }) {
   return (
     <button onClick={onToggle} className="w-full flex items-center justify-between py-1.5 px-2 rounded-lg text-xs hover:bg-slate-800/40 transition-colors group">
@@ -46,7 +46,7 @@ function Toggle({ active, onToggle, label }: { active: boolean; onToggle: () => 
   );
 }
 
-/* â”€â”€ Nav Item â”€â”€ */
+/* Ã¢â€â‚¬Ã¢â€â‚¬ Nav Item Ã¢â€â‚¬Ã¢â€â‚¬ */
 function NavItem({ icon: Icon, label, active, onClick, badge, expandable, expanded }: {
   icon: React.ElementType; label: string; active?: boolean; onClick?: () => void; badge?: string; expandable?: boolean; expanded?: boolean;
 }) {
@@ -75,7 +75,7 @@ function NavItem({ icon: Icon, label, active, onClick, badge, expandable, expand
   );
 }
 
-/* â”€â”€ Section Header â”€â”€ */
+/* Ã¢â€â‚¬Ã¢â€â‚¬ Section Header Ã¢â€â‚¬Ã¢â€â‚¬ */
 function SectionHeader({ label }: { label: string }) {
   return (
     <div className="text-[10px] uppercase font-bold tracking-wider text-slate-500 px-3 pt-3 pb-1">
@@ -84,16 +84,15 @@ function SectionHeader({ label }: { label: string }) {
   );
 }
 
-/* â”€â”€ Basemap Grid (shared) â”€â”€ */
+/* Ã¢â€â‚¬Ã¢â€â‚¬ Basemap Grid (shared) Ã¢â€â‚¬Ã¢â€â‚¬ */
 function BasemapGrid({ basemapStyle, onChangeBasemapStyle }: { basemapStyle: BasemapStyleKey; onChangeBasemapStyle: (s: BasemapStyleKey) => void }) {
   return (
     <>
       <SectionHeader label="Basemap" />
       <div className="px-3">
-        <div className="grid grid-cols-2 gap-1">
+        <div className="grid grid-cols-3 gap-1">
           {([
-            { key: 'street', label: 'Street 3D' },
-            { key: 'street-2d', label: 'Street 2D' },
+            { key: 'street', label: 'Street' },
             { key: 'dark', label: 'Dark' },
             { key: 'satellite', label: 'Satellite' },
           ] as const).map(({ key, label }) => (
@@ -154,7 +153,7 @@ export const SidebarContainer: React.FC<SidebarContainerProps> = ({
 
   return (
     <aside className="hidden md:flex w-[var(--sidebar-width)] h-full flex-col glass-sidebar z-20 overflow-hidden">
-      {/* â”€â”€ Sidebar Header â”€â”€ */}
+      {/* Ã¢â€â‚¬Ã¢â€â‚¬ Sidebar Header Ã¢â€â‚¬Ã¢â€â‚¬ */}
       <div className="px-4 py-3 border-b border-slate-800/80">
         <div className="flex items-center gap-2">
           <div className="w-2 h-2 rounded-full bg-brand-lime" />
@@ -165,10 +164,10 @@ export const SidebarContainer: React.FC<SidebarContainerProps> = ({
         </div>
       </div>
 
-      {/* â”€â”€ Scrollable Content â”€â”€ */}
+      {/* Ã¢â€â‚¬Ã¢â€â‚¬ Scrollable Content Ã¢â€â‚¬Ã¢â€â‚¬ */}
       <div className="flex-1 overflow-y-auto py-1">
 
-        {/* â•â•â•â•â•â• Government Sidebar â•â•â•â•â•â• */}
+        {/* Ã¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢Â Government Sidebar Ã¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢Â */}
         {activePersona === 'government' && (
           <>
             <SectionHeader label="Map Layers" />
@@ -198,7 +197,7 @@ export const SidebarContainer: React.FC<SidebarContainerProps> = ({
                     className="w-full h-1 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-brand-lime" />
                 </div>
                 <div className="text-[9px] text-slate-500 pt-1 border-t border-slate-800">
-                  Menampilkan sel H3 dengan skor {h3ScoreRange[0]}â€“{h3ScoreRange[1]} dalam ring â‰¤{h3RingFilter}
+                  Menampilkan sel H3 dengan skor {h3ScoreRange[0]}Ã¢â‚¬â€œ{h3ScoreRange[1]} dalam ring Ã¢â€°Â¤{h3RingFilter}
                 </div>
               </div>
             )}
@@ -219,7 +218,7 @@ export const SidebarContainer: React.FC<SidebarContainerProps> = ({
 
                 {/* NJOP Legend */}
                 <div className="space-y-1">
-                  <div className="text-[10px] font-semibold text-slate-300">%Î”NJOP Premium</div>
+                  <div className="text-[10px] font-semibold text-slate-300">%ÃŽâ€NJOP Premium</div>
                   <div className="h-2 rounded-full bg-gradient-to-r from-indigo-500 via-blue-500 to-emerald-400 w-full" />
                   <div className="flex justify-between text-[9px] text-slate-500 font-medium">
                     <span>+0%</span><span>+10%</span><span>+20%</span>
@@ -306,7 +305,7 @@ export const SidebarContainer: React.FC<SidebarContainerProps> = ({
           </>
         )}
 
-        {/* â•â•â•â•â•â• Business/Investor Sidebar â•â•â•â•â•â• */}
+        {/* Ã¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢Â Business/Investor Sidebar Ã¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢Â */}
         {activePersona === 'business' && (
           <>
             <SectionHeader label="Spatial Views" />
@@ -329,7 +328,7 @@ export const SidebarContainer: React.FC<SidebarContainerProps> = ({
                   </div>
                   <div className="bg-slate-800/50 rounded-lg p-2 text-center">
                     <div className="text-lg font-black text-cyan-400">{demographics.density.toLocaleString()}</div>
-                    <div className="text-[9px] text-slate-500">Jiwa/kmÂ²</div>
+                    <div className="text-[9px] text-slate-500">Jiwa/kmÃ‚Â²</div>
                   </div>
                   <div className="bg-slate-800/50 rounded-lg p-2 text-center">
                     <div className="text-sm font-bold text-emerald-400">{demographics.avgIncome}</div>
@@ -382,14 +381,14 @@ export const SidebarContainer: React.FC<SidebarContainerProps> = ({
                       </div>
                     </div>
                   </div>
-                  <div className="grid grid-cols-2 gap-1.5">
+                  <div className="grid grid-cols-3 gap-1.5">
                     <div className="bg-slate-800/50 rounded-lg p-2 text-center">
                       <div className="text-sm font-bold text-slate-200">{demographics.householdCount.toLocaleString()}</div>
                       <div className="text-[9px] text-slate-500">Rumah Tangga</div>
                     </div>
                     <div className="bg-slate-800/50 rounded-lg p-2 text-center">
                       <div className={`text-sm font-bold ${demographics.incomeLevel === 'high' ? 'text-emerald-400' : demographics.incomeLevel === 'medium' ? 'text-brand-teal' : 'text-red-400'}`}>
-                        {demographics.incomeLevel === 'high' ? 'â–² Tinggi' : demographics.incomeLevel === 'medium' ? 'â— Sedang' : 'â–¼ Rendah'}
+                        {demographics.incomeLevel === 'high' ? 'Ã¢â€“Â² Tinggi' : demographics.incomeLevel === 'medium' ? 'Ã¢â€”Â Sedang' : 'Ã¢â€“Â¼ Rendah'}
                       </div>
                       <div className="text-[9px] text-slate-500">Income Level</div>
                     </div>
@@ -412,7 +411,7 @@ export const SidebarContainer: React.FC<SidebarContainerProps> = ({
                         <span className="text-sm font-black" style={{ color: environment.aqiColor }}>{environment.aqi}</span>
                       </div>
                       <div className="text-[10px] font-medium" style={{ color: environment.aqiColor }}>{environment.aqiLabel}</div>
-                      <div className="text-[9px] text-slate-500">PM2.5: {environment.pm25} Î¼g/mÂ³</div>
+                      <div className="text-[9px] text-slate-500">PM2.5: {environment.pm25} ÃŽÂ¼g/mÃ‚Â³</div>
                     </div>
                   </div>
                   {/* Flood Risk */}
@@ -428,7 +427,7 @@ export const SidebarContainer: React.FC<SidebarContainerProps> = ({
                     </div>
                   </div>
                   {/* Green Space & Noise */}
-                  <div className="grid grid-cols-2 gap-1.5">
+                  <div className="grid grid-cols-3 gap-1.5">
                     <div className="bg-slate-800/50 rounded-lg p-2 text-center">
                       <TreePine className="w-4 h-4 text-emerald-400 mx-auto mb-1" />
                       <div className="text-sm font-bold text-emerald-400">{environment.greenSpacePct}%</div>
@@ -436,7 +435,7 @@ export const SidebarContainer: React.FC<SidebarContainerProps> = ({
                     </div>
                     <div className="bg-slate-800/50 rounded-lg p-2 text-center">
                       <Thermometer className="w-4 h-4 text-red-400 mx-auto mb-1" />
-                      <div className="text-sm font-bold text-red-400">{environment.temperature}Â°C</div>
+                      <div className="text-sm font-bold text-red-400">{environment.temperature}Ã‚Â°C</div>
                       <div className="text-[9px] text-slate-500">Suhu</div>
                     </div>
                   </div>
@@ -450,7 +449,7 @@ export const SidebarContainer: React.FC<SidebarContainerProps> = ({
                 <div className="text-[10px] font-bold text-cyan-400 uppercase tracking-wider">Filter Data</div>
                 <div>
                   <label className="text-[10px] text-slate-400 block mb-1">
-                    NJOP Premium Range: <span className="text-brand-lime font-bold">{njopRange[0]}% â€“ {njopRange[1]}%</span>
+                    NJOP Premium Range: <span className="text-brand-lime font-bold">{njopRange[0]}% Ã¢â‚¬â€œ {njopRange[1]}%</span>
                   </label>
                   <div className="flex gap-2">
                     <input type="range" min={0} max={25} value={njopRange[0]} onChange={(e) => setNjopRange([+e.target.value, njopRange[1]])}
@@ -471,7 +470,7 @@ export const SidebarContainer: React.FC<SidebarContainerProps> = ({
                   </select>
                 </div>
                 <div className="text-[9px] text-slate-500 pt-1 border-t border-slate-800">
-                  Filter aktif: NJOP {njopRange[0]}%â€“{njopRange[1]}% | Tipe: {propertyType === 'all' ? 'Semua' : propertyType}
+                  Filter aktif: NJOP {njopRange[0]}%Ã¢â‚¬â€œ{njopRange[1]}% | Tipe: {propertyType === 'all' ? 'Semua' : propertyType}
                 </div>
               </div>
             )}
@@ -492,7 +491,7 @@ export const SidebarContainer: React.FC<SidebarContainerProps> = ({
           </>
         )}
 
-        {/* â•â•â•â•â•â• Commuter Sidebar â•â•â•â•â•â• */}
+        {/* Ã¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢Â Commuter Sidebar Ã¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢Â */}
         {activePersona === 'commuter' && (
           <>
             <SectionHeader label="Navigation" />
@@ -520,20 +519,20 @@ export const SidebarContainer: React.FC<SidebarContainerProps> = ({
                           t.status === 'delayed' ? 'bg-amber-500/15 text-brand-teal border border-amber-500/25' :
                           'bg-slate-700 text-slate-400 border border-slate-600'
                         }`}>
-                          {t.status === 'on_time' ? 'â— On Time' : t.status === 'delayed' ? 'âš  Delayed' : 'âœ“ Departed'}
+                          {t.status === 'on_time' ? 'Ã¢â€”Â On Time' : t.status === 'delayed' ? 'Ã¢Å¡Â  Delayed' : 'Ã¢Å“â€œ Departed'}
                         </span>
                       </div>
                       <div className="text-[10px] text-slate-400 flex items-center gap-1">
                         <Clock className="w-3 h-3" />
                         <span className="tabular-nums text-slate-200">{t.departureTime}</span>
-                        <span className="text-slate-600">â†’</span>
+                        <span className="text-slate-600">Ã¢â€ â€™</span>
                         <span className="tabular-nums text-slate-200">{t.arrivalTime}</span>
                       </div>
                       <div className="text-[10px] text-slate-500 mt-0.5">
-                        {t.origin} â†’ {t.destination}
+                        {t.origin} Ã¢â€ â€™ {t.destination}
                       </div>
                       <div className="text-[9px] text-slate-600 mt-0.5">
-                        Platform {t.platform} Â· {t.type}
+                        Platform {t.platform} Ã‚Â· {t.type}
                       </div>
                     </div>
                   ))}
@@ -604,10 +603,10 @@ export const SidebarContainer: React.FC<SidebarContainerProps> = ({
                             <span className="text-[9px] text-brand-teal font-bold flex items-center gap-0.5">
                               <Star className="w-2.5 h-2.5 fill-brand-teal" /> {d.rating}
                             </span>
-                            <span className="text-[9px] text-slate-500">Â·</span>
+                            <span className="text-[9px] text-slate-500">Ã‚Â·</span>
                             <span className="text-[9px] text-slate-400">{d.distanceFromStation}</span>
-                            <span className="text-[9px] text-slate-500">Â·</span>
-                            <span className="text-[9px] text-slate-400">ðŸš¶ {d.walkTime}</span>
+                            <span className="text-[9px] text-slate-500">Ã‚Â·</span>
+                            <span className="text-[9px] text-slate-400">Ã°Å¸Å¡Â¶ {d.walkTime}</span>
                           </div>
                         </div>
                       </div>
@@ -624,7 +623,7 @@ export const SidebarContainer: React.FC<SidebarContainerProps> = ({
         )}
       </div>
 
-      {/* â”€â”€ Bottom Actions â”€â”€ */}
+      {/* Ã¢â€â‚¬Ã¢â€â‚¬ Bottom Actions Ã¢â€â‚¬Ã¢â€â‚¬ */}
       <div className="border-t border-slate-800/80 px-2 py-2 space-y-0.5">
         <NavItem icon={Settings} label="Settings" onClick={onOpenSettings} />
         <NavItem icon={HelpCircle} label="Help" onClick={onOpenHelp} />
@@ -633,5 +632,6 @@ export const SidebarContainer: React.FC<SidebarContainerProps> = ({
     </aside>
   );
 };
+
 
 

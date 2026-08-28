@@ -4,7 +4,7 @@ import React from 'react';
 import { Layers, Eye, Map, Check } from 'lucide-react';
 
 export type ChoroplethMode = 'tod_score' | 'njop_premium' | 'typology';
-export type BasemapStyleKey = 'street' | 'street-2d' | 'dark' | 'satellite';
+export type BasemapStyleKey = 'street' | 'dark' | 'satellite';
 
 interface LayerControlProps {
   choroplethMode: ChoroplethMode;
@@ -39,10 +39,9 @@ export const LayerControl: React.FC<LayerControlProps> = ({
           <Map className="w-3 h-3 text-slate-400" />
           MAPID MAPS Basemap
         </div>
-        <div className="grid grid-cols-2 gap-1">
+        <div className="grid grid-cols-3 gap-1">
           {([
-            { key: 'street', label: 'Street 3D' },
-            { key: 'street-2d', label: 'Street 2D' },
+            { key: 'street', label: 'Street' },
             { key: 'dark', label: 'Dark' },
             { key: 'satellite', label: 'Satellite' },
           ] as const).map(({ key, label }) => (
@@ -177,4 +176,5 @@ export const LayerControl: React.FC<LayerControlProps> = ({
     </div>
   );
 };
+
 
