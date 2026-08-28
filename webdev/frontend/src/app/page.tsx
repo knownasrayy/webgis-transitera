@@ -77,8 +77,9 @@ export default function LandingPage() {
               <Link className="text-sm font-medium text-brand-100 hover:text-white transition-colors" href="#about">About</Link>
             </div>
             <div className="flex items-center space-x-4">
-              <Link className="hidden md:block text-sm font-medium text-brand-100 hover:text-white transition-colors" href="/map">Log in</Link>
-              <Link className="px-5 py-2.5 text-sm font-semibold text-white bg-accent-orange hover:bg-orange-600 rounded transition-colors shadow-[0_0_15px_rgba(249,115,22,0.3)]" href="/map">Get Started</Link>
+              <Link className="px-5 py-2.5 text-sm font-semibold text-white bg-accent-orange hover:bg-orange-600 rounded transition-colors shadow-[0_0_15px_rgba(249,115,22,0.3)] flex items-center gap-2" href="/map">
+                <span>Launch App</span>
+              </Link>
             </div>
           </div>
         </div>
@@ -121,11 +122,9 @@ export default function LandingPage() {
           </motion.p>
           
           <motion.div variants={heroItemVars} className="flex flex-col sm:flex-row justify-center gap-4">
-            <Link className="px-8 py-4 text-base font-bold text-white bg-accent-orange hover:bg-orange-600 rounded transition-all shadow-lg hover:shadow-orange-500/25" href="/map">
-              Explore the Platform
-            </Link>
-            <Link className="px-8 py-4 text-base font-bold text-white bg-surface-container-high hover:bg-surface-container-highest rounded transition-all border border-surface-container-highest" href="/map">
-              Book a Demo
+            <Link className="px-8 py-4 text-sm font-bold text-white bg-accent-orange hover:bg-orange-600 rounded-lg transition-all shadow-[0_0_20px_rgba(249,115,22,0.4)] hover:shadow-[0_0_30px_rgba(249,115,22,0.6)] flex items-center justify-center gap-2" href="/map">
+              <span>Launch App</span>
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
             </Link>
           </motion.div>
         </motion.div>
