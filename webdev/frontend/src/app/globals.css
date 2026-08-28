@@ -5,59 +5,57 @@
   --font-montserrat: var(--font-montserrat), sans-serif;
   --font-inter: var(--font-inter), sans-serif;
   --font-sans: var(--font-inter), sans-serif;
-  --color-brand-50: #f4f6f8;
-  --color-brand-100: #e4e8ed;
-  --color-brand-200: #c5ced8;
-  --color-brand-300: #99aab9;
-  --color-brand-400: #678198;
-  --color-brand-500: #46647d;
-  --color-brand-600: #345065;
-  --color-brand-700: #2a4053;
-  --color-brand-800: #243746;
-  --color-brand-900: #1a365d;
-  --color-brand-950: #12223a;
+  --color-brand-indigo: #12175E;
+  --color-brand-purple: #473DD2;
+  --color-brand-blue: #3663D8;
+  --color-brand-teal: #4FC5C2;
+  --color-brand-mint: #8CE0C4;
+  --color-brand-lime: #B1FC91;
   
-  --color-surface: #121316;
-  --color-surface-dim: #121316;
-  --color-surface-bright: #38393c;
-  --color-surface-container-lowest: #0d0e11;
-  --color-surface-container-low: #1a1c1e;
-  --color-surface-container: #1e2022;
-  --color-surface-container-high: #2a2c2f;
-  --color-surface-container-highest: #35373a;
+  --color-surface: #100D28;
+  --color-surface-dim: #0B0918;
+  --color-surface-bright: #3A3468;
+  --color-surface-container-lowest: #08061A;
+  --color-surface-container-low: #161230;
+  --color-surface-container: #1B1638;
+  --color-surface-container-high: #241E48;
+  --color-surface-container-highest: #2E2758;
+  --color-on-surface: #E8E5F7;
+  --color-on-surface-variant: #C7C2DE;
   
-  --color-accent-orange: #f27a00;
-  --color-accent-blue: #3b82f6;
-  --color-accent-green: #2e7d32;
-  --color-accent-red: #d32f2f;
+  --color-primary: #B9C8FF;
+  --color-primary-container: #2A3B8F;
+  --color-on-primary: #152459;
+  
+  --color-success-green: #22C55E;
+  --color-alert-red: #D32F2F;
 
   --radius-4xl: 2rem;
 }
 
 /* ═══════════════════════════════════════════════════
    TransitERA Design System — "Intelligent Spatial Engine"
-   Palette: Deep Navy + Orange Accent + Glassmorphism
+   Palette: Indigo + Lime + Teal
    ═══════════════════════════════════════════════════ */
 
 :root {
   /* Core Palette */
-  --background: #0a0f1d;
-  --background-secondary: #0d1321;
-  --foreground: #f8fafc;
+  --background: #100D28;
+  --background-secondary: #0B0918;
+  --foreground: #E8E5F7;
 
   /* Accent Colors */
-  --accent-orange: #ff7c00;
-  --accent-orange-dim: rgba(255, 124, 0, 0.15);
-  --accent-orange-border: rgba(255, 124, 0, 0.4);
-  --accent-red: #ff2000;
-  --accent-emerald: #10b981;
-  --accent-cyan: #06b6d4;
-  --accent-blue: #3b82f6;
+  --brand-lime: #B1FC91;
+  --brand-lime-dim: rgba(177, 252, 145, 0.15);
+  --brand-lime-border: rgba(177, 252, 145, 0.4);
+  --brand-teal: #4FC5C2;
+  --alert-red: #D32F2F;
+  --success-green: #22C55E;
 
   /* Panel / Glass */
-  --panel-bg: rgba(13, 19, 33, 0.88);
-  --panel-bg-solid: #111827;
-  --panel-border: rgba(51, 65, 85, 0.55);
+  --panel-bg: rgba(42, 32, 96, 0.68);
+  --panel-bg-solid: #161230;
+  --panel-border: rgba(74, 68, 120, 0.55);
   --panel-border-accent: rgba(255, 124, 0, 0.3);
 
   /* Sidebar */

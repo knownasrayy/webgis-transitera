@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import React, { useEffect, useRef, useState } from 'react';
 import * as maplibregl from 'maplibre-gl';
@@ -90,10 +90,10 @@ export const MapContainer: React.FC<MapContainerProps> = ({
               'interpolate',
               ['linear'],
               ['get', 'tod_readiness_score'],
-              40, '#ef4444', // Red
-              65, '#f59e0b', // Amber
-              80, '#10b981', // Emerald
-              100, '#047857' // Deep Emerald
+              40, '#D32F2F', // Red
+              65, '#4FC5C2', // Amber
+              80, '#22C55E', // Emerald
+              100, '#22C55E' // Deep Emerald
             ],
             'fill-opacity': [
               'case',
@@ -110,7 +110,7 @@ export const MapContainer: React.FC<MapContainerProps> = ({
           type: 'line',
           source: 'h3-tod-source',
           paint: {
-            'line-color': '#ffffff',
+            'line-color': '#4A4478',
             'line-width': 1.0,
             'line-opacity': 0.65
           }
@@ -125,7 +125,7 @@ export const MapContainer: React.FC<MapContainerProps> = ({
           el.className = 'station-marker-pin cursor-pointer group z-50';
           el.innerHTML = `
             <div style="position: relative; display: flex; align-items: center; justify-content: center;">
-              <div style="width: 32px; height: 32px; border-radius: 50%; background: linear-gradient(to top right, #f97316, #f59e0b); border: 2px solid white; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; color: white;">
+              <div style="width: 32px; height: 32px; border-radius: 50%; background: linear-gradient(to top right, #4FC5C2, #B1FC91); border: 2px solid #12175E; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; color: white;">
                 <svg style="width: 16px; height: 16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path>
                 </svg>
@@ -184,17 +184,17 @@ export const MapContainer: React.FC<MapContainerProps> = ({
         const popupContent = `
           <div class="space-y-1.5 text-xs text-slate-100">
             <div class="flex items-center justify-between border-b border-slate-700 pb-1">
-              <span class="font-bold text-orange-400">Sel H3: ${props.h3_index}</span>
-              <span class="text-[10px] bg-orange-950/60 px-1.5 py-0.5 rounded text-orange-300 font-semibold border border-orange-800/40">${props.station_name}</span>
+              <span class="font-bold text-[#B1FC91]">Sel H3: ${props.h3_index}</span>
+              <span class="text-[10px] bg-[#4FC5C2]/20 px-1.5 py-0.5 rounded text-[#4FC5C2] font-semibold border border-[#4FC5C2]/40">${props.station_name}</span>
             </div>
             <div class="grid grid-cols-2 gap-2 text-[11px] pt-1">
               <div>
                 <span class="text-slate-400">TOD Score:</span>
-                <div class="text-sm font-bold text-emerald-400">${props.tod_readiness_score} / 100</div>
+                <div class="text-sm font-bold text-[#22C55E]">${props.tod_readiness_score} / 100</div>
               </div>
               <div>
-                <span class="text-slate-400">Est. %ΔNJOP:</span>
-                <div class="text-sm font-bold text-cyan-400">+${props.predicted_njop_premium_pct}%</div>
+                <span class="text-slate-400">Est. %Î”NJOP:</span>
+                <div class="text-sm font-bold text-[#B1FC91]">+${props.predicted_njop_premium_pct}%</div>
               </div>
             </div>
             <div class="text-[10px] text-slate-300 pt-1 border-t border-slate-800">
@@ -252,7 +252,7 @@ export const MapContainer: React.FC<MapContainerProps> = ({
           type: 'line',
           source: 'feeder-routes-source',
           paint: {
-            'line-color': '#ff7c00',
+            'line-color': '#B1FC91',
             'line-width': 3,
             'line-dasharray': [2, 2],
             'line-opacity': 0.8
@@ -289,7 +289,7 @@ export const MapContainer: React.FC<MapContainerProps> = ({
             source: 'survey-points-source',
             paint: {
               'circle-radius': 5,
-              'circle-color': '#ec4899', // Pink for survey points
+              'circle-color': '#4FC5C2', // Pink for survey points
               'circle-stroke-width': 1.5,
               'circle-stroke-color': '#ffffff'
             }
@@ -325,29 +325,29 @@ export const MapContainer: React.FC<MapContainerProps> = ({
         'interpolate',
         ['linear'],
         ['get', 'tod_readiness_score'],
-        40, '#ef4444',
-        65, '#f59e0b',
-        80, '#10b981',
-        100, '#047857'
+        40, '#D32F2F',
+        65, '#4FC5C2',
+        80, '#22C55E',
+        100, '#22C55E'
       ]);
     } else if (choroplethMode === 'njop_premium') {
       map.setPaintProperty('h3-tod-fill', 'fill-color', [
         'interpolate',
         ['linear'],
         ['get', 'predicted_njop_premium_pct'],
-        3.0, '#6366f1',
-        8.0, '#3b82f6',
-        14.0, '#10b981',
-        20.0, '#047857'
+        3.0, '#3663D8',
+        8.0, '#4FC5C2',
+        14.0, '#22C55E',
+        20.0, '#22C55E'
       ]);
     } else if (choroplethMode === 'typology') {
       map.setPaintProperty('h3-tod-fill', 'fill-color', [
         'match',
         ['get', 'typology'],
-        'Commercial Transit Hub', '#06b6d4',
-        'Mixed-Use Residential Area', '#f59e0b',
-        'Low-Accessibility Feeder Zone', '#a855f7',
-        '#64748b'
+        'Commercial Transit Hub', '#B1FC91',
+        'Mixed-Use Residential Area', '#4FC5C2',
+        'Low-Accessibility Feeder Zone', '#473DD2',
+        '#3A3468'
       ]);
     }
   }, [choroplethMode, isMapLoaded]);
@@ -402,3 +402,4 @@ export const MapContainer: React.FC<MapContainerProps> = ({
     </div>
   );
 };
+

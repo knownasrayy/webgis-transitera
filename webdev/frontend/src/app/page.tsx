@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import React, { useState, useRef } from 'react';
 import Link from 'next/link';
@@ -53,7 +53,7 @@ export default function LandingPage() {
   };
 
   return (
-    <div className="antialiased selection:bg-brand-500 selection:text-white overflow-x-hidden font-montserrat bg-[#0d0e11] text-[#e4e8ed]">
+    <div className="antialiased selection:bg-brand-500 selection:text-white overflow-x-hidden font-montserrat bg-surface-container-lowest text-on-surface">
       {/* BEGIN: Navigation */}
       <motion.nav 
         className={`fixed top-0 w-full z-50 transition-all duration-300 ease-in-out ${isScrolled ? 'glass-panel-stitch' : 'bg-transparent'}`}
@@ -67,17 +67,17 @@ export default function LandingPage() {
                 src="/assets/landing/LOGO.png"
               />
               <span className="text-xl font-bold text-white tracking-tight">
-                Transit<span className="text-accent-orange">ERA</span>
+                Transit<span className="text-brand-lime">ERA</span>
               </span>
             </div>
             <div className="hidden md:flex space-x-8">
-              <Link className="text-sm font-medium text-brand-100 hover:text-white transition-colors" href="#platform">Platform</Link>
-              <Link className="text-sm font-medium text-brand-100 hover:text-white transition-colors" href="#solutions">Solutions</Link>
-              <Link className="text-sm font-medium text-brand-100 hover:text-white transition-colors" href="#use-cases">Use Cases</Link>
-              <Link className="text-sm font-medium text-brand-100 hover:text-white transition-colors" href="#about">About</Link>
+              <Link className="text-sm font-medium text-on-surface hover:text-white transition-colors" href="#platform">Platform</Link>
+              <Link className="text-sm font-medium text-on-surface hover:text-white transition-colors" href="#solutions">Solutions</Link>
+              <Link className="text-sm font-medium text-on-surface hover:text-white transition-colors" href="#use-cases">Use Cases</Link>
+              <Link className="text-sm font-medium text-on-surface hover:text-white transition-colors" href="#about">About</Link>
             </div>
             <div className="flex items-center space-x-4">
-              <Link className="px-5 py-2.5 text-sm font-semibold text-white bg-accent-orange hover:bg-orange-600 rounded transition-colors shadow-[0_0_15px_rgba(249,115,22,0.3)] flex items-center gap-2" href="/map">
+              <Link className="px-5 py-2.5 text-sm font-semibold text-surface-container-lowest bg-brand-lime hover:bg-[#8CE0C4] rounded transition-colors shadow-[0_0_15px_rgba(177,252,145,0.3)] flex items-center gap-2" href="/map">
                 <span>Launch App</span>
               </Link>
             </div>
@@ -108,7 +108,7 @@ export default function LandingPage() {
           animate="visible"
         >
           <motion.div variants={heroItemVars}>
-            <div className="inline-flex items-center px-3 py-1 rounded-full border border-accent-orange/30 bg-accent-orange/10 text-accent-orange text-xs font-semibold uppercase tracking-wider mb-8">
+            <div className="inline-flex items-center px-3 py-1 rounded-full border border-brand-lime/30 bg-brand-lime/10 text-brand-lime text-xs font-semibold uppercase tracking-wider mb-8">
               Maps That Think!
             </div>
           </motion.div>
@@ -117,12 +117,12 @@ export default function LandingPage() {
             Spatial Intelligence for <br /> <span className="text-gradient italic font-serif">Mass Transportation</span>
           </motion.h1>
           
-          <motion.p variants={heroItemVars} className="mt-4 max-w-2xl mx-auto text-base leading-[1.6] text-brand-200 mb-10">
+          <motion.p variants={heroItemVars} className="mt-4 max-w-2xl mx-auto text-base leading-[1.6] text-on-surface-variant mb-10">
             Empowering governments, businesses, and commuters with AI-driven spatial data to optimize transit-oriented development and high-growth urban strategies.
           </motion.p>
           
           <motion.div variants={heroItemVars} className="flex flex-col sm:flex-row justify-center gap-4">
-            <Link className="px-8 py-4 text-sm font-bold text-white bg-accent-orange hover:bg-orange-600 rounded-lg transition-all shadow-[0_0_20px_rgba(249,115,22,0.4)] hover:shadow-[0_0_30px_rgba(249,115,22,0.6)] flex items-center justify-center gap-2" href="/map">
+            <Link className="px-8 py-4 text-sm font-bold text-surface-container-lowest bg-brand-lime hover:bg-[#8CE0C4] rounded-lg transition-all shadow-[0_0_20px_rgba(177,252,145,0.4)] hover:shadow-[0_0_30px_rgba(177,252,145,0.6)] flex items-center justify-center gap-2" href="/map">
               <span>Launch App</span>
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
             </Link>
@@ -143,11 +143,11 @@ export default function LandingPage() {
               transition={{ duration: 0.6, ease: defaultEase }}
             >
               <div className="inline-flex gap-2 mb-6">
-                <span className="px-3 py-1 rounded-full bg-accent-blue/10 text-accent-blue text-xs font-semibold uppercase">Insights</span>
-                <span className="px-3 py-1 rounded-full bg-brand-800 text-brand-200 text-xs font-semibold uppercase">AI-Powered</span>
+                <span className="px-3 py-1 rounded-full bg-brand-teal/10 text-brand-teal text-xs font-semibold uppercase">Insights</span>
+                <span className="px-3 py-1 rounded-full bg-surface-container-high text-on-surface-variant text-xs font-semibold uppercase">AI-Powered</span>
               </div>
-              <h2 className="text-[24px] font-semibold text-white mb-6">Data-driven <span className="italic font-serif text-brand-300">property insights</span></h2>
-              <p className="text-base leading-[1.6] text-brand-200 mb-8">
+              <h2 className="text-[24px] font-semibold text-white mb-6">Data-driven <span className="italic font-serif text-on-surface-variant">property insights</span></h2>
+              <p className="text-base leading-[1.6] text-on-surface-variant mb-8">
                 Our platform leverages smart analytics and H3 spatial resolution to help you find high-potential investments and plan sustainable infrastructure. We combine real-time data with intuitive visual dashboards so you can pinpoint areas poised for growth.
               </p>
               <div className="space-y-6">
@@ -159,9 +159,9 @@ export default function LandingPage() {
                   transition={{ duration: 0.6, delay: 0.1, ease: defaultEase }}
                 >
                   <h3 className="text-xl font-bold text-white mb-2 flex items-center gap-2">
-                    <span className="text-accent-orange font-mono text-sm">01</span> Retail Success Score
+                    <span className="text-brand-lime font-mono text-sm">01</span> Retail Success Score
                   </h3>
-                  <p className="text-brand-300 text-sm">Analyze foot traffic patterns, demographics, and transit proximity to score commercial viability with pinpoint accuracy.</p>
+                  <p className="text-on-surface-variant text-sm">Analyze foot traffic patterns, demographics, and transit proximity to score commercial viability with pinpoint accuracy.</p>
                 </motion.div>
                 
                 <motion.div 
@@ -174,7 +174,7 @@ export default function LandingPage() {
                   <h3 className="text-xl font-bold text-white mb-2 flex items-center gap-2">
                     <span className="text-brand-400 font-mono text-sm">02</span> Predictive Insights
                   </h3>
-                  <p className="text-brand-300 text-sm">Use AI-driven forecasting to spot properties and transit corridors that match long-term urban growth and investment criteria.</p>
+                  <p className="text-on-surface-variant text-sm">Use AI-driven forecasting to spot properties and transit corridors that match long-term urban growth and investment criteria.</p>
                 </motion.div>
               </div>
             </motion.div>
@@ -211,8 +211,8 @@ export default function LandingPage() {
             viewport={{ once: true }}
             transition={{ duration: 0.6, ease: defaultEase }}
           >
-            <h2 className="text-[24px] font-semibold text-white mb-6">Omni-channel intelligence, <br /> <span className="italic font-serif text-brand-300">any stakeholder</span></h2>
-            <p className="text-base leading-[1.6] text-brand-200">
+            <h2 className="text-[24px] font-semibold text-white mb-6">Omni-channel intelligence, <br /> <span className="italic font-serif text-on-surface-variant">any stakeholder</span></h2>
+            <p className="text-base leading-[1.6] text-on-surface-variant">
               TransitERA provides tailored interfaces and tools for the diverse ecosystem of urban development, ensuring everyone has the data they need.
             </p>
           </motion.div>
@@ -233,9 +233,9 @@ export default function LandingPage() {
               />
               <div className="absolute inset-0 bg-gradient-to-t from-surface-container-lowest via-surface-container-lowest/80 to-transparent"></div>
               <div className="absolute bottom-0 left-0 p-8">
-                <span className="px-3 py-1 rounded-full bg-brand-900/80 text-brand-100 border border-brand-700 text-xs font-semibold mb-4 inline-block backdrop-blur-sm">Government</span>
+                <span className="px-3 py-1 rounded-full bg-surface-container/80 text-on-surface border border-surface-container-highest text-xs font-semibold mb-4 inline-block backdrop-blur-sm">Government</span>
                 <h3 className="text-2xl font-bold text-white mb-2">Policy &amp; Planning</h3>
-                <p className="text-brand-200 text-sm">Analyze TOD readiness, plan feeder routes, and simulate urban impact with high-resolution spatial overlays.</p>
+                <p className="text-on-surface-variant text-sm">Analyze TOD readiness, plan feeder routes, and simulate urban impact with high-resolution spatial overlays.</p>
               </div>
             </motion.div>
 
@@ -248,9 +248,9 @@ export default function LandingPage() {
               />
               <div className="absolute inset-0 bg-gradient-to-t from-surface-container-lowest via-surface-container-lowest/80 to-transparent"></div>
               <div className="absolute bottom-0 left-0 p-8">
-                <span className="px-3 py-1 rounded-full bg-accent-orange/20 text-accent-orange border border-accent-orange/30 text-xs font-semibold mb-4 inline-block backdrop-blur-sm">Business &amp; Investor</span>
+                <span className="px-3 py-1 rounded-full bg-brand-lime/20 text-brand-lime border border-brand-lime/30 text-xs font-semibold mb-4 inline-block backdrop-blur-sm">Business &amp; Investor</span>
                 <h3 className="text-2xl font-bold text-white mb-2">Commercial Viability</h3>
-                <p className="text-brand-200 text-sm">Discover high-yield locations, analyze foot traffic, and optimize tenant mix near major transit hubs.</p>
+                <p className="text-on-surface-variant text-sm">Discover high-yield locations, analyze foot traffic, and optimize tenant mix near major transit hubs.</p>
               </div>
             </motion.div>
 
@@ -263,9 +263,9 @@ export default function LandingPage() {
               />
               <div className="absolute inset-0 bg-gradient-to-t from-surface-container-lowest via-surface-container-lowest/80 to-transparent"></div>
               <div className="absolute bottom-0 left-0 p-8">
-                <span className="px-3 py-1 rounded-full bg-accent-green/20 text-accent-green border border-accent-green/30 text-xs font-semibold mb-4 inline-block backdrop-blur-sm">Commuter &amp; Tourist</span>
+                <span className="px-3 py-1 rounded-full bg-success-green/20 text-success-green border border-success-green/30 text-xs font-semibold mb-4 inline-block backdrop-blur-sm">Commuter &amp; Tourist</span>
                 <h3 className="text-2xl font-bold text-white mb-2">Seamless Transit</h3>
-                <p className="text-brand-200 text-sm">Navigate complex transit networks, discover local POIs, and evaluate walkability indexes for better journeys.</p>
+                <p className="text-on-surface-variant text-sm">Navigate complex transit networks, discover local POIs, and evaluate walkability indexes for better journeys.</p>
               </div>
             </motion.div>
           </motion.div>
@@ -284,7 +284,7 @@ export default function LandingPage() {
             transition={{ duration: 0.6, ease: defaultEase }}
           >
             <h2 className="text-[24px] font-semibold text-white mb-4">A unified interface for complex spatial data</h2>
-            <p className="text-brand-300">Explore our specialized dashboards designed for deep analytical insights.</p>
+            <p className="text-on-surface-variant">Explore our specialized dashboards designed for deep analytical insights.</p>
           </motion.div>
           
           <div className="relative h-[400px] sm:h-[500px] md:h-[600px] lg:h-[700px] flex justify-center items-center">
@@ -344,26 +344,26 @@ export default function LandingPage() {
                 />
                 <span className="text-lg font-bold text-white tracking-tight">TransitERA</span>
               </div>
-              <p className="text-brand-300 text-sm max-w-sm leading-relaxed">
+              <p className="text-on-surface-variant text-sm max-w-sm leading-relaxed">
                 Spatial Intelligence for Mass Transportation. Building smarter, more connected cities through data.
               </p>
             </div>
             <div>
               <h4 className="text-white font-semibold mb-4 text-sm">Products</h4>
               <ul className="space-y-2 text-sm">
-                <li><Link className="text-brand-300 hover:text-white transition-colors" href="/map">Gov Portal</Link></li>
-                <li><Link className="text-brand-300 hover:text-white transition-colors" href="/map">Investor Analytics</Link></li>
-                <li><Link className="text-brand-300 hover:text-white transition-colors" href="/map">Commuter App</Link></li>
-                <li><Link className="text-brand-300 hover:text-white transition-colors" href="#">API Access</Link></li>
+                <li><Link className="text-on-surface-variant hover:text-white transition-colors" href="/map">Gov Portal</Link></li>
+                <li><Link className="text-on-surface-variant hover:text-white transition-colors" href="/map">Investor Analytics</Link></li>
+                <li><Link className="text-on-surface-variant hover:text-white transition-colors" href="/map">Commuter App</Link></li>
+                <li><Link className="text-on-surface-variant hover:text-white transition-colors" href="#">API Access</Link></li>
               </ul>
             </div>
             <div>
               <h4 className="text-white font-semibold mb-4 text-sm">Company</h4>
               <ul className="space-y-2 text-sm">
-                <li><Link className="text-brand-300 hover:text-white transition-colors" href="#">About Us</Link></li>
-                <li><Link className="text-brand-300 hover:text-white transition-colors" href="#">Careers</Link></li>
-                <li><Link className="text-brand-300 hover:text-white transition-colors" href="#">Contact</Link></li>
-                <li><Link className="text-brand-300 hover:text-white transition-colors" href="#">Privacy Policy</Link></li>
+                <li><Link className="text-on-surface-variant hover:text-white transition-colors" href="#">About Us</Link></li>
+                <li><Link className="text-on-surface-variant hover:text-white transition-colors" href="#">Careers</Link></li>
+                <li><Link className="text-on-surface-variant hover:text-white transition-colors" href="#">Contact</Link></li>
+                <li><Link className="text-on-surface-variant hover:text-white transition-colors" href="#">Privacy Policy</Link></li>
               </ul>
             </div>
           </div>
@@ -386,3 +386,4 @@ export default function LandingPage() {
     </div>
   );
 }
+

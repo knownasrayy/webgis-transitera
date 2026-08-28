@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import React from 'react';
 import { Layers, Eye, Map, Check } from 'lucide-react';
@@ -27,7 +27,7 @@ export const LayerControl: React.FC<LayerControlProps> = ({
     <div className="glass-panel rounded-xl p-3 text-slate-200 text-xs w-64 space-y-3 shadow-xl">
       {/* Header */}
       <div className="flex items-center gap-1.5 pb-2 border-b border-slate-800">
-        <Layers className="w-4 h-4 text-cyan-400" />
+        <Layers className="w-4 h-4 text-brand-teal" />
         <span className="font-bold text-slate-100 uppercase tracking-wider text-[11px]">
           Layer Control & Legend
         </span>
@@ -51,7 +51,7 @@ export const LayerControl: React.FC<LayerControlProps> = ({
               onClick={() => onChangeBasemapStyle(key)}
               className={`py-1 px-1.5 rounded-lg text-[10px] font-bold transition-all border ${
                 basemapStyle === key
-                  ? 'bg-blue-600 border-blue-400 text-white shadow-sm'
+                  ? 'bg-brand-lime text-surface-container-lowest border-brand-lime text-white shadow-sm'
                   : 'bg-slate-900/60 border-slate-800 text-slate-400 hover:text-slate-200'
               }`}
             >
@@ -71,36 +71,36 @@ export const LayerControl: React.FC<LayerControlProps> = ({
             onClick={() => onChangeChoroplethMode('tod_score')}
             className={`w-full text-left py-1.5 px-2 rounded-lg text-[11px] font-medium flex items-center justify-between border transition-all ${
               choroplethMode === 'tod_score'
-                ? 'bg-cyan-950/60 border-cyan-500/50 text-cyan-300'
+                ? 'bg-brand-teal/20 border-brand-teal/50 text-brand-teal'
                 : 'bg-slate-900/40 border-slate-800/80 text-slate-400 hover:text-slate-300'
             }`}
           >
             <span>TOD Readiness Score (5D)</span>
-            {choroplethMode === 'tod_score' && <Check className="w-3.5 h-3.5 text-cyan-400" />}
+            {choroplethMode === 'tod_score' && <Check className="w-3.5 h-3.5 text-brand-teal" />}
           </button>
 
           <button
             onClick={() => onChangeChoroplethMode('njop_premium')}
             className={`w-full text-left py-1.5 px-2 rounded-lg text-[11px] font-medium flex items-center justify-between border transition-all ${
               choroplethMode === 'njop_premium'
-                ? 'bg-cyan-950/60 border-cyan-500/50 text-cyan-300'
+                ? 'bg-brand-teal/20 border-brand-teal/50 text-brand-teal'
                 : 'bg-slate-900/40 border-slate-800/80 text-slate-400 hover:text-slate-300'
             }`}
           >
-            <span>Estimasi Nilai Lahan (%ΔNJOP)</span>
-            {choroplethMode === 'njop_premium' && <Check className="w-3.5 h-3.5 text-cyan-400" />}
+            <span>Estimasi Nilai Lahan (%Î”NJOP)</span>
+            {choroplethMode === 'njop_premium' && <Check className="w-3.5 h-3.5 text-brand-teal" />}
           </button>
 
           <button
             onClick={() => onChangeChoroplethMode('typology')}
             className={`w-full text-left py-1.5 px-2 rounded-lg text-[11px] font-medium flex items-center justify-between border transition-all ${
               choroplethMode === 'typology'
-                ? 'bg-cyan-950/60 border-cyan-500/50 text-cyan-300'
+                ? 'bg-brand-teal/20 border-brand-teal/50 text-brand-teal'
                 : 'bg-slate-900/40 border-slate-800/80 text-slate-400 hover:text-slate-300'
             }`}
           >
             <span>Tipologi Kawasan (XGBoost)</span>
-            {choroplethMode === 'typology' && <Check className="w-3.5 h-3.5 text-cyan-400" />}
+            {choroplethMode === 'typology' && <Check className="w-3.5 h-3.5 text-brand-teal" />}
           </button>
         </div>
       </div>
@@ -111,7 +111,7 @@ export const LayerControl: React.FC<LayerControlProps> = ({
           onClick={onToggleSurveyPoints}
           className={`w-full py-1.5 px-2 rounded-lg text-[11px] font-medium flex items-center justify-between border transition-all ${
             showSurveyPoints
-              ? 'bg-emerald-950/50 border-emerald-500/50 text-emerald-300'
+              ? 'bg-brand-teal/20 border-brand-teal/50 text-brand-teal'
               : 'bg-slate-900/40 border-slate-800 text-slate-400'
           }`}
         >
@@ -131,13 +131,13 @@ export const LayerControl: React.FC<LayerControlProps> = ({
           {choroplethMode === 'tod_score'
             ? 'Legenda TOD Readiness Score'
             : choroplethMode === 'njop_premium'
-            ? 'Legenda Kenaikan %ΔNJOP'
+            ? 'Legenda Kenaikan %Î”NJOP'
             : 'Legenda Tipologi Kawasan'}
         </div>
 
         {choroplethMode === 'tod_score' && (
           <div className="space-y-1">
-            <div className="h-2 rounded-full bg-gradient-to-r from-red-500 via-amber-500 to-emerald-500 w-full" />
+            <div className="h-2 rounded-full bg-gradient-to-r from-alert-red via-brand-teal to-success-green w-full" />
             <div className="flex justify-between text-[9px] text-slate-400 font-medium">
               <span>0 (Rendah)</span>
               <span>50 (Sedang)</span>
@@ -148,7 +148,7 @@ export const LayerControl: React.FC<LayerControlProps> = ({
 
         {choroplethMode === 'njop_premium' && (
           <div className="space-y-1">
-            <div className="h-2 rounded-full bg-gradient-to-r from-indigo-500 via-blue-500 to-emerald-400 w-full" />
+            <div className="h-2 rounded-full bg-gradient-to-r from-brand-blue via-brand-teal to-success-green w-full" />
             <div className="flex justify-between text-[9px] text-slate-400 font-medium">
               <span>+0%</span>
               <span>+10%</span>
@@ -160,15 +160,15 @@ export const LayerControl: React.FC<LayerControlProps> = ({
         {choroplethMode === 'typology' && (
           <div className="space-y-1 text-[10px]">
             <div className="flex items-center gap-2">
-              <span className="w-2.5 h-2.5 rounded bg-cyan-500" />
+              <span className="w-2.5 h-2.5 rounded bg-brand-lime" />
               <span>Commercial Transit Hub</span>
             </div>
             <div className="flex items-center gap-2">
-              <span className="w-2.5 h-2.5 rounded bg-amber-500" />
+              <span className="w-2.5 h-2.5 rounded bg-brand-teal" />
               <span>Mixed-Use Area</span>
             </div>
             <div className="flex items-center gap-2">
-              <span className="w-2.5 h-2.5 rounded bg-purple-500" />
+              <span className="w-2.5 h-2.5 rounded bg-brand-purple" />
               <span>Feeder Zone</span>
             </div>
           </div>
@@ -177,3 +177,4 @@ export const LayerControl: React.FC<LayerControlProps> = ({
     </div>
   );
 };
+

@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import React, { useState, useRef, useEffect } from 'react';
 import { AIChatMessage, StationId } from '@/types';
@@ -26,7 +26,7 @@ export const AIChatPanel: React.FC<AIChatPanelProps> = ({
     {
       id: 'init-1',
       sender: 'assistant',
-      text: 'Halo! Saya **Asisten Spasial TransitERA** 🚆. Tanyakan kesiapan TOD di 5 stasiun Surabaya, komparasi antarsimpul, estimasi kenaikan nilai tanah (%ΔNJOP), atau profil kesesuaian lokasi usaha UMKM.',
+      text: 'Halo! Saya **Asisten Spasial TransitERA** ðŸš†. Tanyakan kesiapan TOD di 5 stasiun Surabaya, komparasi antarsimpul, estimasi kenaikan nilai tanah (%Î”NJOP), atau profil kesesuaian lokasi usaha UMKM.',
       timestamp: 'Baru saja'
     }
   ]);
@@ -101,13 +101,13 @@ export const AIChatPanel: React.FC<AIChatPanelProps> = ({
       {/* Panel Header */}
       <div className="px-4 py-3 border-b border-slate-800 flex items-center justify-between bg-slate-900/80">
         <div className="flex items-center gap-2">
-          <div className="w-7 h-7 rounded-lg bg-cyan-500/20 border border-cyan-500/40 flex items-center justify-center">
-            <Bot className="w-4 h-4 text-cyan-400" />
+          <div className="w-7 h-7 rounded-lg bg-brand-teal/20 border border-brand-teal/40 flex items-center justify-center">
+            <Bot className="w-4 h-4 text-brand-teal" />
           </div>
           <div>
             <h3 className="text-xs font-bold text-slate-100 flex items-center gap-1.5">
               Spatial AI Assistant
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+              <span className="w-1.5 h-1.5 rounded-full bg-success-green animate-pulse"></span>
             </h3>
             <p className="text-[10px] text-slate-400">Google Gemini Function Calling Proxy</p>
           </div>
@@ -131,15 +131,15 @@ export const AIChatPanel: React.FC<AIChatPanelProps> = ({
             className={`flex gap-2.5 ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`}
           >
             {msg.sender === 'assistant' && (
-              <div className="w-6 h-6 rounded-full bg-gradient-to-tr from-cyan-600 to-blue-600 flex-shrink-0 flex items-center justify-center text-white mt-1 shadow-sm">
-                <Sparkles className="w-3 h-3 text-cyan-200" />
+              <div className="w-6 h-6 rounded-full bg-gradient-to-tr from-brand-teal to-brand-blue flex-shrink-0 flex items-center justify-center text-white mt-1 shadow-sm">
+                <Sparkles className="w-3 h-3 text-brand-lime" />
               </div>
             )}
 
             <div
               className={`max-w-[85%] rounded-2xl px-3.5 py-2.5 text-xs leading-relaxed ${
                 msg.sender === 'user'
-                  ? 'bg-blue-600 text-white rounded-br-none shadow-md'
+                  ? 'bg-brand-blue text-white rounded-br-none shadow-md'
                   : 'bg-slate-900/90 text-slate-200 border border-slate-800 rounded-bl-none shadow-sm'
               }`}
             >
@@ -152,7 +152,7 @@ export const AIChatPanel: React.FC<AIChatPanelProps> = ({
               />
               <div
                 className={`text-[9px] mt-1 text-right ${
-                  msg.sender === 'user' ? 'text-blue-200' : 'text-slate-500'
+                  msg.sender === 'user' ? 'text-brand-lime' : 'text-slate-500'
                 }`}
               >
                 {msg.timestamp}
@@ -168,7 +168,7 @@ export const AIChatPanel: React.FC<AIChatPanelProps> = ({
         ))}
 
         {isLoading && (
-          <div className="flex gap-2.5 items-center text-xs text-cyan-400 bg-slate-900/60 p-2.5 rounded-xl border border-slate-800 w-fit">
+          <div className="flex gap-2.5 items-center text-xs text-brand-teal bg-slate-900/60 p-2.5 rounded-xl border border-slate-800 w-fit">
             <Loader2 className="w-4 h-4 animate-spin" />
             <span>Menganalisis data spasial & menjalankan fungsi...</span>
           </div>
@@ -197,13 +197,13 @@ export const AIChatPanel: React.FC<AIChatPanelProps> = ({
             onChange={(e) => setInputText(e.target.value)}
             placeholder="Tanyakan analisis spasial TOD / ketik prompt..."
             disabled={isLoading}
-            className="flex-1 bg-slate-950/80 border border-slate-700 focus:border-cyan-500 rounded-xl px-3 py-2 text-xs text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-cyan-500 transition-colors disabled:opacity-50"
+            className="flex-1 bg-slate-950/80 border border-slate-700 focus:border-brand-teal rounded-xl px-3 py-2 text-xs text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-brand-teal transition-colors disabled:opacity-50"
             suppressHydrationWarning
           />
           <button
             type="submit"
             disabled={!inputText.trim() || isLoading}
-            className="p-2 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-slate-950 font-bold transition-all disabled:opacity-40 disabled:pointer-events-none shadow-md shadow-blue-500/20"
+            className="p-2 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-brand-teal hover:to-blue-500 text-slate-950 font-bold transition-all disabled:opacity-40 disabled:pointer-events-none shadow-md shadow-brand-teal/20"
             suppressHydrationWarning
           >
             <Send className="w-4 h-4" />
@@ -213,3 +213,4 @@ export const AIChatPanel: React.FC<AIChatPanelProps> = ({
     </div>
   );
 };
+

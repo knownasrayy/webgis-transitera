@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import React, { useState } from 'react';
 import { StationId } from '@/types';
@@ -36,7 +36,7 @@ interface SidebarContainerProps {
   onOpenFeedback?: () => void;
 }
 
-/* ── Orange Toggle ── */
+/* â”€â”€ Orange Toggle â”€â”€ */
 function Toggle({ active, onToggle, label }: { active: boolean; onToggle: () => void; label: string }) {
   return (
     <button onClick={onToggle} className="w-full flex items-center justify-between py-1.5 px-2 rounded-lg text-xs hover:bg-slate-800/40 transition-colors group">
@@ -46,7 +46,7 @@ function Toggle({ active, onToggle, label }: { active: boolean; onToggle: () => 
   );
 }
 
-/* ── Nav Item ── */
+/* â”€â”€ Nav Item â”€â”€ */
 function NavItem({ icon: Icon, label, active, onClick, badge, expandable, expanded }: {
   icon: React.ElementType; label: string; active?: boolean; onClick?: () => void; badge?: string; expandable?: boolean; expanded?: boolean;
 }) {
@@ -75,7 +75,7 @@ function NavItem({ icon: Icon, label, active, onClick, badge, expandable, expand
   );
 }
 
-/* ── Section Header ── */
+/* â”€â”€ Section Header â”€â”€ */
 function SectionHeader({ label }: { label: string }) {
   return (
     <div className="text-[10px] uppercase font-bold tracking-wider text-slate-500 px-3 pt-3 pb-1">
@@ -84,7 +84,7 @@ function SectionHeader({ label }: { label: string }) {
   );
 }
 
-/* ── Basemap Grid (shared) ── */
+/* â”€â”€ Basemap Grid (shared) â”€â”€ */
 function BasemapGrid({ basemapStyle, onChangeBasemapStyle }: { basemapStyle: BasemapStyleKey; onChangeBasemapStyle: (s: BasemapStyleKey) => void }) {
   return (
     <>
@@ -154,7 +154,7 @@ export const SidebarContainer: React.FC<SidebarContainerProps> = ({
 
   return (
     <aside className="hidden md:flex w-[var(--sidebar-width)] h-full flex-col glass-sidebar z-20 overflow-hidden">
-      {/* ── Sidebar Header ── */}
+      {/* â”€â”€ Sidebar Header â”€â”€ */}
       <div className="px-4 py-3 border-b border-slate-800/80">
         <div className="flex items-center gap-2">
           <div className="w-2 h-2 rounded-full bg-orange-500" />
@@ -165,10 +165,10 @@ export const SidebarContainer: React.FC<SidebarContainerProps> = ({
         </div>
       </div>
 
-      {/* ── Scrollable Content ── */}
+      {/* â”€â”€ Scrollable Content â”€â”€ */}
       <div className="flex-1 overflow-y-auto py-1">
 
-        {/* ══════ Government Sidebar ══════ */}
+        {/* â•â•â•â•â•â• Government Sidebar â•â•â•â•â•â• */}
         {activePersona === 'government' && (
           <>
             <SectionHeader label="Map Layers" />
@@ -185,20 +185,20 @@ export const SidebarContainer: React.FC<SidebarContainerProps> = ({
                 <div>
                   <label className="text-[10px] text-slate-400 block mb-1">Min TOD Score: <span className="text-orange-400 font-bold">{h3ScoreRange[0]}</span></label>
                   <input type="range" min={0} max={100} value={h3ScoreRange[0]} onChange={(e) => setH3ScoreRange([+e.target.value, h3ScoreRange[1]])}
-                    className="w-full h-1 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-orange-500" />
+                    className="w-full h-1 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-brand-lime" />
                 </div>
                 <div>
                   <label className="text-[10px] text-slate-400 block mb-1">Max TOD Score: <span className="text-orange-400 font-bold">{h3ScoreRange[1]}</span></label>
                   <input type="range" min={0} max={100} value={h3ScoreRange[1]} onChange={(e) => setH3ScoreRange([h3ScoreRange[0], +e.target.value])}
-                    className="w-full h-1 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-orange-500" />
+                    className="w-full h-1 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-brand-lime" />
                 </div>
                 <div>
                   <label className="text-[10px] text-slate-400 block mb-1">Ring Distance: <span className="text-orange-400 font-bold">{h3RingFilter}</span></label>
                   <input type="range" min={0} max={5} value={h3RingFilter} onChange={(e) => setH3RingFilter(+e.target.value)}
-                    className="w-full h-1 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-orange-500" />
+                    className="w-full h-1 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-brand-lime" />
                 </div>
                 <div className="text-[9px] text-slate-500 pt-1 border-t border-slate-800">
-                  Menampilkan sel H3 dengan skor {h3ScoreRange[0]}–{h3ScoreRange[1]} dalam ring ≤{h3RingFilter}
+                  Menampilkan sel H3 dengan skor {h3ScoreRange[0]}â€“{h3ScoreRange[1]} dalam ring â‰¤{h3RingFilter}
                 </div>
               </div>
             )}
@@ -219,7 +219,7 @@ export const SidebarContainer: React.FC<SidebarContainerProps> = ({
 
                 {/* NJOP Legend */}
                 <div className="space-y-1">
-                  <div className="text-[10px] font-semibold text-slate-300">%ΔNJOP Premium</div>
+                  <div className="text-[10px] font-semibold text-slate-300">%Î”NJOP Premium</div>
                   <div className="h-2 rounded-full bg-gradient-to-r from-indigo-500 via-blue-500 to-emerald-400 w-full" />
                   <div className="flex justify-between text-[9px] text-slate-500 font-medium">
                     <span>+0%</span><span>+10%</span><span>+20%</span>
@@ -302,7 +302,7 @@ export const SidebarContainer: React.FC<SidebarContainerProps> = ({
           </>
         )}
 
-        {/* ══════ Business/Investor Sidebar ══════ */}
+        {/* â•â•â•â•â•â• Business/Investor Sidebar â•â•â•â•â•â• */}
         {activePersona === 'business' && (
           <>
             <SectionHeader label="Spatial Views" />
@@ -324,7 +324,7 @@ export const SidebarContainer: React.FC<SidebarContainerProps> = ({
                   </div>
                   <div className="bg-slate-800/50 rounded-lg p-2 text-center">
                     <div className="text-lg font-black text-cyan-400">{demographics.density.toLocaleString()}</div>
-                    <div className="text-[9px] text-slate-500">Jiwa/km²</div>
+                    <div className="text-[9px] text-slate-500">Jiwa/kmÂ²</div>
                   </div>
                   <div className="bg-slate-800/50 rounded-lg p-2 text-center">
                     <div className="text-sm font-bold text-emerald-400">{demographics.avgIncome}</div>
@@ -384,7 +384,7 @@ export const SidebarContainer: React.FC<SidebarContainerProps> = ({
                     </div>
                     <div className="bg-slate-800/50 rounded-lg p-2 text-center">
                       <div className={`text-sm font-bold ${demographics.incomeLevel === 'high' ? 'text-emerald-400' : demographics.incomeLevel === 'medium' ? 'text-amber-400' : 'text-red-400'}`}>
-                        {demographics.incomeLevel === 'high' ? '▲ Tinggi' : demographics.incomeLevel === 'medium' ? '● Sedang' : '▼ Rendah'}
+                        {demographics.incomeLevel === 'high' ? 'â–² Tinggi' : demographics.incomeLevel === 'medium' ? 'â— Sedang' : 'â–¼ Rendah'}
                       </div>
                       <div className="text-[9px] text-slate-500">Income Level</div>
                     </div>
@@ -407,7 +407,7 @@ export const SidebarContainer: React.FC<SidebarContainerProps> = ({
                         <span className="text-sm font-black" style={{ color: environment.aqiColor }}>{environment.aqi}</span>
                       </div>
                       <div className="text-[10px] font-medium" style={{ color: environment.aqiColor }}>{environment.aqiLabel}</div>
-                      <div className="text-[9px] text-slate-500">PM2.5: {environment.pm25} μg/m³</div>
+                      <div className="text-[9px] text-slate-500">PM2.5: {environment.pm25} Î¼g/mÂ³</div>
                     </div>
                   </div>
                   {/* Flood Risk */}
@@ -431,7 +431,7 @@ export const SidebarContainer: React.FC<SidebarContainerProps> = ({
                     </div>
                     <div className="bg-slate-800/50 rounded-lg p-2 text-center">
                       <Thermometer className="w-4 h-4 text-red-400 mx-auto mb-1" />
-                      <div className="text-sm font-bold text-red-400">{environment.temperature}°C</div>
+                      <div className="text-sm font-bold text-red-400">{environment.temperature}Â°C</div>
                       <div className="text-[9px] text-slate-500">Suhu</div>
                     </div>
                   </div>
@@ -445,13 +445,13 @@ export const SidebarContainer: React.FC<SidebarContainerProps> = ({
                 <div className="text-[10px] font-bold text-cyan-400 uppercase tracking-wider">Filter Data</div>
                 <div>
                   <label className="text-[10px] text-slate-400 block mb-1">
-                    NJOP Premium Range: <span className="text-orange-400 font-bold">{njopRange[0]}% – {njopRange[1]}%</span>
+                    NJOP Premium Range: <span className="text-orange-400 font-bold">{njopRange[0]}% â€“ {njopRange[1]}%</span>
                   </label>
                   <div className="flex gap-2">
                     <input type="range" min={0} max={25} value={njopRange[0]} onChange={(e) => setNjopRange([+e.target.value, njopRange[1]])}
-                      className="flex-1 h-1 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-orange-500" />
+                      className="flex-1 h-1 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-brand-lime" />
                     <input type="range" min={0} max={25} value={njopRange[1]} onChange={(e) => setNjopRange([njopRange[0], +e.target.value])}
-                      className="flex-1 h-1 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-orange-500" />
+                      className="flex-1 h-1 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-brand-lime" />
                   </div>
                 </div>
                 <div>
@@ -466,7 +466,7 @@ export const SidebarContainer: React.FC<SidebarContainerProps> = ({
                   </select>
                 </div>
                 <div className="text-[9px] text-slate-500 pt-1 border-t border-slate-800">
-                  Filter aktif: NJOP {njopRange[0]}%–{njopRange[1]}% | Tipe: {propertyType === 'all' ? 'Semua' : propertyType}
+                  Filter aktif: NJOP {njopRange[0]}%â€“{njopRange[1]}% | Tipe: {propertyType === 'all' ? 'Semua' : propertyType}
                 </div>
               </div>
             )}
@@ -483,7 +483,7 @@ export const SidebarContainer: React.FC<SidebarContainerProps> = ({
           </>
         )}
 
-        {/* ══════ Commuter Sidebar ══════ */}
+        {/* â•â•â•â•â•â• Commuter Sidebar â•â•â•â•â•â• */}
         {activePersona === 'commuter' && (
           <>
             <SectionHeader label="Navigation" />
@@ -510,20 +510,20 @@ export const SidebarContainer: React.FC<SidebarContainerProps> = ({
                           t.status === 'delayed' ? 'bg-amber-500/15 text-amber-400 border border-amber-500/25' :
                           'bg-slate-700 text-slate-400 border border-slate-600'
                         }`}>
-                          {t.status === 'on_time' ? '● On Time' : t.status === 'delayed' ? '⚠ Delayed' : '✓ Departed'}
+                          {t.status === 'on_time' ? 'â— On Time' : t.status === 'delayed' ? 'âš  Delayed' : 'âœ“ Departed'}
                         </span>
                       </div>
                       <div className="text-[10px] text-slate-400 flex items-center gap-1">
                         <Clock className="w-3 h-3" />
                         <span className="tabular-nums text-slate-200">{t.departureTime}</span>
-                        <span className="text-slate-600">→</span>
+                        <span className="text-slate-600">â†’</span>
                         <span className="tabular-nums text-slate-200">{t.arrivalTime}</span>
                       </div>
                       <div className="text-[10px] text-slate-500 mt-0.5">
-                        {t.origin} → {t.destination}
+                        {t.origin} â†’ {t.destination}
                       </div>
                       <div className="text-[9px] text-slate-600 mt-0.5">
-                        Platform {t.platform} · {t.type}
+                        Platform {t.platform} Â· {t.type}
                       </div>
                     </div>
                   ))}
@@ -594,10 +594,10 @@ export const SidebarContainer: React.FC<SidebarContainerProps> = ({
                             <span className="text-[9px] text-amber-400 font-bold flex items-center gap-0.5">
                               <Star className="w-2.5 h-2.5 fill-amber-400" /> {d.rating}
                             </span>
-                            <span className="text-[9px] text-slate-500">·</span>
+                            <span className="text-[9px] text-slate-500">Â·</span>
                             <span className="text-[9px] text-slate-400">{d.distanceFromStation}</span>
-                            <span className="text-[9px] text-slate-500">·</span>
-                            <span className="text-[9px] text-slate-400">🚶 {d.walkTime}</span>
+                            <span className="text-[9px] text-slate-500">Â·</span>
+                            <span className="text-[9px] text-slate-400">ðŸš¶ {d.walkTime}</span>
                           </div>
                         </div>
                       </div>
@@ -612,7 +612,7 @@ export const SidebarContainer: React.FC<SidebarContainerProps> = ({
         )}
       </div>
 
-      {/* ── Bottom Actions ── */}
+      {/* â”€â”€ Bottom Actions â”€â”€ */}
       <div className="border-t border-slate-800/80 px-2 py-2 space-y-0.5">
         <NavItem icon={Settings} label="Settings" onClick={onOpenSettings} />
         <NavItem icon={HelpCircle} label="Help" onClick={onOpenHelp} />
@@ -621,3 +621,4 @@ export const SidebarContainer: React.FC<SidebarContainerProps> = ({
     </aside>
   );
 };
+
