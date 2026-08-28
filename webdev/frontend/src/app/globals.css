@@ -1,0 +1,270 @@
+@import "tailwindcss";
+@import "maplibre-gl/dist/maplibre-gl.css";
+
+@theme {
+  --font-montserrat: var(--font-montserrat), sans-serif;
+  --font-inter: var(--font-inter), sans-serif;
+  --font-sans: var(--font-inter), sans-serif;
+  --color-brand-50: #f4f6f8;
+  --color-brand-100: #e4e8ed;
+  --color-brand-200: #c5ced8;
+  --color-brand-300: #99aab9;
+  --color-brand-400: #678198;
+  --color-brand-500: #46647d;
+  --color-brand-600: #345065;
+  --color-brand-700: #2a4053;
+  --color-brand-800: #243746;
+  --color-brand-900: #1a365d;
+  --color-brand-950: #12223a;
+  
+  --color-surface: #121316;
+  --color-surface-dim: #121316;
+  --color-surface-bright: #38393c;
+  --color-surface-container-lowest: #0d0e11;
+  --color-surface-container-low: #1a1c1e;
+  --color-surface-container: #1e2022;
+  --color-surface-container-high: #2a2c2f;
+  --color-surface-container-highest: #35373a;
+  
+  --color-accent-orange: #f27a00;
+  --color-accent-blue: #3b82f6;
+  --color-accent-green: #2e7d32;
+  --color-accent-red: #d32f2f;
+
+  --radius-4xl: 2rem;
+}
+
+/* ═══════════════════════════════════════════════════
+   TransitERA Design System — "Intelligent Spatial Engine"
+   Palette: Deep Navy + Orange Accent + Glassmorphism
+   ═══════════════════════════════════════════════════ */
+
+:root {
+  /* Core Palette */
+  --background: #0a0f1d;
+  --background-secondary: #0d1321;
+  --foreground: #f8fafc;
+
+  /* Accent Colors */
+  --accent-orange: #ff7c00;
+  --accent-orange-dim: rgba(255, 124, 0, 0.15);
+  --accent-orange-border: rgba(255, 124, 0, 0.4);
+  --accent-red: #ff2000;
+  --accent-emerald: #10b981;
+  --accent-cyan: #06b6d4;
+  --accent-blue: #3b82f6;
+
+  /* Panel / Glass */
+  --panel-bg: rgba(13, 19, 33, 0.88);
+  --panel-bg-solid: #111827;
+  --panel-border: rgba(51, 65, 85, 0.55);
+  --panel-border-accent: rgba(255, 124, 0, 0.3);
+
+  /* Sidebar */
+  --sidebar-width: 280px;
+  --sidebar-bg: rgba(10, 15, 29, 0.95);
+
+  /* Font Families (set by Next.js font loader) */
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, -apple-system, sans-serif;
+}
+
+/* ── Base Reset ────────────────────────────────────── */
+body {
+  background-color: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+  margin: 0;
+  padding: 0;
+}
+
+/* ── Glassmorphism Panels ──────────────────────────── */
+.glass-panel {
+  background: var(--panel-bg);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid var(--panel-border);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
+}
+
+.glass-panel-accent {
+  background: var(--panel-bg);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid var(--panel-border-accent);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4),
+              inset 0 0 0 1px rgba(255, 124, 0, 0.05);
+}
+
+.glass-header {
+  background: rgba(10, 15, 29, 0.92);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border-bottom: 1px solid rgba(255, 124, 0, 0.15);
+}
+
+.glass-sidebar {
+  background: var(--sidebar-bg);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-right: 1px solid var(--panel-border);
+}
+
+.glass-panel-stitch {
+  background: rgba(26, 54, 93, 0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.text-gradient {
+  background: linear-gradient(to right, #3b82f6, #f97316);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* ── Diamond / Hexagonal Gauge ─────────────────────── */
+.diamond-gauge {
+  position: relative;
+  width: 120px;
+  height: 120px;
+}
+
+.diamond-gauge-shape {
+  transform: rotate(45deg);
+  border-radius: 12px;
+  position: absolute;
+  inset: 8px;
+}
+
+.diamond-gauge-value {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+/* ── Orange Toggle Switch ──────────────────────────── */
+.toggle-switch {
+  width: 36px;
+  height: 20px;
+  border-radius: 10px;
+  position: relative;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  background-color: #334155;
+}
+
+.toggle-switch.active {
+  background-color: var(--accent-orange);
+}
+
+.toggle-switch::after {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: white;
+  transition: transform 0.2s;
+}
+
+.toggle-switch.active::after {
+  transform: translateX(16px);
+}
+
+/* ── MapLibre Controls Customization ───────────────── */
+.maplibregl-ctrl-group {
+  background: rgba(13, 19, 33, 0.92) !important;
+  border: 1px solid rgba(51, 65, 85, 0.7) !important;
+  border-radius: 10px !important;
+  overflow: hidden;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4) !important;
+}
+
+.maplibregl-ctrl-group button {
+  border-bottom: 1px solid rgba(51, 65, 85, 0.4) !important;
+}
+
+.maplibregl-ctrl-group button:last-child {
+  border-bottom: none !important;
+}
+
+.maplibregl-ctrl-group button .maplibregl-ctrl-icon {
+  filter: invert(1);
+}
+
+/* ── MapLibre Popups (Orange Accent) ───────────────── */
+.maplibregl-popup-content {
+  background: rgba(13, 19, 33, 0.96) !important;
+  border: 1px solid rgba(255, 124, 0, 0.35) !important;
+  border-radius: 12px !important;
+  padding: 14px 16px !important;
+  color: #f8fafc !important;
+  box-shadow: 0 12px 28px -5px rgba(0, 0, 0, 0.55),
+              0 0 0 1px rgba(255, 124, 0, 0.1) !important;
+}
+
+.maplibregl-popup-anchor-top .maplibregl-popup-tip {
+  border-bottom-color: rgba(13, 19, 33, 0.96) !important;
+}
+.maplibregl-popup-anchor-bottom .maplibregl-popup-tip {
+  border-top-color: rgba(13, 19, 33, 0.96) !important;
+}
+.maplibregl-popup-anchor-left .maplibregl-popup-tip {
+  border-right-color: rgba(13, 19, 33, 0.96) !important;
+}
+.maplibregl-popup-anchor-right .maplibregl-popup-tip {
+  border-left-color: rgba(13, 19, 33, 0.96) !important;
+}
+
+.maplibregl-popup-close-button {
+  color: #94a3b8 !important;
+  font-size: 18px !important;
+  padding: 4px 8px !important;
+}
+
+.maplibregl-popup-close-button:hover {
+  color: #ff7c00 !important;
+  background: transparent !important;
+}
+
+/* ── Custom Scrollbars ─────────────────────────────── */
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+::-webkit-scrollbar-track {
+  background: rgba(13, 19, 33, 0.5);
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(71, 85, 105, 0.7);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 124, 0, 0.5);
+}
+
+/* ── Utility Animations ────────────────────────────── */
+@keyframes pulse-orange {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+.animate-pulse-orange {
+  animation: pulse-orange 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.skeleton-shimmer {
+  background: linear-gradient(90deg, rgba(30, 41, 59, 0.5) 25%, rgba(51, 65, 85, 0.5) 50%, rgba(30, 41, 59, 0.5) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
