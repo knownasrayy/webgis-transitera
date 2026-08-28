@@ -55,14 +55,14 @@ function NavItem({ icon: Icon, label, active, onClick, badge, expandable, expand
       onClick={onClick}
       className={`w-full flex items-center gap-2.5 py-2 px-3 rounded-lg text-xs font-medium transition-all ${
         active
-          ? 'bg-orange-500/15 text-orange-400 border border-orange-500/25'
+          ? 'bg-brand-lime/15 text-brand-lime border border-brand-lime/25'
           : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/40 border border-transparent'
       }`}
     >
-      <Icon className={`w-4 h-4 flex-shrink-0 ${active ? 'text-orange-400' : 'text-slate-500'}`} />
+      <Icon className={`w-4 h-4 flex-shrink-0 ${active ? 'text-brand-lime' : 'text-slate-500'}`} />
       <span className="flex-1 text-left">{label}</span>
       {badge && (
-        <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-orange-500/15 text-orange-400 border border-orange-500/25">
+        <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-brand-lime/15 text-brand-lime border border-brand-lime/25">
           {badge}
         </span>
       )}
@@ -102,7 +102,7 @@ function BasemapGrid({ basemapStyle, onChangeBasemapStyle }: { basemapStyle: Bas
               onClick={() => onChangeBasemapStyle(key)}
               className={`py-1.5 px-2 rounded-lg text-[10px] font-bold transition-all border ${
                 basemapStyle === key
-                  ? 'bg-orange-500/15 border-orange-500/40 text-orange-400'
+                  ? 'bg-brand-lime/15 border-brand-lime/40 text-brand-lime'
                   : 'bg-slate-900/60 border-slate-800 text-slate-500 hover:text-slate-300'
               }`}
             >
@@ -157,9 +157,9 @@ export const SidebarContainer: React.FC<SidebarContainerProps> = ({
       {/* â”€â”€ Sidebar Header â”€â”€ */}
       <div className="px-4 py-3 border-b border-slate-800/80">
         <div className="flex items-center gap-2">
-          <div className="w-2 h-2 rounded-full bg-orange-500" />
+          <div className="w-2 h-2 rounded-full bg-brand-lime" />
           <div>
-            <h3 className="text-xs font-bold text-orange-400">{config.sidebarTitle}</h3>
+            <h3 className="text-xs font-bold text-brand-lime">{config.sidebarTitle}</h3>
             <p className="text-[10px] text-slate-500">{config.sidebarSubtitle}</p>
           </div>
         </div>
@@ -183,17 +183,17 @@ export const SidebarContainer: React.FC<SidebarContainerProps> = ({
               <div className="px-3 py-3 space-y-3 border-t border-slate-800/60 mt-2">
                 <div className="text-[10px] font-bold text-cyan-400 uppercase tracking-wider">H3 Score Filter</div>
                 <div>
-                  <label className="text-[10px] text-slate-400 block mb-1">Min TOD Score: <span className="text-orange-400 font-bold">{h3ScoreRange[0]}</span></label>
+                  <label className="text-[10px] text-slate-400 block mb-1">Min TOD Score: <span className="text-brand-lime font-bold">{h3ScoreRange[0]}</span></label>
                   <input type="range" min={0} max={100} value={h3ScoreRange[0]} onChange={(e) => setH3ScoreRange([+e.target.value, h3ScoreRange[1]])}
                     className="w-full h-1 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-brand-lime" />
                 </div>
                 <div>
-                  <label className="text-[10px] text-slate-400 block mb-1">Max TOD Score: <span className="text-orange-400 font-bold">{h3ScoreRange[1]}</span></label>
+                  <label className="text-[10px] text-slate-400 block mb-1">Max TOD Score: <span className="text-brand-lime font-bold">{h3ScoreRange[1]}</span></label>
                   <input type="range" min={0} max={100} value={h3ScoreRange[1]} onChange={(e) => setH3ScoreRange([h3ScoreRange[0], +e.target.value])}
                     className="w-full h-1 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-brand-lime" />
                 </div>
                 <div>
-                  <label className="text-[10px] text-slate-400 block mb-1">Ring Distance: <span className="text-orange-400 font-bold">{h3RingFilter}</span></label>
+                  <label className="text-[10px] text-slate-400 block mb-1">Ring Distance: <span className="text-brand-lime font-bold">{h3RingFilter}</span></label>
                   <input type="range" min={0} max={5} value={h3RingFilter} onChange={(e) => setH3RingFilter(+e.target.value)}
                     className="w-full h-1 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-brand-lime" />
                 </div>
@@ -238,7 +238,7 @@ export const SidebarContainer: React.FC<SidebarContainerProps> = ({
                     <span className="text-slate-400">Mixed-Use Heritage Core</span>
                   </div>
                   <div className="flex items-center gap-2 text-[10px]">
-                    <span className="w-3 h-3 rounded bg-orange-500 flex-shrink-0" />
+                    <span className="w-3 h-3 rounded bg-brand-lime flex-shrink-0" />
                     <span className="text-slate-400">Mixed-Use Residential</span>
                   </div>
                   <div className="flex items-center gap-2 text-[10px]">
@@ -251,7 +251,7 @@ export const SidebarContainer: React.FC<SidebarContainerProps> = ({
                 <div className="space-y-1.5">
                   <div className="text-[10px] font-semibold text-slate-300">Simbol</div>
                   <div className="flex items-center gap-2 text-[10px]">
-                    <span className="w-3 h-3 rounded-full bg-gradient-to-tr from-orange-500 to-amber-400 border border-white flex-shrink-0" />
+                    <span className="w-3 h-3 rounded-full bg-gradient-to-tr from-brand-lime to-brand-teal border border-white flex-shrink-0" />
                     <span className="text-slate-400">Simpul Stasiun</span>
                   </div>
                   <div className="flex items-center gap-2 text-[10px]">
@@ -319,7 +319,7 @@ export const SidebarContainer: React.FC<SidebarContainerProps> = ({
                 <div className="text-[10px] font-bold text-cyan-400 uppercase tracking-wider">Area Summary</div>
                 <div className="grid grid-cols-2 gap-2">
                   <div className="bg-slate-800/50 rounded-lg p-2 text-center">
-                    <div className="text-lg font-black text-orange-400">{demographics.population.toLocaleString()}</div>
+                    <div className="text-lg font-black text-brand-lime">{demographics.population.toLocaleString()}</div>
                     <div className="text-[9px] text-slate-500">Populasi</div>
                   </div>
                   <div className="bg-slate-800/50 rounded-lg p-2 text-center">
@@ -331,7 +331,7 @@ export const SidebarContainer: React.FC<SidebarContainerProps> = ({
                     <div className="text-[9px] text-slate-500">Avg Income</div>
                   </div>
                   <div className="bg-slate-800/50 rounded-lg p-2 text-center">
-                    <div className="text-sm font-bold text-amber-400">{demographics.employmentRate}%</div>
+                    <div className="text-sm font-bold text-brand-teal">{demographics.employmentRate}%</div>
                     <div className="text-[9px] text-slate-500">Employment</div>
                   </div>
                 </div>
@@ -383,7 +383,7 @@ export const SidebarContainer: React.FC<SidebarContainerProps> = ({
                       <div className="text-[9px] text-slate-500">Rumah Tangga</div>
                     </div>
                     <div className="bg-slate-800/50 rounded-lg p-2 text-center">
-                      <div className={`text-sm font-bold ${demographics.incomeLevel === 'high' ? 'text-emerald-400' : demographics.incomeLevel === 'medium' ? 'text-amber-400' : 'text-red-400'}`}>
+                      <div className={`text-sm font-bold ${demographics.incomeLevel === 'high' ? 'text-emerald-400' : demographics.incomeLevel === 'medium' ? 'text-brand-teal' : 'text-red-400'}`}>
                         {demographics.incomeLevel === 'high' ? 'â–² Tinggi' : demographics.incomeLevel === 'medium' ? 'â— Sedang' : 'â–¼ Rendah'}
                       </div>
                       <div className="text-[9px] text-slate-500">Income Level</div>
@@ -445,7 +445,7 @@ export const SidebarContainer: React.FC<SidebarContainerProps> = ({
                 <div className="text-[10px] font-bold text-cyan-400 uppercase tracking-wider">Filter Data</div>
                 <div>
                   <label className="text-[10px] text-slate-400 block mb-1">
-                    NJOP Premium Range: <span className="text-orange-400 font-bold">{njopRange[0]}% â€“ {njopRange[1]}%</span>
+                    NJOP Premium Range: <span className="text-brand-lime font-bold">{njopRange[0]}% â€“ {njopRange[1]}%</span>
                   </label>
                   <div className="flex gap-2">
                     <input type="range" min={0} max={25} value={njopRange[0]} onChange={(e) => setNjopRange([+e.target.value, njopRange[1]])}
@@ -457,7 +457,7 @@ export const SidebarContainer: React.FC<SidebarContainerProps> = ({
                 <div>
                   <label className="text-[10px] text-slate-400 block mb-1">Tipe Properti</label>
                   <select value={propertyType} onChange={(e) => setPropertyType(e.target.value)}
-                    className="w-full bg-slate-800 border border-slate-700 rounded-lg text-xs text-slate-200 py-1.5 px-2 appearance-none focus:outline-none focus:border-orange-500">
+                    className="w-full bg-slate-800 border border-slate-700 rounded-lg text-xs text-slate-200 py-1.5 px-2 appearance-none focus:outline-none focus:border-brand-lime">
                     <option value="all">Semua Tipe</option>
                     <option value="ruko">Ruko</option>
                     <option value="tanah">Tanah Kosong</option>
@@ -499,15 +499,15 @@ export const SidebarContainer: React.FC<SidebarContainerProps> = ({
                 <div className="text-[10px] font-bold text-cyan-400 uppercase tracking-wider">Jadwal KRL SRRL</div>
                 <div className="space-y-1.5 max-h-[320px] overflow-y-auto pr-1">
                   {trainSchedules.map((t) => (
-                    <div key={t.id} className="bg-slate-800/50 rounded-lg p-2.5 border border-slate-700/50 hover:border-orange-500/30 transition-colors">
+                    <div key={t.id} className="bg-slate-800/50 rounded-lg p-2.5 border border-slate-700/50 hover:border-brand-lime/30 transition-colors">
                       <div className="flex items-center justify-between mb-1">
                         <div className="flex items-center gap-1.5">
-                          <TrainIcon className="w-3.5 h-3.5 text-orange-400" />
+                          <TrainIcon className="w-3.5 h-3.5 text-brand-lime" />
                           <span className="text-[11px] font-bold text-slate-200">{t.trainNumber}</span>
                         </div>
                         <span className={`text-[9px] font-bold px-1.5 py-0.5 rounded ${
                           t.status === 'on_time' ? 'bg-emerald-500/15 text-emerald-400 border border-emerald-500/25' :
-                          t.status === 'delayed' ? 'bg-amber-500/15 text-amber-400 border border-amber-500/25' :
+                          t.status === 'delayed' ? 'bg-amber-500/15 text-brand-teal border border-amber-500/25' :
                           'bg-slate-700 text-slate-400 border border-slate-600'
                         }`}>
                           {t.status === 'on_time' ? 'â— On Time' : t.status === 'delayed' ? 'âš  Delayed' : 'âœ“ Departed'}
@@ -542,7 +542,7 @@ export const SidebarContainer: React.FC<SidebarContainerProps> = ({
                 ) : (
                   <div className="space-y-2 max-h-[320px] overflow-y-auto pr-1">
                     {busRoutes.map((r) => (
-                      <div key={r.id} className="bg-slate-800/50 rounded-lg p-2.5 border border-slate-700/50 hover:border-orange-500/30 transition-colors">
+                      <div key={r.id} className="bg-slate-800/50 rounded-lg p-2.5 border border-slate-700/50 hover:border-brand-lime/30 transition-colors">
                         <div className="flex items-center justify-between mb-1.5">
                           <div className="flex items-center gap-2">
                             <span className="text-[10px] font-black px-1.5 py-0.5 rounded text-white" style={{ backgroundColor: r.color }}>
@@ -584,15 +584,15 @@ export const SidebarContainer: React.FC<SidebarContainerProps> = ({
                 <div className="text-[10px] font-bold text-cyan-400 uppercase tracking-wider">Destinasi Terdekat</div>
                 <div className="space-y-1.5 max-h-[320px] overflow-y-auto pr-1">
                   {touristSpots.map((d) => (
-                    <div key={d.id} className="bg-slate-800/50 rounded-lg p-2.5 border border-slate-700/50 hover:border-orange-500/30 transition-colors cursor-pointer group">
+                    <div key={d.id} className="bg-slate-800/50 rounded-lg p-2.5 border border-slate-700/50 hover:border-brand-lime/30 transition-colors cursor-pointer group">
                       <div className="flex items-start gap-2.5">
                         <span className="text-xl">{d.imageEmoji}</span>
                         <div className="flex-1 min-w-0">
-                          <div className="text-[11px] font-bold text-slate-200 group-hover:text-orange-400 transition-colors">{d.name}</div>
+                          <div className="text-[11px] font-bold text-slate-200 group-hover:text-brand-lime transition-colors">{d.name}</div>
                           <div className="text-[10px] text-slate-500 leading-relaxed">{d.description}</div>
                           <div className="flex items-center gap-2 mt-1">
-                            <span className="text-[9px] text-amber-400 font-bold flex items-center gap-0.5">
-                              <Star className="w-2.5 h-2.5 fill-amber-400" /> {d.rating}
+                            <span className="text-[9px] text-brand-teal font-bold flex items-center gap-0.5">
+                              <Star className="w-2.5 h-2.5 fill-brand-teal" /> {d.rating}
                             </span>
                             <span className="text-[9px] text-slate-500">Â·</span>
                             <span className="text-[9px] text-slate-400">{d.distanceFromStation}</span>
@@ -621,4 +621,5 @@ export const SidebarContainer: React.FC<SidebarContainerProps> = ({
     </aside>
   );
 };
+
 

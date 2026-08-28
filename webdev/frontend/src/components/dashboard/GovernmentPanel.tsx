@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import React from 'react';
 import { StationData, StationId } from '@/types';
@@ -36,7 +36,7 @@ export const GovernmentPanel: React.FC<GovernmentPanelProps> = ({
         {/* Walkability Index */}
         <div className="bg-slate-900/60 border border-slate-800 rounded-xl p-4">
           <div className="flex items-center gap-2 mb-3">
-            <Footprints className="w-4 h-4 text-orange-400" />
+            <Footprints className="w-4 h-4 text-brand-lime" />
             <h4 className="text-xs font-bold text-slate-200">Walkability Index</h4>
           </div>
           <div className="flex items-center gap-4">
@@ -56,7 +56,7 @@ export const GovernmentPanel: React.FC<GovernmentPanelProps> = ({
                 <span className="font-bold text-slate-200">{Math.round(station.scores.design * 0.8)}%</span>
               </div>
               <div className="w-full bg-slate-800 h-1 rounded-full overflow-hidden">
-                <div className="h-full bg-orange-500 rounded-full" style={{ width: `${station.scores.design * 0.8}%` }} />
+                <div className="h-full bg-brand-lime rounded-full" style={{ width: `${station.scores.design * 0.8}%` }} />
               </div>
               <div className="flex justify-between text-[11px]">
                 <span className="text-slate-400">Tactile Paving</span>
@@ -78,7 +78,7 @@ export const GovernmentPanel: React.FC<GovernmentPanelProps> = ({
           <ul className="space-y-1.5">
             {station.policy_recommendations.map((rec, i) => (
               <li key={i} className="text-[11px] text-slate-400 leading-relaxed flex gap-2">
-                <span className="text-orange-400 font-bold mt-0.5">•</span>
+                <span className="text-brand-lime font-bold mt-0.5">â€¢</span>
                 <span>{rec}</span>
               </li>
             ))}
@@ -100,3 +100,4 @@ export const GovernmentPanel: React.FC<GovernmentPanelProps> = ({
     </div>
   );
 };
+

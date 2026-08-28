@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import React, { useEffect, useRef } from 'react';
 import { X } from 'lucide-react';
@@ -70,7 +70,7 @@ export function Modal({
         {/* Header */}
         <div className="flex items-center gap-3 px-5 pt-5 pb-4 border-b border-slate-800">
           {icon && (
-            <div className="w-9 h-9 rounded-xl bg-orange-500/15 border border-orange-500/25 flex items-center justify-center flex-shrink-0 text-orange-400">
+            <div className="w-9 h-9 rounded-xl bg-brand-lime/15 border border-brand-lime/25 flex items-center justify-center flex-shrink-0 text-brand-lime">
               {icon}
             </div>
           )}
@@ -99,3 +99,4 @@ export function Modal({
     </div>
   );
 }
+

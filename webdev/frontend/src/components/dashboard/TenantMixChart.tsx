@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import React from 'react';
 
@@ -9,7 +9,7 @@ interface TenantMixChartProps {
 }
 
 const DEFAULT_TENANT_MIX: TenantMixItem[] = [
-  { label: 'F&B', value: 48, color: 'bg-orange-500' },
+  { label: 'F&B', value: 48, color: 'bg-brand-lime' },
   { label: 'Retail', value: 36, color: 'bg-amber-500' },
   { label: 'Services', value: 28, color: 'bg-emerald-500' },
   { label: 'UMKM (Micro)', value: 18, color: 'bg-cyan-500' },
@@ -46,3 +46,4 @@ export const TenantMixChart: React.FC<TenantMixChartProps> = ({ data = DEFAULT_T
     </div>
   );
 };
+

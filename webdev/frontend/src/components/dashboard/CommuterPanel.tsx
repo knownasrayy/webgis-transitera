@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import React from 'react';
 import { StationData, StationId } from '@/types';
@@ -35,7 +35,7 @@ export const CommuterPanel: React.FC<CommuterPanelProps> = ({
         {/* Walkability Index */}
         <div className="bg-slate-900/60 border border-slate-800 rounded-xl p-4">
           <div className="flex items-center gap-2 mb-3">
-            <Footprints className="w-4 h-4 text-orange-400" />
+            <Footprints className="w-4 h-4 text-brand-lime" />
             <h4 className="text-xs font-bold text-slate-200">Walkability Index</h4>
           </div>
           
@@ -76,3 +76,4 @@ export const CommuterPanel: React.FC<CommuterPanelProps> = ({
     </div>
   );
 };
+

@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import React from 'react';
 
@@ -13,8 +13,8 @@ interface DiamondGaugeProps {
 function getScoreColor(score: number, max: number): { fill: string; text: string; glow: string } {
   const pct = (score / max) * 100;
   if (pct >= 80) return { fill: '#10b981', text: 'text-emerald-400', glow: 'shadow-emerald-500/20' };
-  if (pct >= 60) return { fill: '#f59e0b', text: 'text-amber-400', glow: 'shadow-amber-500/20' };
-  if (pct >= 40) return { fill: '#ff7c00', text: 'text-orange-400', glow: 'shadow-orange-500/20' };
+  if (pct >= 60) return { fill: '#f59e0b', text: 'text-brand-teal', glow: 'shadow-amber-500/20' };
+  if (pct >= 40) return { fill: '#ff7c00', text: 'text-brand-lime', glow: 'shadow-brand-lime/20' };
   return { fill: '#ef4444', text: 'text-red-400', glow: 'shadow-red-500/20' };
 }
 
@@ -114,3 +114,4 @@ export const DiamondGauge: React.FC<DiamondGaugeProps> = ({
     </div>
   );
 };
+

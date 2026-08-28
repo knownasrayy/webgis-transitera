@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import Link from 'next/link';
 import { HeaderNav } from '@/components/ui/HeaderNav';
 import { Compass, CheckCircle2, ArrowLeft, Camera, Receipt, Store, Home, MapPin } from 'lucide-react';
@@ -31,7 +31,7 @@ export default function SurveyPage() {
       target: 100,
       collected: 100,
       icon: Store,
-      color: 'border-amber-500/40 text-amber-400',
+      color: 'border-amber-500/40 text-brand-teal',
       desc: 'Warung, kafe komuter, restoran, kisaran harga menu, dan tingkat keramaian pembeli.'
     },
     {
@@ -48,7 +48,7 @@ export default function SurveyPage() {
       collected: 100,
       icon: Home,
       color: 'border-purple-500/40 text-purple-400',
-      desc: 'Properti jual/sewa (ruko, rumah, kos) untuk validasi harga pasar terhadap %ΔNJOP.'
+      desc: 'Properti jual/sewa (ruko, rumah, kos) untuk validasi harga pasar terhadap %Î”NJOP.'
     }
   ];
 
@@ -107,7 +107,7 @@ export default function SurveyPage() {
             Galeri & Rekapitulasi 360 Titik Survei Primer
           </h1>
           <p className="text-sm text-slate-400 leading-relaxed">
-            Data dikumpulkan langsung melalui <strong>MAPID Apps (Activity & Mission)</strong> di 5 simpul stasiun SRRL Surabaya (Gubeng, Pasar Turi, Semut, Wonokromo, Waru) pada rentang catchment 0–1.000 meter.
+            Data dikumpulkan langsung melalui <strong>MAPID Apps (Activity & Mission)</strong> di 5 simpul stasiun SRRL Surabaya (Gubeng, Pasar Turi, Semut, Wonokromo, Waru) pada rentang catchment 0â€“1.000 meter.
           </p>
         </div>
 
@@ -200,3 +200,4 @@ export default function SurveyPage() {
     </div>
   );
 }
+

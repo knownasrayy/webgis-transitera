@@ -1,4 +1,4 @@
-import { StationData, StationId } from '@/types';
+﻿import { StationData, StationId } from '@/types';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:8000/api';
 
@@ -46,14 +46,14 @@ export const FALLBACK_STATIONS: StationData[] = [
       { name: 'Warung Nasi Madura', distance: '250m', price: 'Low', crowd: 'Medium' }
     ],
     tenant_mix: [
-      { label: 'F&B', value: 48, color: 'bg-orange-500' },
+      { label: 'F&B', value: 48, color: 'bg-brand-lime' },
       { label: 'Retail', value: 36, color: 'bg-amber-500' },
       { label: 'Services', value: 28, color: 'bg-emerald-500' },
       { label: 'UMKM (Micro)', value: 18, color: 'bg-cyan-500' }
     ],
     travel_estimates: [
-      { destination: 'RSUD Dr. Soetomo', time: '10 min', icon: '🚶' },
-      { destination: 'Grand City Mall', time: '5 min', icon: '🚗' }
+      { destination: 'RSUD Dr. Soetomo', time: '10 min', icon: 'ðŸš¶' },
+      { destination: 'Grand City Mall', time: '5 min', icon: 'ðŸš—' }
     ]
   },
   {
@@ -99,14 +99,14 @@ export const FALLBACK_STATIONS: StationData[] = [
       { name: 'Soto Madura Tapak Siring', distance: '300m', price: 'Medium', crowd: 'High' }
     ],
     tenant_mix: [
-      { label: 'Retail Pakaian', value: 55, color: 'bg-orange-500' },
+      { label: 'Retail Pakaian', value: 55, color: 'bg-brand-lime' },
       { label: 'F&B', value: 30, color: 'bg-amber-500' },
       { label: 'Grosir/Jasa', value: 25, color: 'bg-emerald-500' },
       { label: 'UMKM Keliling', value: 40, color: 'bg-cyan-500' }
     ],
     travel_estimates: [
-      { destination: 'Tugu Pahlawan', time: '12 min', icon: '🚶' },
-      { destination: 'Pasar Turi Baru', time: '3 min', icon: '🚶' }
+      { destination: 'Tugu Pahlawan', time: '12 min', icon: 'ðŸš¶' },
+      { destination: 'Pasar Turi Baru', time: '3 min', icon: 'ðŸš¶' }
     ]
   },
   {
@@ -413,7 +413,7 @@ function localAIResponder(prompt: string, activeStation?: StationId) {
         target_layer: 'h3_njop_premium',
         target_station: 'waru',
         view_state: { center: [112.7297, -7.3519], zoom: 14.2 },
-        text_response: `Estimasi Spatial Durbin Model menunjukkan kawasan sekitar **Stasiun Waru** berpotensi mengalami kenaikan nilai lahan (**%ΔNJOP**) rata-rata **+8,2%** (CI 95%: 5,5% - 10,9%) pasca penguatan koridor transit.`
+        text_response: `Estimasi Spatial Durbin Model menunjukkan kawasan sekitar **Stasiun Waru** berpotensi mengalami kenaikan nilai lahan (**%Î”NJOP**) rata-rata **+8,2%** (CI 95%: 5,5% - 10,9%) pasca penguatan koridor transit.`
       }
     };
   }
@@ -428,3 +428,4 @@ function localAIResponder(prompt: string, activeStation?: StationId) {
     }
   };
 }
+

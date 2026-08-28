@@ -152,7 +152,7 @@ export default function LandingPage() {
               </p>
               <div className="space-y-6">
                 <motion.div 
-                  className="glass-panel-stitch p-6 rounded-2xl border-l-4 border-l-accent-orange"
+                  className="glass-panel-stitch p-6 rounded-2xl border-l-4 border-l-brand-lime"
                   initial={{ opacity: 0, x: prefersReducedMotion ? 0 : -20 }}
                   whileInView={{ opacity: 1, x: 0 }}
                   viewport={{ once: true }}
@@ -240,7 +240,7 @@ export default function LandingPage() {
             </motion.div>
 
             {/* Business */}
-            <motion.div variants={cardVars} className="group relative rounded-3xl overflow-hidden bg-surface-container h-[400px] transition-transform duration-300 hover:-translate-y-2 hover:shadow-2xl hover:shadow-accent-orange/20">
+            <motion.div variants={cardVars} className="group relative rounded-3xl overflow-hidden bg-surface-container h-[400px] transition-transform duration-300 hover:-translate-y-2 hover:shadow-2xl hover:shadow-brand-lime/20">
               <img
                 alt="Business Retail Area"
                 className="absolute inset-0 w-full h-full object-cover opacity-40 group-hover:opacity-60 transition-opacity duration-500"
@@ -386,4 +386,5 @@ export default function LandingPage() {
     </div>
   );
 }
+
 

@@ -54,7 +54,7 @@ function SettingSection({ title, icon, children }: { title: string; icon: React.
   return (
     <div className="px-5 py-4 border-b border-slate-800/80 last:border-b-0">
       <div className="flex items-center gap-2 mb-3">
-        <span className="text-orange-400/80">{icon}</span>
+        <span className="text-brand-lime/80">{icon}</span>
         <span className="text-[11px] font-bold text-slate-400 uppercase tracking-widest">{title}</span>
       </div>
       <div className="space-y-3">{children}</div>
@@ -73,7 +73,7 @@ function OptionGroup<T extends string | number>({
           <button key={String(opt.value)} onClick={() => onChange(opt.value)}
             className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
               value === opt.value
-                ? 'bg-brand-lime/20 border border-orange-500/50 text-orange-300'
+                ? 'bg-brand-lime/20 border border-brand-lime/50 text-brand-lime'
                 : 'bg-slate-800/60 border border-slate-700 text-slate-400 hover:text-slate-200 hover:border-slate-600'
             }`}>{opt.label}</button>
         ))}
@@ -107,7 +107,7 @@ function SliderRow({ label, value, min, max, step = 1, onChange, format = (v: nu
     <div>
       <div className="flex items-center justify-between mb-1.5">
         <p className="text-xs text-slate-400">{label}</p>
-        <span className="text-xs font-bold text-orange-400 tabular-nums">{format(value)}</span>
+        <span className="text-xs font-bold text-brand-lime tabular-nums">{format(value)}</span>
       </div>
       <input type="range" min={min} max={max} step={step} value={value}
         onChange={(e) => onChange(Number(e.target.value))}
@@ -260,7 +260,7 @@ export function SettingsModal({ isOpen, onClose, activePersona = 'government' }:
           className={`flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-semibold transition-all ${
             saved
               ? 'bg-emerald-500/20 border border-emerald-500/40 text-emerald-400'
-              : 'bg-brand-lime hover:bg-orange-600 text-white shadow-lg shadow-orange-500/20'
+              : 'bg-brand-lime hover:bg-[#8CE0C4] text-white shadow-lg shadow-brand-lime/20'
           }`}>
           {saved ? <><CheckCircle2 className="w-3.5 h-3.5" />Tersimpan!</> : <>Simpan Pengaturan<ChevronRight className="w-3.5 h-3.5" /></>}
         </button>
@@ -268,4 +268,5 @@ export function SettingsModal({ isOpen, onClose, activePersona = 'government' }:
     </Modal>
   );
 }
+
 

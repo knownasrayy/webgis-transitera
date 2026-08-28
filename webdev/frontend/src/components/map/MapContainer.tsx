@@ -391,9 +391,9 @@ export const MapContainer: React.FC<MapContainerProps> = ({
       {/* Title Overlay for Business Persona */}
       {activePersona === 'business' && (
         <div className="absolute top-4 left-1/2 -translate-x-1/2 z-10 pointer-events-none">
-          <div className="bg-slate-900/80 backdrop-blur-md border border-orange-500/30 shadow-lg shadow-orange-500/10 px-4 py-2 rounded-xl text-center">
+          <div className="bg-slate-900/80 backdrop-blur-md border border-brand-lime/30 shadow-lg shadow-brand-lime/10 px-4 py-2 rounded-xl text-center">
             <h2 className="text-sm font-bold text-slate-100 flex items-center gap-2">
-              <span className="w-2 h-2 rounded-full bg-orange-500 animate-pulse" />
+              <span className="w-2 h-2 rounded-full bg-brand-lime animate-pulse" />
               Surabaya Gubeng Area - Retail Success H3 Analysis
             </h2>
           </div>
@@ -402,4 +402,5 @@ export const MapContainer: React.FC<MapContainerProps> = ({
     </div>
   );
 };
+
 

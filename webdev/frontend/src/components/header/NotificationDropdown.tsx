@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
 import { PersonaType } from '@/lib/persona';
@@ -21,7 +21,7 @@ interface Notification {
 }
 
 const ALL_NOTIFICATIONS: Notification[] = [
-  // ── GOVERNMENT
+  // â”€â”€ GOVERNMENT
   {
     id: 'g1', type: 'warning', personas: ['government'],
     title: 'Risiko Banjir Tinggi Terdeteksi',
@@ -37,7 +37,7 @@ const ALL_NOTIFICATIONS: Notification[] = [
   {
     id: 'g3', type: 'trend', personas: ['government'],
     title: 'Skor TOD St. Malang Meningkat',
-    description: 'Kawasan Stasiun Malang Kotalama mencatat kenaikan skor TOD +8 poin (dari 61 → 69). Potensi penetapan kawasan prioritas TOD.',
+    description: 'Kawasan Stasiun Malang Kotalama mencatat kenaikan skor TOD +8 poin (dari 61 â†’ 69). Potensi penetapan kawasan prioritas TOD.',
     time: '3 jam lalu', read: false,
   },
   {
@@ -53,11 +53,11 @@ const ALL_NOTIFICATIONS: Notification[] = [
     time: '3 hari lalu', read: true,
   },
 
-  // ── BUSINESS
+  // â”€â”€ BUSINESS
   {
     id: 'b1', type: 'trend', personas: ['business'],
     title: 'Zona NJOP Premium Baru Terdeteksi',
-    description: 'Radius 500m sekitar St. Gubeng mencatat kenaikan %ΔNJOP +23% (YoY). Potensi ROI investasi properti tinggi.',
+    description: 'Radius 500m sekitar St. Gubeng mencatat kenaikan %Î”NJOP +23% (YoY). Potensi ROI investasi properti tinggi.',
     time: '10 menit lalu', read: false,
   },
   {
@@ -85,11 +85,11 @@ const ALL_NOTIFICATIONS: Notification[] = [
     time: '2 hari lalu', read: true,
   },
 
-  // ── COMMUTER
+  // â”€â”€ COMMUTER
   {
     id: 'c1', type: 'warning', personas: ['commuter'],
-    title: 'Gangguan KRL Rute Semut–Sidoarjo',
-    description: 'Keterlambatan 25–40 menit akibat perbaikan jalur di km 12+300. Perkiraan normal kembali pukul 20.00 WIB.',
+    title: 'Gangguan KRL Rute Semutâ€“Sidoarjo',
+    description: 'Keterlambatan 25â€“40 menit akibat perbaikan jalur di km 12+300. Perkiraan normal kembali pukul 20.00 WIB.',
     time: '3 menit lalu', read: false,
   },
   {
@@ -101,7 +101,7 @@ const ALL_NOTIFICATIONS: Notification[] = [
   {
     id: 'c3', type: 'success', personas: ['commuter'],
     title: 'Rute Feeder Baru: SB-06',
-    description: 'Suroboyo Bus rute SB-06 (St. Pasar Turi – Tunjungan Plaza) resmi beroperasi mulai hari ini pukul 06.00.',
+    description: 'Suroboyo Bus rute SB-06 (St. Pasar Turi â€“ Tunjungan Plaza) resmi beroperasi mulai hari ini pukul 06.00.',
     time: '4 jam lalu', read: false,
   },
   {
@@ -119,7 +119,7 @@ const ALL_NOTIFICATIONS: Notification[] = [
 ];
 
 const TYPE_CONFIG: Record<NotifType, { icon: React.ReactNode; color: string; bg: string; border: string }> = {
-  warning: { icon: <AlertTriangle className="w-4 h-4" />, color: 'text-amber-400', bg: 'bg-amber-500/10', border: 'border-amber-500/20' },
+  warning: { icon: <AlertTriangle className="w-4 h-4" />, color: 'text-brand-teal', bg: 'bg-amber-500/10', border: 'border-amber-500/20' },
   success: { icon: <CheckCircle2 className="w-4 h-4" />, color: 'text-emerald-400', bg: 'bg-emerald-500/10', border: 'border-emerald-500/20' },
   info:    { icon: <Info className="w-4 h-4" />, color: 'text-blue-400', bg: 'bg-blue-500/10', border: 'border-blue-500/20' },
   trend:   { icon: <TrendingUp className="w-4 h-4" />, color: 'text-purple-400', bg: 'bg-purple-500/10', border: 'border-purple-500/20' },
@@ -174,10 +174,10 @@ export function NotificationDropdown({ activePersona = 'government' }: Notificat
   return (
     <div ref={ref} className="relative">
       <button onClick={() => setOpen((v) => !v)}
-        className="p-1.5 rounded-lg text-slate-400 hover:text-orange-400 hover:bg-slate-800/60 transition-colors relative">
+        className="p-1.5 rounded-lg text-slate-400 hover:text-brand-lime hover:bg-slate-800/60 transition-colors relative">
         <Bell className="w-4 h-4" />
         {unreadCount > 0 && (
-          <span className="absolute top-0.5 right-0.5 min-w-[14px] h-[14px] bg-orange-500 rounded-full flex items-center justify-center text-[8px] font-bold text-white leading-none px-0.5">
+          <span className="absolute top-0.5 right-0.5 min-w-[14px] h-[14px] bg-brand-lime rounded-full flex items-center justify-center text-[8px] font-bold text-white leading-none px-0.5">
             {unreadCount > 9 ? '9+' : unreadCount}
           </span>
         )}
@@ -190,10 +190,10 @@ export function NotificationDropdown({ activePersona = 'government' }: Notificat
           {/* Header */}
           <div className="flex items-center justify-between px-4 py-3 border-b border-slate-800">
             <div className="flex items-center gap-2">
-              <Bell className="w-3.5 h-3.5 text-orange-400" />
+              <Bell className="w-3.5 h-3.5 text-brand-lime" />
               <span className="text-sm font-bold text-slate-100">Notifikasi</span>
               {unreadCount > 0 && (
-                <span className="px-1.5 py-0.5 text-[10px] font-bold bg-orange-500/20 text-orange-400 rounded-full border border-orange-500/30">
+                <span className="px-1.5 py-0.5 text-[10px] font-bold bg-brand-lime/20 text-brand-lime rounded-full border border-brand-lime/30">
                   {unreadCount} baru
                 </span>
               )}
@@ -215,7 +215,7 @@ export function NotificationDropdown({ activePersona = 'government' }: Notificat
             {[true, false].map((v) => (
               <button key={String(v)} onClick={() => setFilterPersona(v)}
                 className={`pb-2 text-[11px] font-semibold border-b-2 transition-colors flex items-center gap-1.5 ${
-                  filterPersona === v ? 'border-orange-500 text-orange-400' : 'border-transparent text-slate-500 hover:text-slate-300'
+                  filterPersona === v ? 'border-brand-lime text-brand-lime' : 'border-transparent text-slate-500 hover:text-slate-300'
                 }`}>
                 {v ? <>{PERSONA_ICON[activePersona]} {activePersona.charAt(0).toUpperCase() + activePersona.slice(1)}</> : 'Semua'}
               </button>
@@ -243,7 +243,7 @@ export function NotificationDropdown({ activePersona = 'government' }: Notificat
                     <div className="flex-1 min-w-0">
                       <div className="flex items-start justify-between gap-1">
                         <p className="text-xs font-semibold text-slate-200 leading-tight">{notif.title}</p>
-                        {!notif.read && <span className="flex-shrink-0 w-1.5 h-1.5 bg-orange-500 rounded-full mt-1" />}
+                        {!notif.read && <span className="flex-shrink-0 w-1.5 h-1.5 bg-brand-lime rounded-full mt-1" />}
                       </div>
                       <p className="text-[11px] text-slate-500 mt-0.5 leading-relaxed line-clamp-2">{notif.description}</p>
                       <p className="text-[10px] text-slate-600 mt-1">{notif.time}</p>
@@ -256,8 +256,8 @@ export function NotificationDropdown({ activePersona = 'government' }: Notificat
 
           {visible.length > 0 && (
             <div className="px-4 py-2.5 border-t border-slate-800 text-center">
-              <button className="text-[11px] text-orange-400 hover:text-orange-300 font-medium transition-colors">
-                Lihat semua aktivitas →
+              <button className="text-[11px] text-brand-lime hover:text-brand-lime font-medium transition-colors">
+                Lihat semua aktivitas â†’
               </button>
             </div>
           )}
@@ -273,3 +273,4 @@ export function NotificationDropdown({ activePersona = 'government' }: Notificat
     </div>
   );
 }
+

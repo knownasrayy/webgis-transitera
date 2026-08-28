@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import React, { useState, useEffect } from 'react';
 import dynamic from 'next/dynamic';
@@ -23,8 +23,8 @@ const MapContainer = dynamic(
   {
     ssr: false,
     loading: () => (
-      <div className="w-full h-full bg-slate-950 flex items-center justify-center text-orange-400 text-xs gap-2">
-        <div className="w-4 h-4 border-2 border-orange-400 border-t-transparent rounded-full animate-spin"></div>
+      <div className="w-full h-full bg-slate-950 flex items-center justify-center text-brand-lime text-xs gap-2">
+        <div className="w-4 h-4 border-2 border-brand-lime border-t-transparent rounded-full animate-spin"></div>
         <span>Memuat Peta MapLibre GL & Basemap MAPID...</span>
       </div>
     )
@@ -179,9 +179,10 @@ export default function WebGISPage() {
       {/* 3. Footer Data Attribution */}
       <Footer activePersona={activePersona} />
 
-      {/* ── Shared Modals (triggered from Sidebar & Header) ── */}
+      {/* â”€â”€ Shared Modals (triggered from Sidebar & Header) â”€â”€ */}
       <SettingsModal isOpen={settingsOpen} onClose={() => setSettingsOpen(false)} activePersona={activePersona} />
       <HelpFeedbackModal isOpen={helpOpen} onClose={() => setHelpOpen(false)} activePersona={activePersona} />
     </div>
   );
 }
+

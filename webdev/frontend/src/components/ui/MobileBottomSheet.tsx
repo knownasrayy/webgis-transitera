@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import React, { useState } from 'react';
 import { PersonaType } from '@/lib/persona';
@@ -48,7 +48,7 @@ export const MobileBottomSheet: React.FC<MobileBottomSheetProps> = ({
                 }}
                 className={`px-3 py-1 rounded-lg text-[10px] font-bold capitalize flex items-center gap-1 ${
                   activePersona === persona
-                    ? 'bg-orange-500 text-slate-950'
+                    ? 'bg-brand-lime text-slate-950'
                     : 'bg-slate-800 text-slate-400'
                 }`}
               >
@@ -72,3 +72,4 @@ export const MobileBottomSheet: React.FC<MobileBottomSheetProps> = ({
     </div>
   );
 };
+

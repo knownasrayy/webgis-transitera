@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import React from 'react';
 import { Store, DollarSign, Users } from 'lucide-react';
@@ -19,15 +19,15 @@ export const MenuGoDiscovery: React.FC<MenuGoDiscoveryProps> = ({ recommendation
   return (
     <div className="space-y-3">
       <div className="flex items-center gap-2 mb-2">
-        <Store className="w-4 h-4 text-orange-400" />
+        <Store className="w-4 h-4 text-brand-lime" />
         <h4 className="text-xs font-bold text-slate-200">Menu Go Discovery</h4>
       </div>
       
       <div className="space-y-2">
         {data.map((item, idx) => {
-          const color = item.crowd === 'High' ? 'text-orange-400' : 'text-emerald-400';
+          const color = item.crowd === 'High' ? 'text-brand-lime' : 'text-emerald-400';
           return (
-            <div key={idx} className="bg-slate-950/60 border border-slate-800 rounded-lg p-2.5 hover:border-orange-500/30 transition-colors cursor-pointer">
+            <div key={idx} className="bg-slate-950/60 border border-slate-800 rounded-lg p-2.5 hover:border-brand-lime/30 transition-colors cursor-pointer">
               <div className="flex justify-between items-start mb-1.5">
                 <span className="text-[11px] font-bold text-slate-200">{item.name}</span>
                 <span className="text-[10px] text-slate-400">{item.distance}</span>
@@ -50,3 +50,4 @@ export const MenuGoDiscovery: React.FC<MenuGoDiscoveryProps> = ({ recommendation
     </div>
   );
 };
+

@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import React from 'react';
 import Link from 'next/link';
@@ -36,21 +36,21 @@ export const HeaderNav: React.FC<HeaderNavProps> = ({
   return (
     <>
       <header className="glass-header sticky top-0 z-40 w-full px-4 py-2 flex items-center justify-between shadow-lg">
-        {/* ── Brand / Logo ── */}
+        {/* â”€â”€ Brand / Logo â”€â”€ */}
         <div className="flex items-center gap-3">
           <Link href="/" className="flex items-center gap-2.5 group">
-            <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-orange-500 via-orange-600 to-amber-600 flex items-center justify-center shadow-lg shadow-orange-500/20 ring-1 ring-white/10 group-hover:scale-105 transition-transform">
+            <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-brand-lime via-[#8CE0C4] to-brand-teal flex items-center justify-center shadow-lg shadow-brand-lime/20 ring-1 ring-white/10 group-hover:scale-105 transition-transform">
               <Train className="w-5 h-5 text-white" />
             </div>
             <div className="hidden sm:block">
-              <span className="font-bold text-lg tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-orange-400 via-amber-300 to-orange-500">
+              <span className="font-bold text-lg tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-brand-lime via-brand-teal to-brand-lime">
                 TransitERA
               </span>
             </div>
           </Link>
         </div>
 
-        {/* ── Persona Tabs (Center) ── */}
+        {/* â”€â”€ Persona Tabs (Center) â”€â”€ */}
         <nav className="flex items-center gap-0.5">
           {PERSONA_TABS.map((tab) => (
             <button
@@ -58,22 +58,22 @@ export const HeaderNav: React.FC<HeaderNavProps> = ({
               onClick={() => onChangePersona?.(tab.id)}
               className={`px-4 py-1.5 text-sm font-semibold transition-all relative ${
                 activePersona === tab.id
-                  ? 'text-orange-400'
+                  ? 'text-brand-lime'
                   : 'text-slate-400 hover:text-slate-200'
               }`}
             >
               {tab.label}
               {activePersona === tab.id && (
-                <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-8 h-0.5 bg-orange-400 rounded-full" />
+                <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-8 h-0.5 bg-brand-lime rounded-full" />
               )}
             </button>
           ))}
         </nav>
 
-        {/* ── Right Actions ── */}
+        {/* â”€â”€ Right Actions â”€â”€ */}
         <div className="flex items-center gap-1.5">
           {/* Search (desktop) */}
-          <div className="hidden lg:flex items-center bg-slate-900/70 border border-slate-700 rounded-lg px-2.5 py-1.5 gap-2 w-44 focus-within:border-orange-500/50 transition-colors">
+          <div className="hidden lg:flex items-center bg-slate-900/70 border border-slate-700 rounded-lg px-2.5 py-1.5 gap-2 w-44 focus-within:border-brand-lime/50 transition-colors">
             <Search className="w-3.5 h-3.5 text-slate-500" />
             <input
               type="text"
@@ -88,7 +88,7 @@ export const HeaderNav: React.FC<HeaderNavProps> = ({
               <select
                 value={activeStation}
                 onChange={(e) => onSelectStation(e.target.value as StationId)}
-                className="appearance-none bg-slate-900/70 hover:bg-slate-800 text-slate-200 text-xs font-semibold py-1.5 pl-3 pr-7 rounded-lg border border-slate-700 focus:outline-none focus:ring-1 focus:ring-orange-500/50 cursor-pointer transition-colors"
+                className="appearance-none bg-slate-900/70 hover:bg-slate-800 text-slate-200 text-xs font-semibold py-1.5 pl-3 pr-7 rounded-lg border border-slate-700 focus:outline-none focus:ring-1 focus:ring-brand-lime/50 cursor-pointer transition-colors"
               >
                 {FALLBACK_STATIONS.map((s) => (
                   <option key={s.id} value={s.id} className="bg-slate-900 text-slate-200">
@@ -129,3 +129,4 @@ export const HeaderNav: React.FC<HeaderNavProps> = ({
     </>
   );
 };
+

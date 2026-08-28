@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import React from 'react';
 import { StationData, StationId } from '@/types';
@@ -35,7 +35,7 @@ export const InvestorPanel: React.FC<InvestorPanelProps> = ({
         <div className="bg-slate-900/60 border border-slate-800 rounded-xl p-4">
           <div className="flex items-center justify-between mb-3">
             <div className="flex items-center gap-2">
-              <TrendingUp className="w-4 h-4 text-orange-400" />
+              <TrendingUp className="w-4 h-4 text-brand-lime" />
               <h4 className="text-xs font-bold text-slate-200">Retail Success Score</h4>
             </div>
             <span className="text-[9px] tabular-nums text-slate-500 bg-slate-800/60 px-1.5 py-0.5 rounded">
@@ -86,3 +86,4 @@ export const InvestorPanel: React.FC<InvestorPanelProps> = ({
     </div>
   );
 };
+
