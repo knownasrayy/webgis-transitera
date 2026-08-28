@@ -1,9 +1,13 @@
-﻿'use client';
+'use client';
 
 import React from 'react';
 import { StationData, StationId } from '@/types';
 import { DiamondGauge } from './DiamondGauge';
-import { RadarChart5D } from './RadarChart5D';
+import dynamic from 'next/dynamic';
+const RadarChart5D = dynamic(() => import('./RadarChart5D').then(mod => mod.RadarChart5D), { 
+  ssr: false, 
+  loading: () => <div className="w-full h-64 bg-slate-900/50 backdrop-blur-md rounded-xl animate-pulse" /> 
+});
 import { AIChatPanel } from '@/components/ai/AIChatPanel';
 import { Footprints, Shield } from 'lucide-react';
 

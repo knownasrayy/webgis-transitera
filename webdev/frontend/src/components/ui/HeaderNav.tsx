@@ -2,6 +2,7 @@
 
 import React from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { StationId } from '@/types';
 import { PersonaType } from '@/lib/persona';
 import { FALLBACK_STATIONS } from '@/lib/api';
@@ -39,10 +40,12 @@ export const HeaderNav: React.FC<HeaderNavProps> = ({
         {/* â”€â”€ Brand / Logo â”€â”€ */}
         <div className="flex items-center gap-3">
           <Link href="/" className="flex items-center gap-2.5 group">
-            <img
+            <Image
               alt="TransitERA Logo"
               className="h-8 w-auto object-contain group-hover:scale-105 transition-transform"
               src="/assets/landing/LOGO.png"
+              width={32}
+              height={32}
             />
             <div className="hidden sm:block">
               <span className="font-bold text-lg tracking-tight text-white">

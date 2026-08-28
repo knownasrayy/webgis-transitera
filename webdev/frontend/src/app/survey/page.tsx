@@ -1,5 +1,6 @@
 ﻿import React from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { HeaderNav } from '@/components/ui/HeaderNav';
 import { Compass, CheckCircle2, ArrowLeft, Camera, Receipt, Store, Home, MapPin } from 'lucide-react';
 
@@ -200,4 +201,5 @@ export default function SurveyPage() {
     </div>
   );
 }
+
 

@@ -1,9 +1,13 @@
-﻿'use client';
+'use client';
 
 import React from 'react';
 import { StationData, StationId } from '@/types';
 import { DiamondGauge } from './DiamondGauge';
-import { TenantMixChart } from './TenantMixChart';
+import dynamic from 'next/dynamic';
+const TenantMixChart = dynamic(() => import('./TenantMixChart').then(mod => mod.TenantMixChart), { 
+  ssr: false, 
+  loading: () => <div className="w-full h-48 bg-slate-900/50 backdrop-blur-md rounded-xl animate-pulse" /> 
+});
 import { AIChatPanel } from '@/components/ai/AIChatPanel';
 import { Building, TrendingUp } from 'lucide-react';
 

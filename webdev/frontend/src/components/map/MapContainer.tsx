@@ -1,12 +1,15 @@
-﻿'use client';
+'use client';
 
 import React, { useEffect, useRef, useState } from 'react';
 import * as maplibregl from 'maplibre-gl';
 import { StationId } from '@/types';
 import { BASEMAP_STYLES, SURABAYA_CENTER, SURABAYA_DEFAULT_ZOOM } from '@/lib/mapid';
-import { FALLBACK_STATIONS, fetchH3Grid, fetchMapidSurvey } from '@/lib/api';
+import { FALLBACK_STATIONS, fetchMapidSurvey } from '@/lib/api';
 import { ChoroplethMode, BasemapStyleKey } from './LayerControl';
-import { PersonaType, getPersonaConfig } from '@/lib/persona';
+import { PersonaType } from '@/lib/persona';
+
+import { useH3Layer } from './useH3Layer';
+import { useStationMarkers } from './useStationMarkers';
 
 interface MapContainerProps {
   activeStation: StationId;
@@ -34,14 +37,10 @@ export const MapContainer: React.FC<MapContainerProps> = ({
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<maplibregl.Map | null>(null);
   const [isMapLoaded, setIsMapLoaded] = useState(false);
-  const popupRef = useRef<maplibregl.Popup | null>(null);
 
   // 1. Initialize MapLibre GL Map Instance
   useEffect(() => {
     if (!mapContainerRef.current) return;
-
-    console.log('MapContainer useEffect triggered. Container:', mapContainerRef.current);
-    console.log('Initializing MapLibre with style:', BASEMAP_STYLES[basemapStyle]);
 
     const currentStation = FALLBACK_STATIONS.find((s) => s.id === activeStation) || FALLBACK_STATIONS[0];
 
@@ -57,157 +56,15 @@ export const MapContainer: React.FC<MapContainerProps> = ({
     map.addControl(new maplibregl.NavigationControl({ visualizePitch: true }), 'top-right');
     map.addControl(new maplibregl.ScaleControl({ unit: 'metric' }), 'bottom-left');
 
-    console.log('Map controls added successfully.');
-
     map.on('error', (e) => {
       console.error('MAPLIBRE ERROR:', e.error || e);
     });
 
-    map.on('load', async () => {
-      console.log('MapLibre LOAD event fired!');
-      // Force resize multiple times to ensure the canvas has the correct dimensions
+    map.on('load', () => {
       map.resize();
       setTimeout(() => map.resize(), 100);
       setTimeout(() => map.resize(), 500);
       setIsMapLoaded(true);
-
-      // Load and add H3 GeoJSON data source
-      const h3Data = await fetchH3Grid();
-      if (!map.getSource('h3-tod-source')) {
-        map.addSource('h3-tod-source', {
-          type: 'geojson',
-          data: h3Data,
-          generateId: true
-        });
-
-        // 1. Fill layer with dynamic color ramp based on mode
-        map.addLayer({
-          id: 'h3-tod-fill',
-          type: 'fill',
-          source: 'h3-tod-source',
-          paint: {
-            'fill-color': [
-              'interpolate',
-              ['linear'],
-              ['get', 'tod_readiness_score'],
-              40, '#D32F2F', // Red
-              65, '#4FC5C2', // Amber
-              80, '#22C55E', // Emerald
-              100, '#22C55E' // Deep Emerald
-            ],
-            'fill-opacity': [
-              'case',
-              ['boolean', ['feature-state', 'hover'], false],
-              0.88,
-              0.62
-            ]
-          }
-        });
-
-        // 2. Hexagon Outline Layer
-        map.addLayer({
-          id: 'h3-tod-border',
-          type: 'line',
-          source: 'h3-tod-source',
-          paint: {
-            'line-color': '#4A4478',
-            'line-width': 1.0,
-            'line-opacity': 0.65
-          }
-        });
-      }
-
-      // Add Station Point Markers (with slight delay to ensure DOM is ready)
-      setTimeout(() => {
-        console.log('Adding station markers to map...');
-        FALLBACK_STATIONS.forEach((st) => {
-          const el = document.createElement('div');
-          el.className = 'station-marker-pin cursor-pointer group z-50';
-          el.innerHTML = `
-            <div style="position: relative; display: flex; align-items: center; justify-content: center;">
-              <div style="width: 32px; height: 32px; border-radius: 50%; background: linear-gradient(to top right, #4FC5C2, #B1FC91); border: 2px solid #12175E; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; color: white;">
-                <svg style="width: 16px; height: 16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path>
-                </svg>
-              </div>
-              <div style="position: absolute; bottom: -24px; white-space: nowrap; background: rgba(15, 23, 42, 0.9); color: white; font-weight: bold; font-size: 10px; padding: 2px 8px; border-radius: 4px; box-shadow: 0 1px 3px rgba(0,0,0,0.5); border: 1px solid #334155; pointer-events: none;">
-                ${st.name.replace('Stasiun Surabaya ', 'St. ')}
-              </div>
-            </div>
-          `;
-
-          el.addEventListener('click', () => {
-            onSelectStation(st.id);
-          });
-
-          new maplibregl.Marker({ element: el })
-            .setLngLat([st.longitude, st.latitude])
-            .addTo(map);
-        });
-      }, 500);
-    });
-
-    let hoveredStateId: any = null;
-
-    // Hover interactive state on H3 polygons
-    map.on('mousemove', 'h3-tod-fill', (e) => {
-      if (e.features && e.features.length > 0) {
-        map.getCanvas().style.cursor = 'pointer';
-        if (hoveredStateId !== null) {
-          map.setFeatureState({ source: 'h3-tod-source', id: hoveredStateId }, { hover: false });
-        }
-        hoveredStateId = e.features[0].id;
-        map.setFeatureState({ source: 'h3-tod-source', id: hoveredStateId }, { hover: true });
-      }
-    });
-
-    map.on('mouseleave', 'h3-tod-fill', () => {
-      map.getCanvas().style.cursor = '';
-      if (hoveredStateId !== null) {
-        map.setFeatureState({ source: 'h3-tod-source', id: hoveredStateId }, { hover: false });
-      }
-      hoveredStateId = null;
-    });
-
-    // Click on H3 Polygon opens rich popup
-    map.on('click', 'h3-tod-fill', (e) => {
-      if (e.features && e.features.length > 0) {
-        const props = e.features[0].properties;
-        const coordinates = e.lngLat;
-        
-        if (onSelectH3Index) {
-          onSelectH3Index(props.h3_index);
-        }
-
-        if (popupRef.current) popupRef.current.remove();
-
-        const popupContent = `
-          <div class="space-y-1.5 text-xs text-slate-100">
-            <div class="flex items-center justify-between border-b border-slate-700 pb-1">
-              <span class="font-bold text-[#B1FC91]">Sel H3: ${props.h3_index}</span>
-              <span class="text-[10px] bg-[#4FC5C2]/20 px-1.5 py-0.5 rounded text-[#4FC5C2] font-semibold border border-[#4FC5C2]/40">${props.station_name}</span>
-            </div>
-            <div class="grid grid-cols-2 gap-2 text-[11px] pt-1">
-              <div>
-                <span class="text-slate-400">TOD Score:</span>
-                <div class="text-sm font-bold text-[#22C55E]">${props.tod_readiness_score} / 100</div>
-              </div>
-              <div>
-                <span class="text-slate-400">Est. %Î”NJOP:</span>
-                <div class="text-sm font-bold text-[#B1FC91]">+${props.predicted_njop_premium_pct}%</div>
-              </div>
-            </div>
-            <div class="text-[10px] text-slate-300 pt-1 border-t border-slate-800">
-              Tipologi: <strong class="text-slate-100">${props.typology}</strong>
-            </div>
-          </div>
-        `;
-
-        popupRef.current = new maplibregl.Popup({ closeButton: true, closeOnClick: false })
-          .setLngLat(coordinates)
-          .setHTML(popupContent)
-          .addTo(map);
-      }
     });
 
     mapRef.current = map;
@@ -218,6 +75,10 @@ export const MapContainer: React.FC<MapContainerProps> = ({
       mapRef.current = null;
     };
   }, []);
+
+  // Use Custom Hooks for Modular Layers
+  useH3Layer(mapRef.current, isMapLoaded, choroplethMode, onSelectH3Index);
+  useStationMarkers(mapRef.current, isMapLoaded, onSelectStation);
 
   // 1.5 Add Feeder Routes layer for Commuter Persona
   useEffect(() => {
@@ -270,7 +131,7 @@ export const MapContainer: React.FC<MapContainerProps> = ({
     }
   }, [activePersona, isMapLoaded]);
 
-  // 2. Update Map Style when Basemap changes
+  // 2. Survey Points Layer
   useEffect(() => {
     if (!mapRef.current || !isMapLoaded) return;
     const map = mapRef.current;
@@ -289,7 +150,7 @@ export const MapContainer: React.FC<MapContainerProps> = ({
             source: 'survey-points-source',
             paint: {
               'circle-radius': 5,
-              'circle-color': '#4FC5C2', // Pink for survey points
+              'circle-color': '#4FC5C2',
               'circle-stroke-width': 1.5,
               'circle-stroke-color': '#ffffff'
             }
@@ -313,44 +174,6 @@ export const MapContainer: React.FC<MapContainerProps> = ({
     if (!mapRef.current || !isMapLoaded) return;
     mapRef.current.setStyle(BASEMAP_STYLES[basemapStyle]);
   }, [basemapStyle]);
-
-  // 3. Update Choropleth Paint Property when Mode changes
-  useEffect(() => {
-    if (!mapRef.current || !isMapLoaded) return;
-    const map = mapRef.current;
-    if (!map.getLayer('h3-tod-fill')) return;
-
-    if (choroplethMode === 'tod_score') {
-      map.setPaintProperty('h3-tod-fill', 'fill-color', [
-        'interpolate',
-        ['linear'],
-        ['get', 'tod_readiness_score'],
-        40, '#D32F2F',
-        65, '#4FC5C2',
-        80, '#22C55E',
-        100, '#22C55E'
-      ]);
-    } else if (choroplethMode === 'njop_premium') {
-      map.setPaintProperty('h3-tod-fill', 'fill-color', [
-        'interpolate',
-        ['linear'],
-        ['get', 'predicted_njop_premium_pct'],
-        3.0, '#3663D8',
-        8.0, '#4FC5C2',
-        14.0, '#22C55E',
-        20.0, '#22C55E'
-      ]);
-    } else if (choroplethMode === 'typology') {
-      map.setPaintProperty('h3-tod-fill', 'fill-color', [
-        'match',
-        ['get', 'typology'],
-        'Commercial Transit Hub', '#B1FC91',
-        'Mixed-Use Residential Area', '#4FC5C2',
-        'Low-Accessibility Feeder Zone', '#473DD2',
-        '#3A3468'
-      ]);
-    }
-  }, [choroplethMode, isMapLoaded]);
 
   // 4. Fly to station when activeStation changes
   useEffect(() => {
@@ -402,6 +225,3 @@ export const MapContainer: React.FC<MapContainerProps> = ({
     </div>
   );
 };
-
-
-

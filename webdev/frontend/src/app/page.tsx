@@ -1,7 +1,8 @@
-'use client';
+﻿'use client';
 
 import React, { useState, useRef } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { motion, useScroll, useTransform, useMotionValueEvent, useReducedMotion } from 'framer-motion';
 
 export default function LandingPage() {
@@ -61,11 +62,7 @@ export default function LandingPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-20">
             <div className="flex items-center gap-3">
-              <img
-                alt="TransitERA Logo"
-                className="h-10 w-auto object-contain"
-                src="/assets/landing/LOGO.png"
-              />
+              <Image alt="TransitERA Logo" className="h-10 w-auto object-contain" src="/assets/landing/LOGO.png" width={40} height={40} />
               <span className="text-xl font-bold text-white tracking-tight">
                 Transit<span className="text-brand-lime">ERA</span>
               </span>
@@ -188,11 +185,7 @@ export default function LandingPage() {
               whileHover={!prefersReducedMotion ? { y: -4, transition: { duration: 0.3 } } : {}}
             >
               <div className="relative rounded-3xl overflow-hidden glass-panel-stitch p-2 shadow-2xl transition-shadow duration-300 hover:shadow-brand-500/20">
-                <img
-                  alt="Retail Success Score Dashboard"
-                  className="w-full h-auto rounded-2xl opacity-90 transition-opacity"
-                  src="/assets/landing/a_professional_modern_urban_planning_workspace._a_large_high_resolution_monitor.png"
-                />
+                <Image alt="Retail Success Score Dashboard" className="w-full h-auto rounded-2xl opacity-90 transition-opacity" src="/assets/landing/a_professional_modern_urban_planning_workspace._a_large_high_resolution_monitor.png" width={1200} height={800} />
                 <div className="absolute inset-0 bg-gradient-to-t from-surface-container-lowest/80 to-transparent pointer-events-none rounded-2xl"></div>
               </div>
             </motion.div>
@@ -226,11 +219,7 @@ export default function LandingPage() {
           >
             {/* Government */}
             <motion.div variants={cardVars} className="group relative rounded-3xl overflow-hidden bg-surface-container h-[400px] transition-transform duration-300 hover:-translate-y-2 hover:shadow-2xl hover:shadow-brand-900/40">
-              <img
-                alt="Government Urban Planning"
-                className="absolute inset-0 w-full h-full object-cover opacity-40 group-hover:opacity-60 transition-opacity duration-500"
-                src="/assets/landing/a_high_tech_futuristic_aerial_view_of_a_smart_city_transit_corridor_in_surabaya.png"
-              />
+              <Image alt="Government Urban Planning" className="object-cover opacity-40 group-hover:opacity-60 transition-opacity duration-500" src="/assets/landing/a_high_tech_futuristic_aerial_view_of_a_smart_city_transit_corridor_in_surabaya.png" fill sizes="(max-width: 768px) 100vw, 33vw" />
               <div className="absolute inset-0 bg-gradient-to-t from-surface-container-lowest via-surface-container-lowest/80 to-transparent"></div>
               <div className="absolute bottom-0 left-0 p-8">
                 <span className="px-3 py-1 rounded-full bg-surface-container/80 text-on-surface border border-surface-container-highest text-xs font-semibold mb-4 inline-block backdrop-blur-sm">Government</span>
@@ -241,11 +230,7 @@ export default function LandingPage() {
 
             {/* Business */}
             <motion.div variants={cardVars} className="group relative rounded-3xl overflow-hidden bg-surface-container h-[400px] transition-transform duration-300 hover:-translate-y-2 hover:shadow-2xl hover:shadow-brand-lime/20">
-              <img
-                alt="Business Retail Area"
-                className="absolute inset-0 w-full h-full object-cover opacity-40 group-hover:opacity-60 transition-opacity duration-500"
-                src="/assets/landing/a_futuristic_tech_enabled_retail_shopping_district_near_a_transit_hub._subtle.png"
-              />
+              <Image alt="Business Retail Area" className="object-cover opacity-40 group-hover:opacity-60 transition-opacity duration-500" src="/assets/landing/a_futuristic_tech_enabled_retail_shopping_district_near_a_transit_hub._subtle.png" fill sizes="(max-width: 768px) 100vw, 33vw" />
               <div className="absolute inset-0 bg-gradient-to-t from-surface-container-lowest via-surface-container-lowest/80 to-transparent"></div>
               <div className="absolute bottom-0 left-0 p-8">
                 <span className="px-3 py-1 rounded-full bg-brand-lime/20 text-brand-lime border border-brand-lime/30 text-xs font-semibold mb-4 inline-block backdrop-blur-sm">Business &amp; Investor</span>
@@ -256,11 +241,7 @@ export default function LandingPage() {
 
             {/* Commuter */}
             <motion.div variants={cardVars} className="group relative rounded-3xl overflow-hidden bg-surface-container h-[400px] transition-transform duration-300 hover:-translate-y-2 hover:shadow-2xl hover:shadow-accent-green/20">
-              <img
-                alt="Commuter Transit Station"
-                className="absolute inset-0 w-full h-full object-cover opacity-40 group-hover:opacity-60 transition-opacity duration-500"
-                src="/assets/landing/a_first_person_perspective_of_a_commuter_walking_through_a_modern_clean_and.png"
-              />
+              <Image alt="Commuter Transit Station" className="object-cover opacity-40 group-hover:opacity-60 transition-opacity duration-500" src="/assets/landing/a_first_person_perspective_of_a_commuter_walking_through_a_modern_clean_and.png" fill sizes="(max-width: 768px) 100vw, 33vw" />
               <div className="absolute inset-0 bg-gradient-to-t from-surface-container-lowest via-surface-container-lowest/80 to-transparent"></div>
               <div className="absolute bottom-0 left-0 p-8">
                 <span className="px-3 py-1 rounded-full bg-success-green/20 text-success-green border border-success-green/30 text-xs font-semibold mb-4 inline-block backdrop-blur-sm">Commuter &amp; Tourist</span>
@@ -296,11 +277,7 @@ export default function LandingPage() {
               style={{ y: backY }}
               className="absolute hidden md:block right-[10%] top-[15%] w-3/4 max-w-4xl opacity-40 blur-[4px] z-10"
             >
-              <img
-                alt="Investor Dashboard Background"
-                className="w-full rounded-lg shadow-xl"
-                src="/assets/landing/screen.png"
-              />
+              <Image alt="Investor Dashboard Background" className="w-full rounded-lg shadow-xl" src="/assets/landing/screen.png" width={1200} height={800} />
             </motion.div>
 
             {/* Middle Layer (Commuter - Left) */}
@@ -308,11 +285,7 @@ export default function LandingPage() {
               style={{ y: middleY }}
               className="absolute hidden md:block left-[10%] top-[10%] w-3/4 max-w-4xl opacity-50 blur-[2px] z-20"
             >
-              <img
-                alt="Commuter Dashboard Background"
-                className="w-full rounded-lg shadow-xl"
-                src="/assets/landing/screen.png"
-              />
+              <Image alt="Commuter Dashboard Background" className="w-full rounded-lg shadow-xl" src="/assets/landing/screen.png" width={1200} height={800} />
             </motion.div>
 
             {/* Front Layer (Main Showcase) */}
@@ -320,11 +293,7 @@ export default function LandingPage() {
               style={{ y: frontY }}
               className="absolute top-0 w-full max-w-5xl px-4 md:px-0 z-30"
             >
-              <img
-                alt="Platform Dashboard Showcase"
-                className="w-full rounded-lg shadow-[0_20px_50px_rgba(0,0,0,0.5)] border border-white/5"
-                src="/assets/landing/screen.png"
-              />
+              <Image alt="Platform Dashboard Showcase" className="w-full rounded-lg shadow-[0_20px_50px_rgba(0,0,0,0.5)] border border-white/5" src="/assets/landing/screen.png" width={1200} height={800} />
             </motion.div>
           </div>
         </div>
@@ -336,11 +305,7 @@ export default function LandingPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col items-center text-center mb-12">
             <div className="flex items-center gap-3 mb-4">
-              <img
-                alt="TransitERA Logo"
-                className="h-6 w-auto object-contain"
-                src="/assets/landing/LOGO.png"
-              />
+              <Image alt="TransitERA Logo" className="h-6 w-auto object-contain" src="/assets/landing/LOGO.png" width={24} height={24} />
               <span className="text-lg font-bold text-white tracking-tight">TransitERA</span>
             </div>
             <p className="text-on-surface-variant text-sm max-w-sm leading-relaxed">
@@ -358,5 +323,6 @@ export default function LandingPage() {
     </div>
   );
 }
+
 
 
