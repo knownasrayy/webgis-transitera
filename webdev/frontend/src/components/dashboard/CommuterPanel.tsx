@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import React from 'react';
 import { StationData, StationId } from '@/types';
@@ -61,9 +61,9 @@ export const CommuterPanel: React.FC<CommuterPanelProps> = ({
           <TravelEstimator estimates={station.travel_estimates} />
         </div>
 
-        {/* KAI Agent */}
+        {/* AI Advisor */}
         <div className="bg-slate-900/60 border border-slate-800 rounded-xl overflow-hidden">
-          <div className="h-80">
+          <div className="h-[450px]">
             <AIChatPanel
               activeStation={activeStation}
               activePersona="commuter"

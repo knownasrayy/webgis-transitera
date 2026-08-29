@@ -138,7 +138,7 @@ export const InvestorPanel: React.FC<InvestorPanelProps> = ({
 
         {/* AI Advisor */}
         <div className="bg-slate-900/60 border border-slate-800 rounded-xl overflow-hidden">
-          <div className="h-80">
+          <div className="h-[450px]">
             <AIChatPanel
               activeStation={activeStation}
               activePersona="business"

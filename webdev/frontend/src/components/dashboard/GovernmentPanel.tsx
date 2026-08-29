@@ -199,7 +199,7 @@ export const GovernmentPanel: React.FC<GovernmentPanelProps> = ({
               </div>
               <span className="text-[9px] text-slate-400 bg-slate-800 px-1.5 py-0.5 rounded">RAG + Function Calling</span>
             </div>
-            <div className="h-[380px]">
+            <div className="h-[450px]">
               <AIChatPanel
                 activeStation={activeStation}
                 activePersona="government"
