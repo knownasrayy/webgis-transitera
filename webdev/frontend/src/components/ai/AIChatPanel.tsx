@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useRef, useEffect } from 'react';
+import DOMPurify from 'dompurify';
 import { AIChatMessage, StationId } from '@/types';
 import { PersonaType } from '@/lib/persona';
 import { queryAI } from '@/lib/api';
@@ -37,6 +38,18 @@ export const AIChatPanel: React.FC<AIChatPanelProps> = ({
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages, isLoading]);
+
+  const sanitizeHtml = (rawHtml: string) => {
+    const formattedHtml = rawHtml
+      .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+      .replace(/\*(.*?)\*/g, '<em>$1</em>');
+    
+    // Use DOMPurify only on the client side where window is available
+    if (typeof window !== 'undefined') {
+      return DOMPurify.sanitize(formattedHtml);
+    }
+    return formattedHtml;
+  };
 
   const handleSendMessage = async (textToSend: string) => {
     if (!textToSend.trim() || isLoading) return;
@@ -145,9 +158,7 @@ export const AIChatPanel: React.FC<AIChatPanelProps> = ({
             >
               <div
                 dangerouslySetInnerHTML={{
-                  __html: msg.text
-                    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-                    .replace(/\*(.*?)\*/g, '<em>$1</em>')
+                  __html: sanitizeHtml(msg.text)
                 }}
               />
               <div

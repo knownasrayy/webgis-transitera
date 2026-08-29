@@ -19,6 +19,21 @@ STATIONS_COORDS = {
     'surabaya-kota': (-7.2415, 112.7419)
 }
 
+def validate_study_area(lat: float, lng: float):
+    """
+    SEC-F2: Validasi bounding box wilayah studi (Surabaya/Gerbangkertosusila).
+    Tolak koordinat [0,0] atau yang di luar wilayah secara eksplisit.
+    """
+    if lat == 0.0 and lng == 0.0:
+        raise HTTPException(status_code=400, detail="Invalid coordinates: [0,0] is not allowed")
+    
+    # Rough bounding box for Surabaya / GKS region
+    MIN_LAT, MAX_LAT = -7.6, -7.0
+    MIN_LNG, MAX_LNG = 112.5, 113.0
+    
+    if not (MIN_LAT <= lat <= MAX_LAT and MIN_LNG <= lng <= MAX_LNG):
+        raise HTTPException(status_code=400, detail="Coordinates out of study area bounds")
+
 @router.get("/api/v1/h3-grid")
 async def get_h3_grid(
     station_id: Optional[str] = Query('gubeng', description="Station ID to generate grid around"),
@@ -32,6 +47,7 @@ async def get_h3_grid(
         raise HTTPException(status_code=404, detail="Station not found")
         
     lat, lng = STATIONS_COORDS[station_id]
+    validate_study_area(lat, lng)
     
     # 1. Generate H3 Grid (approx 1.5 - 2km radius)
     h3_indices = generate_h3_grid_around_point(lat, lng, radius_km=1.5, resolution=resolution)
