@@ -43,8 +43,8 @@ export const PERSONA_CONFIGS: Record<PersonaType, PersonaConfig> = {
   },
   commuter: {
     id: 'commuter',
-    label: 'Commuter',
-    sublabel: 'Wisatawan',
+    label: 'Masyarakat Umum',
+    sublabel: 'Komuter & Warga',
     sidebarTitle: 'Transit Navigator',
     sidebarSubtitle: 'Rute & Jadwal',
     defaultBasemap: 'dark',

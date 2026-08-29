@@ -150,7 +150,9 @@ export const SidebarContainer: React.FC<SidebarContainerProps> = ({
   const [propertyType, setPropertyType] = useState('all');
 
   // Commuter state
-  const [commuterActiveTab, setCommuterActiveTab] = useState<'train' | 'bus' | 'tourist' | 'layers'>('train');
+  const [commuterActiveTab, setCommuterActiveTab] = useState<'schedules' | 'tourist' | 'layers'>('schedules');
+  const [showKRL, setShowKRL] = useState(true);
+  const [showBus, setShowBus] = useState(true);
 
   const demographics = getDemographicsForStation(activeStation);
   const environment = getEnvironmentForStation(activeStation);
@@ -629,22 +631,30 @@ export const SidebarContainer: React.FC<SidebarContainerProps> = ({
         )}
 
         {/* Ã¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢Â Commuter Sidebar Ã¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢Â */}
+        {/* ---------------- Commuter Sidebar ---------------- */}
         {activePersona === 'commuter' && (
           <>
             <SectionHeader label="Navigation" />
             <div className="px-2 space-y-0.5">
-              <NavItem icon={TrainIcon} label="Train Schedules" active={commuterActiveTab === 'train'} onClick={() => setCommuterActiveTab('train')} badge={`${trainSchedules.length}`} />
-              <NavItem icon={Bus} label="Feeder Suroboyo Bus" active={commuterActiveTab === 'bus'} onClick={() => setCommuterActiveTab('bus')} badge={`${busRoutes.length}`} />
+              <NavItem icon={TrainIcon} label="Transit Schedules" active={commuterActiveTab === 'schedules'} onClick={() => setCommuterActiveTab('schedules')} badge={`${trainSchedules.length + busRoutes.length}`} />
               <NavItem icon={MapPin} label="Tourist Destinations" active={commuterActiveTab === 'tourist'} onClick={() => setCommuterActiveTab('tourist')} badge={`${touristSpots.length}`} />
               <NavItem icon={Layers} label="Basemap" active={commuterActiveTab === 'layers'} onClick={() => setCommuterActiveTab('layers')} />
             </div>
 
-            {/* Train Schedules */}
-            {commuterActiveTab === 'train' && (
+            {/* Consolidated Schedules */}
+            {commuterActiveTab === 'schedules' && (
               <div className="px-3 py-3 space-y-2 border-t border-slate-800/60 mt-2">
-                <div className="text-[10px] font-bold text-cyan-400 uppercase tracking-wider">Jadwal KRL SRRL</div>
-                <div className="space-y-1.5 max-h-[320px] overflow-y-auto pr-1">
-                  {trainSchedules.map((t) => (
+                <div className="text-[10px] font-bold text-cyan-400 uppercase tracking-wider">Jadwal Transportasi</div>
+                
+                {/* Filters */}
+                <div className="bg-slate-900/40 p-2 rounded-lg border border-slate-800 space-y-2 mb-3">
+                  <div className="text-[9px] text-slate-500 font-bold mb-1">FILTER MODA</div>
+                  <Toggle active={showKRL} onToggle={() => setShowKRL(!showKRL)} label="KRL / Kereta Lokal" />
+                  <Toggle active={showBus} onToggle={() => setShowBus(!showBus)} label="Feeder Suroboyo Bus" />
+                </div>
+
+                <div className="space-y-2 max-h-[320px] overflow-y-auto pr-1">
+                  {showKRL && trainSchedules.map((t) => (
                     <div key={t.id} className="bg-slate-800/50 rounded-lg p-2.5 border border-slate-700/50 hover:border-brand-lime/30 transition-colors">
                       <div className="flex items-center justify-between mb-1">
                         <div className="flex items-center gap-1.5">
@@ -656,71 +666,62 @@ export const SidebarContainer: React.FC<SidebarContainerProps> = ({
                           t.status === 'delayed' ? 'bg-amber-500/15 text-brand-teal border border-amber-500/25' :
                           'bg-slate-700 text-slate-400 border border-slate-600'
                         }`}>
-                          {t.status === 'on_time' ? 'Ã¢â€”Â On Time' : t.status === 'delayed' ? 'Ã¢Å¡Â  Delayed' : 'Ã¢Å“â€œ Departed'}
+                          {t.status === 'on_time' ? '● On Time' : t.status === 'delayed' ? '⚠ Delayed' : '✓ Departed'}
                         </span>
                       </div>
                       <div className="text-[10px] text-slate-400 flex items-center gap-1">
                         <Clock className="w-3 h-3" />
                         <span className="tabular-nums text-slate-200">{t.departureTime}</span>
-                        <span className="text-slate-600">Ã¢â€ â€™</span>
+                        <span className="text-slate-600">→</span>
                         <span className="tabular-nums text-slate-200">{t.arrivalTime}</span>
                       </div>
                       <div className="text-[10px] text-slate-500 mt-0.5">
-                        {t.origin} Ã¢â€ â€™ {t.destination}
+                        {t.origin} → {t.destination}
                       </div>
                       <div className="text-[9px] text-slate-600 mt-0.5">
-                        Platform {t.platform} Ã‚Â· {t.type}
+                        Platform {t.platform} · {t.type}
+                      </div>
+                    </div>
+                  ))}
+
+                  {showBus && busRoutes.length === 0 && (
+                    <div className="text-[11px] text-slate-500 text-center py-4 border border-dashed border-slate-700 rounded-lg">
+                      Belum ada rute feeder yang melayani stasiun ini.
+                    </div>
+                  )}
+
+                  {showBus && busRoutes.map((r) => (
+                    <div key={r.id} className="bg-slate-800/50 rounded-lg p-2.5 border border-slate-700/50 hover:border-brand-lime/30 transition-colors">
+                      <div className="flex items-center justify-between mb-1.5">
+                        <div className="flex items-center gap-2">
+                          <span className="text-[10px] font-black px-1.5 py-0.5 rounded text-white" style={{ backgroundColor: r.color }}>
+                            {r.routeCode}
+                          </span>
+                          <span className="text-[11px] font-bold text-slate-200">{r.routeName}</span>
+                        </div>
+                      </div>
+                      <div className="text-[10px] text-slate-400 space-y-0.5">
+                        <div className="flex items-center gap-1"><Clock className="w-3 h-3" /><span>{r.frequency}</span></div>
+                        <div className="flex items-center gap-1"><Bus className="w-3 h-3" /><span>{r.operatingHours}</span></div>
+                        <div className="text-emerald-400 font-medium">{r.fare}</div>
+                      </div>
+                      <div className="mt-2 pt-2 border-t border-slate-700/50">
+                        <div className="text-[9px] text-slate-500 font-bold mb-1">HALTE ({r.stops.length} pemberhentian)</div>
+                        <div className="space-y-0.5">
+                          {r.stops.map((stop, i) => (
+                            <div key={i} className="flex items-center gap-1.5 text-[10px]">
+                              <div className="w-1.5 h-1.5 rounded-full flex-shrink-0" style={{ backgroundColor: r.color }} />
+                              <span className={`${i === 0 || i === r.stops.length - 1 ? 'text-slate-200 font-medium' : 'text-slate-500'}`}>
+                                {stop.name}
+                              </span>
+                            </div>
+                          ))}
+                        </div>
+                        <div className="text-[9px] text-slate-500 mt-1">Est. waktu: {r.estimatedTime}</div>
                       </div>
                     </div>
                   ))}
                 </div>
-              </div>
-            )}
-
-            {/* Feeder Suroboyo Bus */}
-            {commuterActiveTab === 'bus' && (
-              <div className="px-3 py-3 space-y-2 border-t border-slate-800/60 mt-2">
-                <div className="text-[10px] font-bold text-cyan-400 uppercase tracking-wider">Rute Feeder Bus</div>
-                {busRoutes.length === 0 ? (
-                  <div className="text-[11px] text-slate-500 text-center py-4 border border-dashed border-slate-700 rounded-lg">
-                    Belum ada rute feeder yang melayani stasiun ini.
-                  </div>
-                ) : (
-                  <div className="space-y-2 max-h-[320px] overflow-y-auto pr-1">
-                    {busRoutes.map((r) => (
-                      <div key={r.id} className="bg-slate-800/50 rounded-lg p-2.5 border border-slate-700/50 hover:border-brand-lime/30 transition-colors">
-                        <div className="flex items-center justify-between mb-1.5">
-                          <div className="flex items-center gap-2">
-                            <span className="text-[10px] font-black px-1.5 py-0.5 rounded text-white" style={{ backgroundColor: r.color }}>
-                              {r.routeCode}
-                            </span>
-                            <span className="text-[11px] font-bold text-slate-200">{r.routeName}</span>
-                          </div>
-                        </div>
-                        <div className="text-[10px] text-slate-400 space-y-0.5">
-                          <div className="flex items-center gap-1"><Clock className="w-3 h-3" /><span>{r.frequency}</span></div>
-                          <div className="flex items-center gap-1"><Bus className="w-3 h-3" /><span>{r.operatingHours}</span></div>
-                          <div className="text-emerald-400 font-medium">{r.fare}</div>
-                        </div>
-                        {/* Mini route map */}
-                        <div className="mt-2 pt-2 border-t border-slate-700/50">
-                          <div className="text-[9px] text-slate-500 font-bold mb-1">HALTE ({r.stops.length} pemberhentian)</div>
-                          <div className="space-y-0.5">
-                            {r.stops.map((stop, i) => (
-                              <div key={i} className="flex items-center gap-1.5 text-[10px]">
-                                <div className="w-1.5 h-1.5 rounded-full flex-shrink-0" style={{ backgroundColor: r.color }} />
-                                <span className={`${i === 0 || i === r.stops.length - 1 ? 'text-slate-200 font-medium' : 'text-slate-500'}`}>
-                                  {stop.name}
-                                </span>
-                              </div>
-                            ))}
-                          </div>
-                          <div className="text-[9px] text-slate-500 mt-1">Est. waktu: {r.estimatedTime}</div>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                )}
               </div>
             )}
 

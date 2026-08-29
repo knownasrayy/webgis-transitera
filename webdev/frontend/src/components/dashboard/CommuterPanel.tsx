@@ -6,7 +6,7 @@ import { DiamondGauge } from './DiamondGauge';
 import { MenuGoDiscovery } from './MenuGoDiscovery';
 import { TravelEstimator } from './TravelEstimator';
 import { AIChatPanel } from '@/components/ai/AIChatPanel';
-import { Footprints, Train } from 'lucide-react';
+import { Footprints, Train, MessageCircle, ThumbsUp, ThumbsDown, Minus } from 'lucide-react';
 
 interface CommuterPanelProps {
   station: StationData;
@@ -54,6 +54,39 @@ export const CommuterPanel: React.FC<CommuterPanelProps> = ({
         {/* Menu Go Discovery */}
         <div className="bg-slate-900/60 border border-slate-800 rounded-xl p-4">
           <MenuGoDiscovery recommendations={station.menu_go_recommendations} />
+        </div>
+
+        {/* Public Sentiment */}
+        <div className="bg-slate-900/60 border border-slate-800 rounded-xl p-4">
+          <div className="flex items-center gap-2 mb-3">
+            <MessageCircle className="w-4 h-4 text-brand-teal" />
+            <h4 className="text-xs font-bold text-slate-200">Public Sentiment & Feedback</h4>
+          </div>
+          
+          <div className="space-y-3">
+            <div className="flex items-center justify-between text-[10px] text-slate-300">
+              <span className="flex items-center gap-1"><ThumbsUp className="w-3 h-3 text-emerald-400" /> Positif (68%)</span>
+              <span className="flex items-center gap-1"><Minus className="w-3 h-3 text-slate-400" /> Netral (20%)</span>
+              <span className="flex items-center gap-1"><ThumbsDown className="w-3 h-3 text-red-400" /> Negatif (12%)</span>
+            </div>
+            {/* Progress Bar */}
+            <div className="w-full h-2 flex rounded-full overflow-hidden">
+              <div className="bg-emerald-400 h-full" style={{ width: '68%' }} />
+              <div className="bg-slate-600 h-full" style={{ width: '20%' }} />
+              <div className="bg-red-400 h-full" style={{ width: '12%' }} />
+            </div>
+            
+            {/* Top Keywords */}
+            <div className="mt-3 pt-3 border-t border-slate-800/80">
+              <div className="text-[9px] text-slate-500 font-bold mb-2">TOPICS OF INTEREST (X/TWITTER & SURVEY)</div>
+              <div className="flex flex-wrap gap-1.5">
+                <span className="px-2 py-0.5 bg-brand-teal/10 text-brand-teal border border-brand-teal/20 rounded-full text-[9px]">#KebersihanStasiun</span>
+                <span className="px-2 py-0.5 bg-brand-teal/10 text-brand-teal border border-brand-teal/20 rounded-full text-[9px]">Akses WiraWiri Mudah</span>
+                <span className="px-2 py-0.5 bg-red-400/10 text-red-400 border border-red-400/20 rounded-full text-[9px]">Antrean Tap In Panjang</span>
+                <span className="px-2 py-0.5 bg-brand-lime/10 text-brand-lime border border-brand-lime/20 rounded-full text-[9px]">Spot Foto Estetik</span>
+              </div>
+            </div>
+          </div>
         </div>
 
         {/* Travel Estimator */}
