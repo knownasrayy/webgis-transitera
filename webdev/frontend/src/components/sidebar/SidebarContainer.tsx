@@ -142,7 +142,7 @@ export const SidebarContainer: React.FC<SidebarContainerProps> = ({
   const [govActiveTab, setGovActiveTab] = useState<'layers' | 'demographics' | 'environment' | 'h3filter' | 'legend'>('layers');
 
   // Business state
-  const [bizActiveTab, setBizActiveTab] = useState<'mapview' | 'demographics' | 'environment' | 'filters' | 'layers'>('mapview');
+  const [bizActiveTab, setBizActiveTab] = useState<'demographics' | 'environment' | 'filters' | 'layers'>('layers');
   const [showEconomicPOI, setShowEconomicPOI] = useState(true);
   const [showNJOPZone, setShowNJOPZone] = useState(true);
   const [showPropertiGo, setShowPropertiGo] = useState(false);
@@ -450,37 +450,12 @@ export const SidebarContainer: React.FC<SidebarContainerProps> = ({
           <>
             <SectionHeader label="Spatial Views" />
             <div className="px-2 space-y-0.5">
-              <NavItem icon={Map} label="Map View" active={bizActiveTab === 'mapview'} onClick={() => setBizActiveTab('mapview')} />
               <NavItem icon={Users} label="Demographics" active={bizActiveTab === 'demographics'} onClick={() => setBizActiveTab('demographics')} />
               <NavItem icon={TreePine} label="Environment" active={bizActiveTab === 'environment'} onClick={() => setBizActiveTab('environment')} />
               <NavItem icon={SlidersHorizontal} label="Filters" active={bizActiveTab === 'filters'} onClick={() => setBizActiveTab('filters')} />
-              <NavItem icon={Layers} label="Layers & Basemap" active={bizActiveTab === 'layers'} onClick={() => setBizActiveTab('layers')} />
+              <NavItem icon={Layers} label="Legends & Summary" active={bizActiveTab === 'layers'} onClick={() => setBizActiveTab('layers')} />
             </div>
 
-            {/* Map View Panel */}
-            {bizActiveTab === 'mapview' && demographics && (
-              <div className="px-3 py-3 space-y-2 border-t border-slate-800/60 mt-2">
-                <div className="text-[10px] font-bold text-cyan-400 uppercase tracking-wider">Area Summary</div>
-                <div className="grid grid-cols-2 gap-2">
-                  <div className="bg-slate-800/50 rounded-lg p-2 text-center">
-                    <div className="text-lg font-black text-brand-lime">{demographics.population.toLocaleString()}</div>
-                    <div className="text-[9px] text-slate-500">Populasi</div>
-                  </div>
-                  <div className="bg-slate-800/50 rounded-lg p-2 text-center">
-                    <div className="text-lg font-black text-cyan-400">{demographics.density.toLocaleString()}</div>
-                    <div className="text-[9px] text-slate-500">Jiwa/kmÃ‚Â²</div>
-                  </div>
-                  <div className="bg-slate-800/50 rounded-lg p-2 text-center">
-                    <div className="text-sm font-bold text-emerald-400">{demographics.avgIncome}</div>
-                    <div className="text-[9px] text-slate-500">Avg Income</div>
-                  </div>
-                  <div className="bg-slate-800/50 rounded-lg p-2 text-center">
-                    <div className="text-sm font-bold text-brand-teal">{demographics.employmentRate}%</div>
-                    <div className="text-[9px] text-slate-500">Employment</div>
-                  </div>
-                </div>
-              </div>
-            )}
 
             {/* Demographics Panel */}
             {bizActiveTab === 'demographics' && demographics && (
@@ -615,18 +590,40 @@ export const SidebarContainer: React.FC<SidebarContainerProps> = ({
               </div>
             )}
 
-            {bizActiveTab === 'layers' && (
+            {bizActiveTab === 'layers' && demographics && (
               <>
-                <SectionHeader label="Activate Datasets" />
-            <div className="px-3 space-y-1">
-              <Toggle active={showEconomicPOI} onToggle={() => setShowEconomicPOI(!showEconomicPOI)} label="Economic POIs" />
-              <Toggle active={showNJOPZone} onToggle={() => { setShowNJOPZone(!showNJOPZone); if (!showNJOPZone) onChangeChoroplethMode('njop_premium'); }} label="Land Value Zone (NJOP)" />
-              <Toggle active={showPropertiGo} onToggle={() => setShowPropertiGo(!showPropertiGo)} label="Properti Go Listings" />
-              <Toggle active={showSurveyPoints} onToggle={onToggleSurveyPoints} label="Survei #PakSibukGa" />
-            </div>
+                <SectionHeader label="Area Summary" />
+                <div className="px-3 pb-2">
+                  <div className="grid grid-cols-2 gap-1.5">
+                    <div className="bg-slate-800/50 rounded-lg p-1.5 text-center border border-slate-700/50">
+                      <div className="text-sm font-black text-brand-lime">{demographics.population.toLocaleString()}</div>
+                      <div className="text-[8px] text-slate-400">Populasi</div>
+                    </div>
+                    <div className="bg-slate-800/50 rounded-lg p-1.5 text-center border border-slate-700/50">
+                      <div className="text-sm font-black text-cyan-400">{demographics.density.toLocaleString()}</div>
+                      <div className="text-[8px] text-slate-400">Jiwa/km²</div>
+                    </div>
+                    <div className="bg-slate-800/50 rounded-lg p-1.5 text-center border border-slate-700/50">
+                      <div className="text-xs font-bold text-emerald-400">{demographics.avgIncome}</div>
+                      <div className="text-[8px] text-slate-400">Avg Income</div>
+                    </div>
+                    <div className="bg-slate-800/50 rounded-lg p-1.5 text-center border border-slate-700/50">
+                      <div className="text-xs font-bold text-brand-teal">{demographics.employmentRate}%</div>
+                      <div className="text-[8px] text-slate-400">Employment</div>
+                    </div>
+                  </div>
+                </div>
 
-            <BasemapGrid basemapStyle={basemapStyle} onChangeBasemapStyle={onChangeBasemapStyle} />
-            </>
+                <SectionHeader label="Activate Datasets" />
+                <div className="px-3 space-y-1 pb-2">
+                  <Toggle active={showEconomicPOI} onToggle={() => setShowEconomicPOI(!showEconomicPOI)} label="Economic POIs" />
+                  <Toggle active={showNJOPZone} onToggle={() => { setShowNJOPZone(!showNJOPZone); if (!showNJOPZone) onChangeChoroplethMode('njop_premium'); }} label="Land Value Zone (NJOP)" />
+                  <Toggle active={showPropertiGo} onToggle={() => setShowPropertiGo(!showPropertiGo)} label="Properti Go Listings" />
+                  <Toggle active={showSurveyPoints} onToggle={onToggleSurveyPoints} label="Survei #PakSibukGa" />
+                </div>
+
+                <BasemapGrid basemapStyle={basemapStyle} onChangeBasemapStyle={onChangeBasemapStyle} />
+              </>
             )}
           </>
         )}
