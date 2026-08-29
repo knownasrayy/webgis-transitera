@@ -18,6 +18,8 @@ interface MapContainerProps {
   choroplethMode: ChoroplethMode;
   basemapStyle: BasemapStyleKey;
   showSurveyPoints: boolean;
+  h3ScoreRange?: [number, number];
+  h3RingFilter?: number;
   highlightedH3Index?: string | null;
   onSelectH3Index?: (index: string | null) => void;
   mapActionTrigger?: any;
@@ -30,6 +32,8 @@ export const MapContainer: React.FC<MapContainerProps> = ({
   choroplethMode,
   basemapStyle,
   showSurveyPoints,
+  h3ScoreRange,
+  h3RingFilter,
   highlightedH3Index,
   onSelectH3Index,
   mapActionTrigger
@@ -77,7 +81,7 @@ export const MapContainer: React.FC<MapContainerProps> = ({
   }, []);
 
   // Use Custom Hooks for Modular Layers
-  useH3Layer(mapRef.current, isMapLoaded, choroplethMode, onSelectH3Index);
+  useH3Layer(mapRef.current, isMapLoaded, choroplethMode, onSelectH3Index, h3ScoreRange, h3RingFilter);
   useStationMarkers(mapRef.current, isMapLoaded, onSelectStation);
 
   // 1.5 Add Feeder Routes layer for Commuter Persona

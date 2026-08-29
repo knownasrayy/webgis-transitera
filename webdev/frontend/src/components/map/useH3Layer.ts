@@ -7,7 +7,9 @@ export function useH3Layer(
   map: maplibregl.Map | null,
   isMapLoaded: boolean,
   choroplethMode: ChoroplethMode,
-  onSelectH3Index?: (index: string | null) => void
+  onSelectH3Index?: (index: string | null) => void,
+  h3ScoreRange?: [number, number],
+  h3RingFilter?: number
 ) {
   // 1. Initial Load
   useEffect(() => {
@@ -156,4 +158,25 @@ export function useH3Layer(
       ]);
     }
   }, [map, isMapLoaded, choroplethMode]);
+
+  // 3. Update Filter Expression (H3 Score Range & Ring Filter)
+  useEffect(() => {
+    if (!map || !isMapLoaded || !map.getLayer('h3-tod-fill')) return;
+
+    const minScore = h3ScoreRange ? h3ScoreRange[0] : 0;
+    const maxScore = h3ScoreRange ? h3ScoreRange[1] : 100;
+    const maxRing = h3RingFilter !== undefined ? h3RingFilter : 5;
+
+    const filterExpr: any = [
+      'all',
+      ['>=', ['get', 'tod_readiness_score'], minScore],
+      ['<=', ['get', 'tod_readiness_score'], maxScore],
+      ['<=', ['get', 'ring_distance'], maxRing]
+    ];
+
+    map.setFilter('h3-tod-fill', filterExpr);
+    if (map.getLayer('h3-tod-border')) {
+      map.setFilter('h3-tod-border', filterExpr);
+    }
+  }, [map, isMapLoaded, h3ScoreRange, h3RingFilter]);
 }

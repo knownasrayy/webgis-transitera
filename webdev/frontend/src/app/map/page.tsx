@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import React, { useState, useEffect } from 'react';
 import dynamic from 'next/dynamic';
@@ -39,6 +39,8 @@ export default function WebGISPage() {
   const [choroplethMode, setChoroplethMode] = useState<ChoroplethMode>('tod_score');
   const [basemapStyle, setBasemapStyle] = useState<BasemapStyleKey>('street');
   const [showSurveyPoints, setShowSurveyPoints] = useState<boolean>(true);
+  const [h3ScoreRange, setH3ScoreRange] = useState<[number, number]>([0, 100]);
+  const [h3RingFilter, setH3RingFilter] = useState<number>(5);
   
   const [mapActionTrigger, setMapActionTrigger] = useState<any>(null);
   const [highlightedH3Index, setHighlightedH3Index] = useState<string | null>(null);
@@ -99,6 +101,10 @@ export default function WebGISPage() {
           onToggleSurveyPoints={() => setShowSurveyPoints(!showSurveyPoints)}
           basemapStyle={basemapStyle}
           onChangeBasemapStyle={setBasemapStyle}
+          h3ScoreRange={h3ScoreRange}
+          onChangeH3ScoreRange={setH3ScoreRange}
+          h3RingFilter={h3RingFilter}
+          onChangeH3RingFilter={setH3RingFilter}
           onOpenSettings={() => setSettingsOpen(true)}
           onOpenHelp={() => setHelpOpen(true)}
           onOpenFeedback={() => setHelpOpen(true)}
@@ -113,6 +119,8 @@ export default function WebGISPage() {
             choroplethMode={choroplethMode}
             basemapStyle={basemapStyle}
             showSurveyPoints={showSurveyPoints}
+            h3ScoreRange={h3ScoreRange}
+            h3RingFilter={h3RingFilter}
             highlightedH3Index={highlightedH3Index}
             onSelectH3Index={setSelectedH3Index}
             mapActionTrigger={mapActionTrigger}

@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import React, { useState } from 'react';
 import { StationId } from '@/types';
@@ -31,12 +31,16 @@ interface SidebarContainerProps {
   onToggleSurveyPoints: () => void;
   basemapStyle: BasemapStyleKey;
   onChangeBasemapStyle: (style: BasemapStyleKey) => void;
+  h3ScoreRange?: [number, number];
+  onChangeH3ScoreRange?: (range: [number, number]) => void;
+  h3RingFilter?: number;
+  onChangeH3RingFilter?: (ring: number) => void;
   onOpenSettings?: () => void;
   onOpenHelp?: () => void;
   onOpenFeedback?: () => void;
 }
 
-/* Ã¢â€â‚¬Ã¢â€â‚¬ Orange Toggle Ã¢â€â‚¬Ã¢â€â‚¬ */
+/* ── Orange Toggle ── */
 function Toggle({ active, onToggle, label }: { active: boolean; onToggle: () => void; label: string }) {
   return (
     <button onClick={onToggle} className="w-full flex items-center justify-between py-1.5 px-2 rounded-lg text-xs hover:bg-slate-800/40 transition-colors group">
@@ -46,7 +50,7 @@ function Toggle({ active, onToggle, label }: { active: boolean; onToggle: () => 
   );
 }
 
-/* Ã¢â€â‚¬Ã¢â€â‚¬ Nav Item Ã¢â€â‚¬Ã¢â€â‚¬ */
+/* ── Nav Item ── */
 function NavItem({ icon: Icon, label, active, onClick, badge, expandable, expanded }: {
   icon: React.ElementType; label: string; active?: boolean; onClick?: () => void; badge?: string; expandable?: boolean; expanded?: boolean;
 }) {
@@ -75,7 +79,7 @@ function NavItem({ icon: Icon, label, active, onClick, badge, expandable, expand
   );
 }
 
-/* Ã¢â€â‚¬Ã¢â€â‚¬ Section Header Ã¢â€â‚¬Ã¢â€â‚¬ */
+/* ── Section Header ── */
 function SectionHeader({ label }: { label: string }) {
   return (
     <div className="text-[10px] uppercase font-bold tracking-wider text-slate-500 px-3 pt-3 pb-1">
@@ -84,7 +88,7 @@ function SectionHeader({ label }: { label: string }) {
   );
 }
 
-/* Ã¢â€â‚¬Ã¢â€â‚¬ Basemap Grid (shared) Ã¢â€â‚¬Ã¢â€â‚¬ */
+/* ── Basemap Grid (shared) ── */
 function BasemapGrid({ basemapStyle, onChangeBasemapStyle }: { basemapStyle: BasemapStyleKey; onChangeBasemapStyle: (s: BasemapStyleKey) => void }) {
   return (
     <>
@@ -124,6 +128,10 @@ export const SidebarContainer: React.FC<SidebarContainerProps> = ({
   onToggleSurveyPoints,
   basemapStyle,
   onChangeBasemapStyle,
+  h3ScoreRange = [0, 100],
+  onChangeH3ScoreRange,
+  h3RingFilter = 5,
+  onChangeH3RingFilter,
   onOpenSettings,
   onOpenHelp,
   onOpenFeedback,
@@ -131,9 +139,7 @@ export const SidebarContainer: React.FC<SidebarContainerProps> = ({
   const config = getPersonaConfig(activePersona);
 
   // Government state
-  const [govActiveTab, setGovActiveTab] = useState<'layers' | 'h3filter' | 'legend'>('layers');
-  const [h3ScoreRange, setH3ScoreRange] = useState<[number, number]>([0, 100]);
-  const [h3RingFilter, setH3RingFilter] = useState<number>(3);
+  const [govActiveTab, setGovActiveTab] = useState<'layers' | 'demographics' | 'environment' | 'h3filter' | 'legend'>('layers');
 
   // Business state
   const [bizActiveTab, setBizActiveTab] = useState<'mapview' | 'demographics' | 'environment' | 'filters' | 'layers'>('mapview');
@@ -154,7 +160,7 @@ export const SidebarContainer: React.FC<SidebarContainerProps> = ({
 
   return (
     <aside className="hidden md:flex w-[var(--sidebar-width)] h-full flex-col glass-sidebar z-20 overflow-hidden">
-      {/* Ã¢â€â‚¬Ã¢â€â‚¬ Sidebar Header Ã¢â€â‚¬Ã¢â€â‚¬ */}
+      {/* ── Sidebar Header ── */}
       <div className="px-4 py-3 border-b border-slate-800/80">
         <div className="flex items-center gap-2">
           <div className="w-2 h-2 rounded-full bg-brand-lime" />
@@ -165,40 +171,173 @@ export const SidebarContainer: React.FC<SidebarContainerProps> = ({
         </div>
       </div>
 
-      {/* Ã¢â€â‚¬Ã¢â€â‚¬ Scrollable Content Ã¢â€â‚¬Ã¢â€â‚¬ */}
+      {/* ── Scrollable Content ── */}
       <div className="flex-1 overflow-y-auto py-1">
 
-        {/* Ã¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢Â Government Sidebar Ã¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢Â */}
+        {/* ══════ Government Sidebar ══════ */}
         {activePersona === 'government' && (
           <>
-            <SectionHeader label="Map Layers" />
+            <SectionHeader label="Government Tools (PWK)" />
             <div className="px-2 space-y-0.5">
-              <NavItem icon={Layers} label="Layers" active={govActiveTab === 'layers'} onClick={() => setGovActiveTab('layers')} badge="5D" />
-              <NavItem icon={SlidersHorizontal} label="H3 Filters" active={govActiveTab === 'h3filter'} onClick={() => setGovActiveTab('h3filter')} />
-              <NavItem icon={Map} label="Legend" active={govActiveTab === 'legend'} onClick={() => setGovActiveTab('legend')} />
+              <NavItem icon={Layers} label="Map Layers & 5D" active={govActiveTab === 'layers'} onClick={() => setGovActiveTab('layers')} badge="5D" />
+              <NavItem icon={Users} label="Demografi Spasial" active={govActiveTab === 'demographics'} onClick={() => setGovActiveTab('demographics')} />
+              <NavItem icon={TreePine} label="Lingkungan & RTH" active={govActiveTab === 'environment'} onClick={() => setGovActiveTab('environment')} />
+              <NavItem icon={SlidersHorizontal} label="H3 TOD Filter" active={govActiveTab === 'h3filter'} onClick={() => setGovActiveTab('h3filter')} badge={h3ScoreRange[0] > 0 || h3ScoreRange[1] < 100 || h3RingFilter < 5 ? 'Active' : undefined} />
+              <NavItem icon={Map} label="Legenda Peta" active={govActiveTab === 'legend'} onClick={() => setGovActiveTab('legend')} />
             </div>
 
-            {/* H3 Filter Panel */}
+            {/* Demographics Panel for Government */}
+            {govActiveTab === 'demographics' && demographics && (
+              <div className="px-3 py-3 space-y-3 border-t border-slate-800/60 mt-2">
+                <div className="flex items-center justify-between">
+                  <div className="text-[10px] font-bold text-brand-lime uppercase tracking-wider">
+                    {demographics.kecamatan}
+                  </div>
+                  <span className="text-[9px] bg-brand-lime/10 border border-brand-lime/30 text-brand-lime px-1.5 py-0.5 rounded font-semibold">
+                    PWK Buffer
+                  </span>
+                </div>
+                
+                {/* Summary Cards */}
+                <div className="grid grid-cols-2 gap-1.5">
+                  <div className="bg-slate-800/50 rounded-lg p-2 text-center border border-slate-700/40">
+                    <div className="text-base font-black text-brand-lime">{demographics.population.toLocaleString()}</div>
+                    <div className="text-[9px] text-slate-400">Total Populasi</div>
+                  </div>
+                  <div className="bg-slate-800/50 rounded-lg p-2 text-center border border-slate-700/40">
+                    <div className="text-base font-black text-cyan-400">{demographics.density.toLocaleString()}</div>
+                    <div className="text-[9px] text-slate-400">Kepadatan (Jiwa/km²)</div>
+                  </div>
+                </div>
+
+                {/* Age Pyramid / Distribution */}
+                <div className="bg-slate-800/50 rounded-lg p-3 border border-slate-700/40">
+                  <div className="text-[10px] font-semibold text-slate-300 mb-2">Struktur Demografi Usia</div>
+                  <div className="space-y-2">
+                    <div>
+                      <div className="flex justify-between text-[10px] mb-0.5">
+                        <span className="text-slate-400">Usia Muda (0-17 thn)</span>
+                        <span className="text-slate-200 font-bold">{demographics.ageDistribution.youth}%</span>
+                      </div>
+                      <div className="w-full bg-slate-700 h-1.5 rounded-full overflow-hidden">
+                        <div className="h-full bg-blue-500 rounded-full transition-all" style={{ width: `${demographics.ageDistribution.youth}%` }} />
+                      </div>
+                    </div>
+                    <div>
+                      <div className="flex justify-between text-[10px] mb-0.5">
+                        <span className="text-slate-400">Usia Produktif (18-55 thn)</span>
+                        <span className="text-slate-200 font-bold">{demographics.ageDistribution.productive}%</span>
+                      </div>
+                      <div className="w-full bg-slate-700 h-1.5 rounded-full overflow-hidden">
+                        <div className="h-full bg-emerald-500 rounded-full transition-all" style={{ width: `${demographics.ageDistribution.productive}%` }} />
+                      </div>
+                    </div>
+                    <div>
+                      <div className="flex justify-between text-[10px] mb-0.5">
+                        <span className="text-slate-400">Usia Lansia (56+ thn)</span>
+                        <span className="text-slate-200 font-bold">{demographics.ageDistribution.elderly}%</span>
+                      </div>
+                      <div className="w-full bg-slate-700 h-1.5 rounded-full overflow-hidden">
+                        <div className="h-full bg-amber-500 rounded-full transition-all" style={{ width: `${demographics.ageDistribution.elderly}%` }} />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Socio-Economic Status */}
+                <div className="grid grid-cols-2 gap-1.5">
+                  <div className="bg-slate-800/50 rounded-lg p-2 text-center border border-slate-700/40">
+                    <div className="text-xs font-bold text-slate-200">{demographics.householdCount.toLocaleString()}</div>
+                    <div className="text-[9px] text-slate-400">Kepala Keluarga</div>
+                  </div>
+                  <div className="bg-slate-800/50 rounded-lg p-2 text-center border border-slate-700/40">
+                    <div className="text-xs font-bold text-emerald-400">{demographics.employmentRate}%</div>
+                    <div className="text-[9px] text-slate-400">Tingkat Bekerja</div>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Environment & Disaster Panel for Government */}
+            {govActiveTab === 'environment' && environment && (
+              <div className="px-3 py-3 space-y-2 border-t border-slate-800/60 mt-2">
+                <div className="text-[10px] font-bold text-brand-lime uppercase tracking-wider">Daya Dukung Lingkungan & Risiko</div>
+                
+                {/* AQI */}
+                <div className="bg-slate-800/50 rounded-lg p-3 border border-slate-700/40 flex items-center gap-3">
+                  <Wind className="w-5 h-5 flex-shrink-0" style={{ color: environment.aqiColor }} />
+                  <div className="flex-1">
+                    <div className="flex justify-between items-baseline">
+                      <span className="text-[10px] text-slate-400">Kualitas Udara (AQI)</span>
+                      <span className="text-sm font-black" style={{ color: environment.aqiColor }}>{environment.aqi}</span>
+                    </div>
+                    <div className="text-[10px] font-medium" style={{ color: environment.aqiColor }}>{environment.aqiLabel}</div>
+                    <div className="text-[9px] text-slate-500">PM2.5: {environment.pm25} µg/m³</div>
+                  </div>
+                </div>
+
+                {/* Flood Risk */}
+                <div className="bg-slate-800/50 rounded-lg p-3 border border-slate-700/40 flex items-center gap-3">
+                  <Droplets className="w-5 h-5 flex-shrink-0" style={{ color: environment.floodRiskColor }} />
+                  <div className="flex-1">
+                    <div className="flex justify-between items-baseline">
+                      <span className="text-[10px] text-slate-400">Mitigasi Banjir</span>
+                      <span className="text-xs font-bold uppercase px-1.5 py-0.5 rounded" style={{ color: environment.floodRiskColor, backgroundColor: `${environment.floodRiskColor}15`, border: `1px solid ${environment.floodRiskColor}40` }}>
+                        Risiko {environment.floodRisk}
+                      </span>
+                    </div>
+                    <div className="text-[9px] text-slate-400 mt-1">Perlu penguatan drainase primer koridor stasiun.</div>
+                  </div>
+                </div>
+
+                {/* RTH & Micro Climate */}
+                <div className="grid grid-cols-2 gap-1.5">
+                  <div className="bg-slate-800/50 rounded-lg p-2 text-center border border-slate-700/40">
+                    <TreePine className="w-4 h-4 text-emerald-400 mx-auto mb-1" />
+                    <div className="text-sm font-bold text-emerald-400">{environment.greenSpacePct}%</div>
+                    <div className="text-[9px] text-slate-400">Cakupan RTH</div>
+                  </div>
+                  <div className="bg-slate-800/50 rounded-lg p-2 text-center border border-slate-700/40">
+                    <Thermometer className="w-4 h-4 text-red-400 mx-auto mb-1" />
+                    <div className="text-sm font-bold text-red-400">{environment.temperature}°C</div>
+                    <div className="text-[9px] text-slate-400">Suhu Permukaan</div>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* H3 Filter Panel with Real-time map link */}
             {govActiveTab === 'h3filter' && (
               <div className="px-3 py-3 space-y-3 border-t border-slate-800/60 mt-2">
-                <div className="text-[10px] font-bold text-cyan-400 uppercase tracking-wider">H3 Score Filter</div>
+                <div className="flex items-center justify-between">
+                  <div className="text-[10px] font-bold text-cyan-400 uppercase tracking-wider">H3 Spatial Filter</div>
+                  <button
+                    onClick={() => {
+                      onChangeH3ScoreRange?.([0, 100]);
+                      onChangeH3RingFilter?.(5);
+                    }}
+                    className="text-[9px] text-slate-400 hover:text-brand-lime underline"
+                  >
+                    Reset Filter
+                  </button>
+                </div>
                 <div>
                   <label className="text-[10px] text-slate-400 block mb-1">Min TOD Score: <span className="text-brand-lime font-bold">{h3ScoreRange[0]}</span></label>
-                  <input type="range" min={0} max={100} value={h3ScoreRange[0]} onChange={(e) => setH3ScoreRange([+e.target.value, h3ScoreRange[1]])}
+                  <input type="range" min={0} max={100} value={h3ScoreRange[0]} onChange={(e) => onChangeH3ScoreRange?.([+e.target.value, h3ScoreRange[1]])}
                     className="w-full h-1 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-brand-lime" />
                 </div>
                 <div>
                   <label className="text-[10px] text-slate-400 block mb-1">Max TOD Score: <span className="text-brand-lime font-bold">{h3ScoreRange[1]}</span></label>
-                  <input type="range" min={0} max={100} value={h3ScoreRange[1]} onChange={(e) => setH3ScoreRange([h3ScoreRange[0], +e.target.value])}
+                  <input type="range" min={0} max={100} value={h3ScoreRange[1]} onChange={(e) => onChangeH3ScoreRange?.([h3ScoreRange[0], +e.target.value])}
                     className="w-full h-1 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-brand-lime" />
                 </div>
                 <div>
-                  <label className="text-[10px] text-slate-400 block mb-1">Ring Distance: <span className="text-brand-lime font-bold">{h3RingFilter}</span></label>
-                  <input type="range" min={0} max={5} value={h3RingFilter} onChange={(e) => setH3RingFilter(+e.target.value)}
+                  <label className="text-[10px] text-slate-400 block mb-1">Catchment Ring: <span className="text-brand-lime font-bold">Ring ≤ {h3RingFilter}</span></label>
+                  <input type="range" min={0} max={5} value={h3RingFilter} onChange={(e) => onChangeH3RingFilter?.(+e.target.value)}
                     className="w-full h-1 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-brand-lime" />
                 </div>
-                <div className="text-[9px] text-slate-500 pt-1 border-t border-slate-800">
-                  Menampilkan sel H3 dengan skor {h3ScoreRange[0]}Ã¢â‚¬â€œ{h3ScoreRange[1]} dalam ring Ã¢â€°Â¤{h3RingFilter}
+                <div className="text-[9px] text-slate-400 bg-slate-800/60 p-2 rounded-lg border border-slate-700/50">
+                  ⚡ Peta MapLibre secara dinamis memfilter sel heksagon dengan skor <strong className="text-brand-lime">{h3ScoreRange[0]}–{h3ScoreRange[1]}</strong> pada radius ring <strong className="text-brand-lime">≤ {h3RingFilter}</strong>.
                 </div>
               </div>
             )}
@@ -206,11 +345,11 @@ export const SidebarContainer: React.FC<SidebarContainerProps> = ({
             {/* Legend Panel */}
             {govActiveTab === 'legend' && (
               <div className="px-3 py-3 space-y-3 border-t border-slate-800/60 mt-2">
-                <div className="text-[10px] font-bold text-cyan-400 uppercase tracking-wider">Map Legend</div>
+                <div className="text-[10px] font-bold text-cyan-400 uppercase tracking-wider">Legenda Simbologi Peta</div>
                 
                 {/* TOD Score Legend */}
                 <div className="space-y-1">
-                  <div className="text-[10px] font-semibold text-slate-300">TOD Readiness Score</div>
+                  <div className="text-[10px] font-semibold text-slate-300">TOD Readiness Score (0-100)</div>
                   <div className="h-2 rounded-full bg-gradient-to-r from-red-500 via-amber-500 to-emerald-500 w-full" />
                   <div className="flex justify-between text-[9px] text-slate-500 font-medium">
                     <span>0 (Rendah)</span><span>50 (Sedang)</span><span>100 (Tinggi)</span>
@@ -219,7 +358,7 @@ export const SidebarContainer: React.FC<SidebarContainerProps> = ({
 
                 {/* NJOP Legend */}
                 <div className="space-y-1">
-                  <div className="text-[10px] font-semibold text-slate-300">%ÃŽâ€NJOP Premium</div>
+                  <div className="text-[10px] font-semibold text-slate-300">Estimasi %ΔNJOP Premium</div>
                   <div className="h-2 rounded-full bg-gradient-to-r from-indigo-500 via-blue-500 to-emerald-400 w-full" />
                   <div className="flex justify-between text-[9px] text-slate-500 font-medium">
                     <span>+0%</span><span>+10%</span><span>+20%</span>
@@ -228,7 +367,7 @@ export const SidebarContainer: React.FC<SidebarContainerProps> = ({
 
                 {/* Typology Legend */}
                 <div className="space-y-1.5">
-                  <div className="text-[10px] font-semibold text-slate-300">Tipologi Kawasan</div>
+                  <div className="text-[10px] font-semibold text-slate-300">Tipologi Kawasan (Cluster Analysis)</div>
                   <div className="flex items-center gap-2 text-[10px]">
                     <span className="w-3 h-3 rounded bg-cyan-500 flex-shrink-0" />
                     <span className="text-slate-400">Commercial Transit Hub</span>
@@ -249,14 +388,14 @@ export const SidebarContainer: React.FC<SidebarContainerProps> = ({
 
                 {/* Station Markers */}
                 <div className="space-y-1.5">
-                  <div className="text-[10px] font-semibold text-slate-300">Simbol</div>
+                  <div className="text-[10px] font-semibold text-slate-300">Simbol & Marker</div>
                   <div className="flex items-center gap-2 text-[10px]">
                     <span className="w-3 h-3 rounded-full bg-gradient-to-tr from-brand-lime to-brand-teal border border-white flex-shrink-0" />
-                    <span className="text-slate-400">Simpul Stasiun</span>
+                    <span className="text-slate-400">Simpul Stasiun SRRL</span>
                   </div>
                   <div className="flex items-center gap-2 text-[10px]">
                     <span className="w-3 h-3 rounded-full bg-pink-500 border border-white flex-shrink-0" />
-                    <span className="text-slate-400">Titik Survei #PakSibukGa</span>
+                    <span className="text-slate-400">Titik Survei Lapangan #PakSibukGa</span>
                   </div>
                 </div>
               </div>
