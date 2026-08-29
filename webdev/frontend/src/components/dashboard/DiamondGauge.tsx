@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import React from 'react';
 
@@ -54,7 +54,7 @@ export const DiamondGauge: React.FC<DiamondGaugeProps> = ({
     <div className="flex flex-col items-center gap-1.5">
       {/* Diamond Container */}
       <div
-        className={`relative ${colors.glow}`}
+        className={`relative ${colors.glow} ${size === 'lg' ? 'my-8' : size === 'md' ? 'my-6' : 'my-4'}`}
         style={{ width: s.outer, height: s.outer }}
       >
         {/* Rotated diamond background */}
