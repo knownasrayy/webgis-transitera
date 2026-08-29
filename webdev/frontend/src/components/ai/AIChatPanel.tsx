@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import React, { useState, useRef, useEffect } from 'react';
 import { AIChatMessage, StationId } from '@/types';
@@ -26,7 +26,7 @@ export const AIChatPanel: React.FC<AIChatPanelProps> = ({
     {
       id: 'init-1',
       sender: 'assistant',
-      text: 'Halo! Saya **Asisten Spasial TransitERA** ðŸš†. Tanyakan kesiapan TOD di 5 stasiun Surabaya, komparasi antarsimpul, estimasi kenaikan nilai tanah (%Î”NJOP), atau profil kesesuaian lokasi usaha UMKM.',
+      text: 'Halo! Saya **TransitERA AI** 🚆. Tanyakan kesiapan TOD di 5 stasiun Surabaya, komparasi antarsimpul, estimasi kenaikan nilai tanah (%ΔNJOP), atau profil kesesuaian lokasi usaha UMKM.',
       timestamp: 'Baru saja'
     }
   ]);
@@ -106,10 +106,10 @@ export const AIChatPanel: React.FC<AIChatPanelProps> = ({
           </div>
           <div>
             <h3 className="text-xs font-bold text-slate-100 flex items-center gap-1.5">
-              Spatial AI Assistant
+              TransitERA AI
               <span className="w-1.5 h-1.5 rounded-full bg-success-green animate-pulse"></span>
             </h3>
-            <p className="text-[10px] text-slate-400">Google Gemini Function Calling Proxy</p>
+            <p className="text-[10px] text-slate-400">Asisten Spasial Cerdas</p>
           </div>
         </div>
 

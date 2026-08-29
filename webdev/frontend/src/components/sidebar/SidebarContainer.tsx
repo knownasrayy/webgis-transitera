@@ -138,19 +138,24 @@ export const SidebarContainer: React.FC<SidebarContainerProps> = ({
 }) => {
   const config = getPersonaConfig(activePersona);
 
-  // Government state
-  const [govActiveTab, setGovActiveTab] = useState<'layers' | 'demographics' | 'environment' | 'h3filter' | 'legend'>('layers');
+  // Global active tab state per persona
+  const [govActiveTab, setGovActiveTab] = useState<'demographics' | 'environment' | 'filter' | 'layers' | 'legends'>('layers');
+  const [bizActiveTab, setBizActiveTab] = useState<'demographics' | 'environment' | 'filter' | 'layers' | 'legends'>('layers');
+  const [commuterActiveTab, setCommuterActiveTab] = useState<'schedules' | 'tourist' | 'filter' | 'layers' | 'legends'>('schedules');
 
-  // Business state
-  const [bizActiveTab, setBizActiveTab] = useState<'demographics' | 'environment' | 'filters' | 'layers'>('layers');
+  // General Layer States
   const [showEconomicPOI, setShowEconomicPOI] = useState(true);
   const [showNJOPZone, setShowNJOPZone] = useState(true);
   const [showPropertiGo, setShowPropertiGo] = useState(false);
+  const [showGistaru, setShowGistaru] = useState(false);
+  const [showBhumi, setShowBhumi] = useState(false);
+  const [showTraffic, setShowTraffic] = useState(false);
+
+  // Business Specific State
   const [njopRange, setNjopRange] = useState<[number, number]>([0, 25]);
   const [propertyType, setPropertyType] = useState('all');
 
-  // Commuter state
-  const [commuterActiveTab, setCommuterActiveTab] = useState<'schedules' | 'tourist' | 'layers'>('schedules');
+  // Commuter Specific State
   const [showKRL, setShowKRL] = useState(true);
   const [showBus, setShowBus] = useState(true);
 
@@ -159,6 +164,160 @@ export const SidebarContainer: React.FC<SidebarContainerProps> = ({
   const trainSchedules = getTrainSchedulesForStation(activeStation);
   const busRoutes = getBusRoutesForStation(activeStation);
   const touristSpots = getTouristDestinationsForStation(activeStation);
+
+  // ---------------------------------------------------------------------------
+  // SHARED UI RENDERERS (FILTER, LAYERS, LEGENDS)
+  // ---------------------------------------------------------------------------
+  
+  const renderFilterTab = () => (
+    <div className="px-3 py-3 space-y-3 border-t border-slate-800/60 mt-2">
+      <div className="flex items-center justify-between">
+        <div className="text-[10px] font-bold text-cyan-400 uppercase tracking-wider">Filter Spasial</div>
+        <button
+          onClick={() => {
+            onChangeH3ScoreRange?.([0, 100]);
+            onChangeH3RingFilter?.(5);
+            setNjopRange([0, 25]);
+          }}
+          className="text-[9px] text-slate-400 hover:text-brand-lime underline"
+        >
+          Reset Filter
+        </button>
+      </div>
+      
+      {/* H3 Catchment & Score Filter */}
+      <div className="space-y-2">
+        <div>
+          <label className="text-[10px] text-slate-400 block mb-1">Catchment Ring: <span className="text-brand-lime font-bold">Ring ≤ {h3RingFilter}</span></label>
+          <input type="range" min={0} max={5} value={h3RingFilter} onChange={(e) => onChangeH3RingFilter?.(+e.target.value)}
+            className="w-full h-1 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-brand-lime" />
+        </div>
+        <div>
+          <label className="text-[10px] text-slate-400 block mb-1">Min TOD Score: <span className="text-brand-lime font-bold">{h3ScoreRange[0]}</span></label>
+          <input type="range" min={0} max={100} value={h3ScoreRange[0]} onChange={(e) => onChangeH3ScoreRange?.([+e.target.value, h3ScoreRange[1]])}
+            className="w-full h-1 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-brand-lime" />
+        </div>
+        <div>
+          <label className="text-[10px] text-slate-400 block mb-1">Max TOD Score: <span className="text-brand-lime font-bold">{h3ScoreRange[1]}</span></label>
+          <input type="range" min={0} max={100} value={h3ScoreRange[1]} onChange={(e) => onChangeH3ScoreRange?.([h3ScoreRange[0], +e.target.value])}
+            className="w-full h-1 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-brand-lime" />
+        </div>
+      </div>
+
+      {/* NJOP Premium Filter */}
+      <div className="pt-2 border-t border-slate-800">
+        <label className="text-[10px] text-slate-400 block mb-1">
+          NJOP Premium Range: <span className="text-brand-lime font-bold">{njopRange[0]}% – {njopRange[1]}%</span>
+        </label>
+        <div className="flex gap-2">
+          <input type="range" min={0} max={25} value={njopRange[0]} onChange={(e) => setNjopRange([+e.target.value, njopRange[1]])}
+            className="flex-1 h-1 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-brand-lime" />
+          <input type="range" min={0} max={25} value={njopRange[1]} onChange={(e) => setNjopRange([njopRange[0], +e.target.value])}
+            className="flex-1 h-1 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-brand-lime" />
+        </div>
+      </div>
+    </div>
+  );
+
+  const renderLayersTab = (isGovBiz: boolean) => (
+    <>
+      <SectionHeader label="Lapisan Peta (Layers)" />
+      <div className="px-3 space-y-1 pb-2">
+        <Toggle active={choroplethMode === 'tod_score'} onToggle={() => onChangeChoroplethMode('tod_score')} label="⬡ H3 TOD Grid" />
+        <Toggle active={showGistaru} onToggle={() => setShowGistaru(!showGistaru)} label="🗺️ Kawasan BWP (GISTARU)" />
+        <Toggle active={showBhumi} onToggle={() => setShowBhumi(!showBhumi)} label="📜 Persil Tanah (Bhumi ATR)" />
+        <Toggle active={showSurveyPoints} onToggle={onToggleSurveyPoints} label="📊 Opini Publik (Survei MAPID)" />
+        <Toggle active={choroplethMode === 'njop_premium'} onToggle={() => onChangeChoroplethMode('njop_premium')} label="💰 Zona Nilai Lahan (NJOP)" />
+        {isGovBiz && <Toggle active={showEconomicPOI} onToggle={() => setShowEconomicPOI(!showEconomicPOI)} label="🏢 Economic POI" />}
+        <Toggle active={showTraffic} onToggle={() => setShowTraffic(!showTraffic)} label="🚗 Traffic Real-Time" />
+      </div>
+
+      <BasemapGrid basemapStyle={basemapStyle} onChangeBasemapStyle={onChangeBasemapStyle} />
+    </>
+  );
+
+  const renderLegendsTab = (showAreaSummary: boolean) => (
+    <div className="px-3 py-3 space-y-3 border-t border-slate-800/60 mt-2">
+      {/* Area Summary Khusus Business */}
+      {showAreaSummary && demographics && (
+        <div className="mb-4">
+          <SectionHeader label="Area Summary" />
+          <div className="grid grid-cols-2 gap-1.5 mt-2">
+            <div className="bg-slate-800/50 rounded-lg p-1.5 text-center border border-slate-700/50">
+              <div className="text-sm font-black text-brand-lime">{demographics.population.toLocaleString()}</div>
+              <div className="text-[8px] text-slate-400">Populasi</div>
+            </div>
+            <div className="bg-slate-800/50 rounded-lg p-1.5 text-center border border-slate-700/50">
+              <div className="text-sm font-black text-cyan-400">{demographics.density.toLocaleString()}</div>
+              <div className="text-[8px] text-slate-400">Jiwa/km²</div>
+            </div>
+            <div className="bg-slate-800/50 rounded-lg p-1.5 text-center border border-slate-700/50">
+              <div className="text-xs font-bold text-emerald-400">{demographics.avgIncome}</div>
+              <div className="text-[8px] text-slate-400">Rata-rata Pendapatan</div>
+            </div>
+            <div className="bg-slate-800/50 rounded-lg p-1.5 text-center border border-slate-700/50">
+              <div className="text-xs font-bold text-brand-teal">{demographics.employmentRate}%</div>
+              <div className="text-[8px] text-slate-400">Tingkat Pekerjaan</div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      <div className="text-[10px] font-bold text-cyan-400 uppercase tracking-wider">Legenda Simbologi Peta</div>
+      
+      {/* TOD Score Legend */}
+      <div className="space-y-1">
+        <div className="text-[10px] font-semibold text-slate-300">TOD Readiness Score (0-100)</div>
+        <div className="h-2 rounded-full bg-gradient-to-r from-red-500 via-amber-500 to-emerald-500 w-full" />
+        <div className="flex justify-between text-[9px] text-slate-500 font-medium">
+          <span>0 (Rendah)</span><span>50 (Sedang)</span><span>100 (Tinggi)</span>
+        </div>
+      </div>
+
+      {/* NJOP Legend */}
+      <div className="space-y-1">
+        <div className="text-[10px] font-semibold text-slate-300">Estimasi %ΔNJOP Premium</div>
+        <div className="h-2 rounded-full bg-gradient-to-r from-indigo-500 via-blue-500 to-emerald-400 w-full" />
+        <div className="flex justify-between text-[9px] text-slate-500 font-medium">
+          <span>+0%</span><span>+10%</span><span>+20%</span>
+        </div>
+      </div>
+
+      {/* Typology Legend */}
+      <div className="space-y-1.5">
+        <div className="text-[10px] font-semibold text-slate-300">Tipologi Kawasan (Cluster Analysis)</div>
+        <div className="flex items-center gap-2 text-[10px]">
+          <span className="w-3 h-3 rounded bg-cyan-500 flex-shrink-0" />
+          <span className="text-slate-400">Commercial Transit Hub</span>
+        </div>
+        <div className="flex items-center gap-2 text-[10px]">
+          <span className="w-3 h-3 rounded bg-amber-500 flex-shrink-0" />
+          <span className="text-slate-400">Mixed-Use Heritage Core</span>
+        </div>
+        <div className="flex items-center gap-2 text-[10px]">
+          <span className="w-3 h-3 rounded bg-brand-lime flex-shrink-0" />
+          <span className="text-slate-400">Mixed-Use Residential</span>
+        </div>
+        <div className="flex items-center gap-2 text-[10px]">
+          <span className="w-3 h-3 rounded bg-purple-500 flex-shrink-0" />
+          <span className="text-slate-400">Low-Access Feeder Zone</span>
+        </div>
+      </div>
+
+      {/* Station Markers */}
+      <div className="space-y-1.5">
+        <div className="text-[10px] font-semibold text-slate-300">Simbol & Marker</div>
+        <div className="flex items-center gap-2 text-[10px]">
+          <span className="w-3 h-3 rounded-full bg-gradient-to-tr from-brand-lime to-brand-teal border border-white flex-shrink-0" />
+          <span className="text-slate-400">Simpul Stasiun SRRL</span>
+        </div>
+        <div className="flex items-center gap-2 text-[10px]">
+          <span className="w-3 h-3 rounded-full bg-pink-500 border border-white flex-shrink-0" />
+          <span className="text-slate-400">Titik Opini Publik / Survei MAPID</span>
+        </div>
+      </div>
+    </div>
+  );
 
   return (
     <aside className="hidden md:flex w-[var(--sidebar-width)] h-full flex-col glass-sidebar z-20 overflow-hidden">
@@ -181,12 +340,18 @@ export const SidebarContainer: React.FC<SidebarContainerProps> = ({
           <>
             <SectionHeader label="Government Tools (PWK)" />
             <div className="px-2 space-y-0.5">
-              <NavItem icon={Layers} label="Map Layers & 5D" active={govActiveTab === 'layers'} onClick={() => setGovActiveTab('layers')} badge="5D" />
+              <NavItem icon={SlidersHorizontal} label="Filter Spasial" active={govActiveTab === 'filter'} onClick={() => setGovActiveTab('filter')} badge={h3ScoreRange[0] > 0 || h3ScoreRange[1] < 100 || h3RingFilter < 5 || njopRange[0] > 0 || njopRange[1] < 25 ? 'Aktif' : undefined} />
+              <NavItem icon={Layers} label="Lapisan Peta (Layers)" active={govActiveTab === 'layers'} onClick={() => setGovActiveTab('layers')} />
+              <NavItem icon={Map} label="Legenda (Legends)" active={govActiveTab === 'legends'} onClick={() => setGovActiveTab('legends')} />
+              <div className="my-1 border-t border-slate-800/80" />
               <NavItem icon={Users} label="Demografi Spasial" active={govActiveTab === 'demographics'} onClick={() => setGovActiveTab('demographics')} />
               <NavItem icon={TreePine} label="Lingkungan & RTH" active={govActiveTab === 'environment'} onClick={() => setGovActiveTab('environment')} />
-              <NavItem icon={SlidersHorizontal} label="H3 TOD Filter" active={govActiveTab === 'h3filter'} onClick={() => setGovActiveTab('h3filter')} badge={h3ScoreRange[0] > 0 || h3ScoreRange[1] < 100 || h3RingFilter < 5 ? 'Active' : undefined} />
-              <NavItem icon={Map} label="Legenda Peta" active={govActiveTab === 'legend'} onClick={() => setGovActiveTab('legend')} />
             </div>
+
+            {/* General Features Rendering */}
+            {govActiveTab === 'filter' && renderFilterTab()}
+            {govActiveTab === 'layers' && renderLayersTab(true)}
+            {govActiveTab === 'legends' && renderLegendsTab(false)}
 
             {/* Demographics Panel for Government */}
             {govActiveTab === 'demographics' && demographics && (
@@ -307,156 +472,26 @@ export const SidebarContainer: React.FC<SidebarContainerProps> = ({
                 </div>
               </div>
             )}
-
-            {/* H3 Filter Panel with Real-time map link */}
-            {govActiveTab === 'h3filter' && (
-              <div className="px-3 py-3 space-y-3 border-t border-slate-800/60 mt-2">
-                <div className="flex items-center justify-between">
-                  <div className="text-[10px] font-bold text-cyan-400 uppercase tracking-wider">H3 Spatial Filter</div>
-                  <button
-                    onClick={() => {
-                      onChangeH3ScoreRange?.([0, 100]);
-                      onChangeH3RingFilter?.(5);
-                    }}
-                    className="text-[9px] text-slate-400 hover:text-brand-lime underline"
-                  >
-                    Reset Filter
-                  </button>
-                </div>
-                <div>
-                  <label className="text-[10px] text-slate-400 block mb-1">Min TOD Score: <span className="text-brand-lime font-bold">{h3ScoreRange[0]}</span></label>
-                  <input type="range" min={0} max={100} value={h3ScoreRange[0]} onChange={(e) => onChangeH3ScoreRange?.([+e.target.value, h3ScoreRange[1]])}
-                    className="w-full h-1 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-brand-lime" />
-                </div>
-                <div>
-                  <label className="text-[10px] text-slate-400 block mb-1">Max TOD Score: <span className="text-brand-lime font-bold">{h3ScoreRange[1]}</span></label>
-                  <input type="range" min={0} max={100} value={h3ScoreRange[1]} onChange={(e) => onChangeH3ScoreRange?.([h3ScoreRange[0], +e.target.value])}
-                    className="w-full h-1 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-brand-lime" />
-                </div>
-                <div>
-                  <label className="text-[10px] text-slate-400 block mb-1">Catchment Ring: <span className="text-brand-lime font-bold">Ring ≤ {h3RingFilter}</span></label>
-                  <input type="range" min={0} max={5} value={h3RingFilter} onChange={(e) => onChangeH3RingFilter?.(+e.target.value)}
-                    className="w-full h-1 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-brand-lime" />
-                </div>
-                <div className="text-[9px] text-slate-400 bg-slate-800/60 p-2 rounded-lg border border-slate-700/50">
-                  ⚡ Peta MapLibre secara dinamis memfilter sel heksagon dengan skor <strong className="text-brand-lime">{h3ScoreRange[0]}–{h3ScoreRange[1]}</strong> pada radius ring <strong className="text-brand-lime">≤ {h3RingFilter}</strong>.
-                </div>
-              </div>
-            )}
-
-            {/* Legend Panel */}
-            {govActiveTab === 'legend' && (
-              <div className="px-3 py-3 space-y-3 border-t border-slate-800/60 mt-2">
-                <div className="text-[10px] font-bold text-cyan-400 uppercase tracking-wider">Legenda Simbologi Peta</div>
-                
-                {/* TOD Score Legend */}
-                <div className="space-y-1">
-                  <div className="text-[10px] font-semibold text-slate-300">TOD Readiness Score (0-100)</div>
-                  <div className="h-2 rounded-full bg-gradient-to-r from-red-500 via-amber-500 to-emerald-500 w-full" />
-                  <div className="flex justify-between text-[9px] text-slate-500 font-medium">
-                    <span>0 (Rendah)</span><span>50 (Sedang)</span><span>100 (Tinggi)</span>
-                  </div>
-                </div>
-
-                {/* NJOP Legend */}
-                <div className="space-y-1">
-                  <div className="text-[10px] font-semibold text-slate-300">Estimasi %ΔNJOP Premium</div>
-                  <div className="h-2 rounded-full bg-gradient-to-r from-indigo-500 via-blue-500 to-emerald-400 w-full" />
-                  <div className="flex justify-between text-[9px] text-slate-500 font-medium">
-                    <span>+0%</span><span>+10%</span><span>+20%</span>
-                  </div>
-                </div>
-
-                {/* Typology Legend */}
-                <div className="space-y-1.5">
-                  <div className="text-[10px] font-semibold text-slate-300">Tipologi Kawasan (Cluster Analysis)</div>
-                  <div className="flex items-center gap-2 text-[10px]">
-                    <span className="w-3 h-3 rounded bg-cyan-500 flex-shrink-0" />
-                    <span className="text-slate-400">Commercial Transit Hub</span>
-                  </div>
-                  <div className="flex items-center gap-2 text-[10px]">
-                    <span className="w-3 h-3 rounded bg-amber-500 flex-shrink-0" />
-                    <span className="text-slate-400">Mixed-Use Heritage Core</span>
-                  </div>
-                  <div className="flex items-center gap-2 text-[10px]">
-                    <span className="w-3 h-3 rounded bg-brand-lime flex-shrink-0" />
-                    <span className="text-slate-400">Mixed-Use Residential</span>
-                  </div>
-                  <div className="flex items-center gap-2 text-[10px]">
-                    <span className="w-3 h-3 rounded bg-purple-500 flex-shrink-0" />
-                    <span className="text-slate-400">Low-Access Feeder Zone</span>
-                  </div>
-                </div>
-
-                {/* Station Markers */}
-                <div className="space-y-1.5">
-                  <div className="text-[10px] font-semibold text-slate-300">Simbol & Marker</div>
-                  <div className="flex items-center gap-2 text-[10px]">
-                    <span className="w-3 h-3 rounded-full bg-gradient-to-tr from-brand-lime to-brand-teal border border-white flex-shrink-0" />
-                    <span className="text-slate-400">Simpul Stasiun SRRL</span>
-                  </div>
-                  <div className="flex items-center gap-2 text-[10px]">
-                    <span className="w-3 h-3 rounded-full bg-pink-500 border border-white flex-shrink-0" />
-                    <span className="text-slate-400">Titik Survei Lapangan #PakSibukGa</span>
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {govActiveTab === 'layers' && (
-              <>
-                <SectionHeader label="Active Overlays" />
-            <div className="px-3 space-y-1">
-              <Toggle active={choroplethMode === 'tod_score'} onToggle={() => onChangeChoroplethMode('tod_score')} label="H3 TOD Grid" />
-              <Toggle active={showSurveyPoints} onToggle={onToggleSurveyPoints} label="Survei #PakSibukGa" />
-              <Toggle active={choroplethMode === 'njop_premium'} onToggle={() => onChangeChoroplethMode('njop_premium')} label="Nilai Lahan (NJOP)" />
-              <Toggle active={choroplethMode === 'typology'} onToggle={() => onChangeChoroplethMode('typology')} label="Tipologi Kawasan" />
-            </div>
-
-            <BasemapGrid basemapStyle={basemapStyle} onChangeBasemapStyle={onChangeBasemapStyle} />
-
-            {/* Dynamic Choropleth Legend */}
-            <SectionHeader label="Active Legend" />
-            <div className="px-3 pb-2">
-              {choroplethMode === 'tod_score' && (
-                <div className="space-y-1">
-                  <div className="h-1.5 rounded-full bg-gradient-to-r from-red-500 via-amber-500 to-emerald-500 w-full" />
-                  <div className="flex justify-between text-[9px] text-slate-500 font-medium">
-                    <span>0 (Rendah)</span><span>50</span><span>100 (Tinggi)</span>
-                  </div>
-                </div>
-              )}
-              {choroplethMode === 'njop_premium' && (
-                <div className="space-y-1">
-                  <div className="h-1.5 rounded-full bg-gradient-to-r from-indigo-500 via-blue-500 to-emerald-400 w-full" />
-                  <div className="flex justify-between text-[9px] text-slate-500 font-medium">
-                    <span>+0%</span><span>+10%</span><span>+20%</span>
-                  </div>
-                </div>
-              )}
-              {choroplethMode === 'typology' && (
-                <div className="space-y-1 text-[10px]">
-                  <div className="flex items-center gap-2"><span className="w-2.5 h-2.5 rounded bg-cyan-500" /><span className="text-slate-400">Commercial Hub</span></div>
-                  <div className="flex items-center gap-2"><span className="w-2.5 h-2.5 rounded bg-amber-500" /><span className="text-slate-400">Mixed-Use</span></div>
-                  <div className="flex items-center gap-2"><span className="w-2.5 h-2.5 rounded bg-purple-500" /><span className="text-slate-400">Feeder Zone</span></div>
-                </div>
-              )}
-            </div>
-            </>
-            )}
           </>
         )}
 
         {/* Ã¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢Â Business/Investor Sidebar Ã¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢Â */}
         {activePersona === 'business' && (
           <>
-            <SectionHeader label="Spatial Views" />
+            <SectionHeader label="Business/Investor Views" />
             <div className="px-2 space-y-0.5">
-              <NavItem icon={Users} label="Demographics" active={bizActiveTab === 'demographics'} onClick={() => setBizActiveTab('demographics')} />
-              <NavItem icon={TreePine} label="Environment" active={bizActiveTab === 'environment'} onClick={() => setBizActiveTab('environment')} />
-              <NavItem icon={SlidersHorizontal} label="Filters" active={bizActiveTab === 'filters'} onClick={() => setBizActiveTab('filters')} />
-              <NavItem icon={Layers} label="Legends & Summary" active={bizActiveTab === 'layers'} onClick={() => setBizActiveTab('layers')} />
+              <NavItem icon={SlidersHorizontal} label="Filter Spasial" active={bizActiveTab === 'filter'} onClick={() => setBizActiveTab('filter')} badge={h3ScoreRange[0] > 0 || h3ScoreRange[1] < 100 || h3RingFilter < 5 || njopRange[0] > 0 || njopRange[1] < 25 ? 'Aktif' : undefined} />
+              <NavItem icon={Layers} label="Lapisan Peta (Layers)" active={bizActiveTab === 'layers'} onClick={() => setBizActiveTab('layers')} />
+              <NavItem icon={Map} label="Legenda (Legends)" active={bizActiveTab === 'legends'} onClick={() => setBizActiveTab('legends')} />
+              <div className="my-1 border-t border-slate-800/80" />
+              <NavItem icon={Users} label="Demografi Spasial" active={bizActiveTab === 'demographics'} onClick={() => setBizActiveTab('demographics')} />
+              <NavItem icon={TreePine} label="Lingkungan & RTH" active={bizActiveTab === 'environment'} onClick={() => setBizActiveTab('environment')} />
             </div>
+
+            {/* General Features Rendering */}
+            {bizActiveTab === 'filter' && renderFilterTab()}
+            {bizActiveTab === 'layers' && renderLayersTab(true)}
+            {bizActiveTab === 'legends' && renderLegendsTab(true)}
 
 
             {/* Demographics Panel */}
@@ -549,10 +584,10 @@ export const SidebarContainer: React.FC<SidebarContainerProps> = ({
                       <TreePine className="w-4 h-4 text-emerald-400 mx-auto mb-1" />
                       <div className="text-sm font-bold text-emerald-400">{environment.greenSpacePct}%</div>
                       <div className="text-[9px] text-slate-500">RTH</div>
-                    </div>
+</div>
                     <div className="bg-slate-800/50 rounded-lg p-2 text-center">
                       <Thermometer className="w-4 h-4 text-red-400 mx-auto mb-1" />
-                      <div className="text-sm font-bold text-red-400">{environment.temperature}Ã‚Â°C</div>
+                      <div className="text-sm font-bold text-red-400">{environment.temperature}℃</div>
                       <div className="text-[9px] text-slate-500">Suhu</div>
                     </div>
                   </div>
@@ -560,86 +595,27 @@ export const SidebarContainer: React.FC<SidebarContainerProps> = ({
               </div>
             )}
 
-            {/* Filters Panel */}
-            {bizActiveTab === 'filters' && (
-              <div className="px-3 py-3 space-y-3 border-t border-slate-800/60 mt-2">
-                <div className="text-[10px] font-bold text-cyan-400 uppercase tracking-wider">Filter Data</div>
-                <div>
-                  <label className="text-[10px] text-slate-400 block mb-1">
-                    NJOP Premium Range: <span className="text-brand-lime font-bold">{njopRange[0]}% Ã¢â‚¬â€œ {njopRange[1]}%</span>
-                  </label>
-                  <div className="flex gap-2">
-                    <input type="range" min={0} max={25} value={njopRange[0]} onChange={(e) => setNjopRange([+e.target.value, njopRange[1]])}
-                      className="flex-1 h-1 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-brand-lime" />
-                    <input type="range" min={0} max={25} value={njopRange[1]} onChange={(e) => setNjopRange([njopRange[0], +e.target.value])}
-                      className="flex-1 h-1 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-brand-lime" />
-                  </div>
-                </div>
-                <div>
-                  <label className="text-[10px] text-slate-400 block mb-1">Tipe Properti</label>
-                  <select value={propertyType} onChange={(e) => setPropertyType(e.target.value)}
-                    className="w-full bg-slate-800 border border-slate-700 rounded-lg text-xs text-slate-200 py-1.5 px-2 appearance-none focus:outline-none focus:border-brand-lime">
-                    <option value="all">Semua Tipe</option>
-                    <option value="ruko">Ruko</option>
-                    <option value="tanah">Tanah Kosong</option>
-                    <option value="rumah">Rumah</option>
-                    <option value="apartemen">Apartemen</option>
-                  </select>
-                </div>
-                <div className="text-[9px] text-slate-500 pt-1 border-t border-slate-800">
-                  Filter aktif: NJOP {njopRange[0]}%Ã¢â‚¬â€œ{njopRange[1]}% | Tipe: {propertyType === 'all' ? 'Semua' : propertyType}
-                </div>
-              </div>
-            )}
 
-            {bizActiveTab === 'layers' && demographics && (
-              <>
-                <SectionHeader label="Area Summary" />
-                <div className="px-3 pb-2">
-                  <div className="grid grid-cols-2 gap-1.5">
-                    <div className="bg-slate-800/50 rounded-lg p-1.5 text-center border border-slate-700/50">
-                      <div className="text-sm font-black text-brand-lime">{demographics.population.toLocaleString()}</div>
-                      <div className="text-[8px] text-slate-400">Populasi</div>
-                    </div>
-                    <div className="bg-slate-800/50 rounded-lg p-1.5 text-center border border-slate-700/50">
-                      <div className="text-sm font-black text-cyan-400">{demographics.density.toLocaleString()}</div>
-                      <div className="text-[8px] text-slate-400">Jiwa/km²</div>
-                    </div>
-                    <div className="bg-slate-800/50 rounded-lg p-1.5 text-center border border-slate-700/50">
-                      <div className="text-xs font-bold text-emerald-400">{demographics.avgIncome}</div>
-                      <div className="text-[8px] text-slate-400">Avg Income</div>
-                    </div>
-                    <div className="bg-slate-800/50 rounded-lg p-1.5 text-center border border-slate-700/50">
-                      <div className="text-xs font-bold text-brand-teal">{demographics.employmentRate}%</div>
-                      <div className="text-[8px] text-slate-400">Employment</div>
-                    </div>
-                  </div>
-                </div>
-
-                <SectionHeader label="Activate Datasets" />
-                <div className="px-3 space-y-1 pb-2">
-                  <Toggle active={showEconomicPOI} onToggle={() => setShowEconomicPOI(!showEconomicPOI)} label="Economic POIs" />
-                  <Toggle active={showNJOPZone} onToggle={() => { setShowNJOPZone(!showNJOPZone); if (!showNJOPZone) onChangeChoroplethMode('njop_premium'); }} label="Land Value Zone (NJOP)" />
-                  <Toggle active={showPropertiGo} onToggle={() => setShowPropertiGo(!showPropertiGo)} label="Properti Go Listings" />
-                  <Toggle active={showSurveyPoints} onToggle={onToggleSurveyPoints} label="Survei #PakSibukGa" />
-                </div>
-
-                <BasemapGrid basemapStyle={basemapStyle} onChangeBasemapStyle={onChangeBasemapStyle} />
-              </>
-            )}
           </>
         )}
 
-        {/* Ã¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢Â Commuter Sidebar Ã¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢Â */}
-        {/* ---------------- Commuter Sidebar ---------------- */}
+        {/* ══════ Commuter Sidebar ══════ */}
         {activePersona === 'commuter' && (
           <>
             <SectionHeader label="Navigation" />
             <div className="px-2 space-y-0.5">
-              <NavItem icon={TrainIcon} label="Transit Schedules" active={commuterActiveTab === 'schedules'} onClick={() => setCommuterActiveTab('schedules')} badge={`${trainSchedules.length + busRoutes.length}`} />
-              <NavItem icon={MapPin} label="Tourist Destinations" active={commuterActiveTab === 'tourist'} onClick={() => setCommuterActiveTab('tourist')} badge={`${touristSpots.length}`} />
-              <NavItem icon={Layers} label="Basemap" active={commuterActiveTab === 'layers'} onClick={() => setCommuterActiveTab('layers')} />
+              <NavItem icon={SlidersHorizontal} label="Filter Spasial" active={commuterActiveTab === 'filter'} onClick={() => setCommuterActiveTab('filter')} badge={h3ScoreRange[0] > 0 || h3ScoreRange[1] < 100 || h3RingFilter < 5 || njopRange[0] > 0 || njopRange[1] < 25 ? 'Aktif' : undefined} />
+              <NavItem icon={Layers} label="Lapisan Peta (Layers)" active={commuterActiveTab === 'layers'} onClick={() => setCommuterActiveTab('layers')} />
+              <NavItem icon={Map} label="Legenda (Legends)" active={commuterActiveTab === 'legends'} onClick={() => setCommuterActiveTab('legends')} />
+              <div className="my-1 border-t border-slate-800/80" />
+              <NavItem icon={TrainIcon} label="Jadwal Transit" active={commuterActiveTab === 'schedules'} onClick={() => setCommuterActiveTab('schedules')} badge={`${trainSchedules.length + busRoutes.length}`} />
+              <NavItem icon={MapPin} label="Destinasi Terdekat" active={commuterActiveTab === 'tourist'} onClick={() => setCommuterActiveTab('tourist')} badge={`${touristSpots.length}`} />
             </div>
+
+            {/* General Features Rendering */}
+            {commuterActiveTab === 'filter' && renderFilterTab()}
+            {commuterActiveTab === 'layers' && renderLayersTab(false)}
+            {commuterActiveTab === 'legends' && renderLegendsTab(false)}
 
             {/* Consolidated Schedules */}
             {commuterActiveTab === 'schedules' && (
@@ -754,9 +730,7 @@ export const SidebarContainer: React.FC<SidebarContainerProps> = ({
               </div>
             )}
 
-            {commuterActiveTab === 'layers' && (
-              <BasemapGrid basemapStyle={basemapStyle} onChangeBasemapStyle={onChangeBasemapStyle} />
-            )}
+
           </>
         )}
       </div>

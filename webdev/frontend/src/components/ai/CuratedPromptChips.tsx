@@ -54,7 +54,7 @@ export const CuratedPromptChips: React.FC<CuratedPromptChipsProps> = ({
     <div className="space-y-1.5">
       <div className="flex items-center gap-1 text-[10px] uppercase font-bold text-brand-teal tracking-wider">
         <Sparkles className="w-3 h-3 text-brand-teal animate-pulse" />
-        Curated Prompts (Jury Ready)
+        Prompt Rekomendasi (Siap Uji)
       </div>
       <div className="flex gap-1.5 overflow-x-auto pb-2 custom-scrollbar">
         {CURATED_PROMPTS_LIST.map((item, idx) => {
