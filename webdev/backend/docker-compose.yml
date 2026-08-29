@@ -5,9 +5,9 @@ services:
     image: postgis/postgis:15-3.3
     container_name: transitera_postgis
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgrespassword
-      POSTGRES_DB: transitera_db
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+      POSTGRES_DB: ${POSTGRES_DB:-transitera_db}
     ports:
       - "5432:5432"
     volumes:
@@ -22,7 +22,7 @@ services:
     volumes:
       - .:/app
     environment:
-      - DATABASE_URL=postgresql://postgres:postgrespassword@db:5432/transitera_db
+      - DATABASE_URL=${DATABASE_URL}
     depends_on:
       - db
     restart: unless-stopped

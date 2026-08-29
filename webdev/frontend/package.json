@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "test": "vitest run"
+    "test": "vitest run",
+    "security:scan": "node ../../scripts/scan-secrets.js"
   },
   "dependencies": {
     "clsx": "^2.1.1",
