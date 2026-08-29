@@ -1,5 +1,5 @@
-﻿// MAPID API Key
-const MAPID_KEY = '6a8fc28753df37905b3a5c56';
+// MAPID API Key from environment variable
+const MAPID_KEY = process.env.NEXT_PUBLIC_MAPID_API_KEY || '';
 
 export const BASEMAP_STYLES: Record<string, string> = {
   // Street Mapid (Default: 3D & 2D building)

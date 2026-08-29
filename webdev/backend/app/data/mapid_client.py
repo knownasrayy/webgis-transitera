@@ -6,7 +6,7 @@ import random
 
 logger = logging.getLogger(__name__)
 
-MAPID_API_KEY = os.getenv("MAPID_API_KEY", "6a8fc28753df37905b3a5c56")
+MAPID_API_KEY = os.getenv("MAPID_API_KEY", "")
 ENDPOINT = "https://server.mapid.io/web/competition/"
 
 def fetch_all_survey_data(polygon_coords: list, hashtag: str = "PakSibukGa") -> gpd.GeoDataFrame:
