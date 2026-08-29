@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import React from 'react';
 import { Sparkles, BarChart, Scale, AlertTriangle, TrendingUp, Utensils, Sliders, Coffee } from 'lucide-react';
@@ -56,7 +56,7 @@ export const CuratedPromptChips: React.FC<CuratedPromptChipsProps> = ({
         <Sparkles className="w-3 h-3 text-brand-teal animate-pulse" />
         Curated Prompts (Jury Ready)
       </div>
-      <div className="flex flex-wrap gap-1.5 max-h-36 overflow-y-auto pr-1">
+      <div className="flex gap-1.5 overflow-x-auto pb-1 scrollbar-hide">
         {CURATED_PROMPTS_LIST.map((item, idx) => {
           const IconComp = item.icon;
           return (
@@ -64,7 +64,7 @@ export const CuratedPromptChips: React.FC<CuratedPromptChipsProps> = ({
               key={idx}
               disabled={disabled}
               onClick={() => onSelectPrompt(item.prompt)}
-              className="text-[11px] bg-slate-900/90 hover:bg-brand-teal/20 text-slate-300 hover:text-brand-teal/80 border border-slate-700 hover:border-brand-teal/60 rounded-full px-2.5 py-1 transition-all flex items-center gap-1.5 shadow-sm disabled:opacity-50 disabled:pointer-events-none"
+              className="flex-shrink-0 text-[11px] bg-slate-900/90 hover:bg-brand-teal/20 text-slate-300 hover:text-brand-teal/80 border border-slate-700 hover:border-brand-teal/60 rounded-full px-2.5 py-1 transition-all flex items-center gap-1.5 shadow-sm disabled:opacity-50 disabled:pointer-events-none"
             >
               <IconComp className="w-3 h-3 text-brand-teal" />
               <span>{item.title}</span>
