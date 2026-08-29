@@ -1,5 +1,5 @@
-// MAPID API Key from environment variable
-const MAPID_KEY = process.env.NEXT_PUBLIC_MAPID_API_KEY || '';
+// MAPID API Key
+const MAPID_KEY = process.env.NEXT_PUBLIC_MAPID_API_KEY || '6a8fc28753df37905b3a5c56';
 
 export const BASEMAP_STYLES: Record<string, string> = {
   // Street Mapid (Default: 3D & 2D building)
@@ -22,4 +22,3 @@ export const SURABAYA_BOUNDS: [[number, number], [number, number]] = [
   [112.55, -7.38], // Southwest coordinates
   [112.85, -7.18]  // Northeast coordinates
 ];
-
