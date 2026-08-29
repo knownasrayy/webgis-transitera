@@ -56,7 +56,7 @@ export const CuratedPromptChips: React.FC<CuratedPromptChipsProps> = ({
         <Sparkles className="w-3 h-3 text-brand-teal animate-pulse" />
         Curated Prompts (Jury Ready)
       </div>
-      <div className="flex gap-1.5 overflow-x-auto pb-1 scrollbar-hide">
+      <div className="flex gap-1.5 overflow-x-auto pb-2 custom-scrollbar">
         {CURATED_PROMPTS_LIST.map((item, idx) => {
           const IconComp = item.icon;
           return (
