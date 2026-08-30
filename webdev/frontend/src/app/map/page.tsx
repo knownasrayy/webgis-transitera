@@ -12,7 +12,8 @@ import { Footer } from '@/components/ui/Footer';
 import { MobileBottomSheet } from '@/components/ui/MobileBottomSheet';
 import { SidebarContainer } from '@/components/sidebar/SidebarContainer';
 import { SettingsModal } from '@/components/header/SettingsModal';
-import { HelpFeedbackModal } from '@/components/header/HelpFeedbackModal';
+import { HelpModal } from '@/components/header/HelpModal';
+import { FeedbackModal } from '@/components/header/FeedbackModal';
 
 import { GovernmentPanel } from '@/components/dashboard/GovernmentPanel';
 import { InvestorPanel } from '@/components/dashboard/InvestorPanel';
@@ -45,9 +46,10 @@ export default function WebGISPage() {
   const [mapActionTrigger, setMapActionTrigger] = useState<any>(null);
   const [highlightedH3Index, setHighlightedH3Index] = useState<string | null>(null);
 
-  // Modal state (shared between HeaderNav and Sidebar)
+  // Modal states (differentiated between Settings, Help, and Feedback)
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [helpOpen, setHelpOpen] = useState(false);
+  const [feedbackOpen, setFeedbackOpen] = useState(false);
 
   const currentStation: StationData =
     FALLBACK_STATIONS.find((s) => s.id === activeStation) || FALLBACK_STATIONS[0];
@@ -59,7 +61,7 @@ export default function WebGISPage() {
     
     if (activePersona === 'government') setChoroplethMode('tod_score');
     if (activePersona === 'business') setChoroplethMode('njop_premium');
-    if (activePersona === 'commuter') setChoroplethMode('typology'); // Or off ideally, but keeping it simple
+    if (activePersona === 'commuter') setChoroplethMode('typology');
   }, [activePersona]);
 
   const handleExecuteMapAction = (aiData: any) => {
@@ -69,10 +71,13 @@ export default function WebGISPage() {
     }
     if (aiData.target_layer === 'h3_njop_premium') {
       setChoroplethMode('njop_premium');
-      setActivePersona('business');
-    } else if (aiData.target_layer === 'h3_tod_score') {
-      setChoroplethMode('tod_score');
-      setActivePersona('government');
+    }
+    if (aiData.target_layer === 'survey_points') {
+      setShowSurveyPoints(true);
+    }
+    if (aiData.highlight_h3_index) {
+      setHighlightedH3Index(aiData.highlight_h3_index);
+      setSelectedH3Index(aiData.highlight_h3_index);
     }
   };
 
@@ -107,7 +112,7 @@ export default function WebGISPage() {
           onChangeH3RingFilter={setH3RingFilter}
           onOpenSettings={() => setSettingsOpen(true)}
           onOpenHelp={() => setHelpOpen(true)}
-          onOpenFeedback={() => setHelpOpen(true)}
+          onOpenFeedback={() => setFeedbackOpen(true)}
         />
 
         {/* Central Map Canvas */}
@@ -187,10 +192,10 @@ export default function WebGISPage() {
       {/* 3. Footer Data Attribution */}
       <Footer activePersona={activePersona} />
 
-      {/* â”€â”€ Shared Modals (triggered from Sidebar & Header) â”€â”€ */}
+      {/* ── Separate Modals ── */}
       <SettingsModal isOpen={settingsOpen} onClose={() => setSettingsOpen(false)} activePersona={activePersona} />
-      <HelpFeedbackModal isOpen={helpOpen} onClose={() => setHelpOpen(false)} activePersona={activePersona} />
+      <HelpModal isOpen={helpOpen} onClose={() => setHelpOpen(false)} activePersona={activePersona} />
+      <FeedbackModal isOpen={feedbackOpen} onClose={() => setFeedbackOpen(false)} activePersona={activePersona} />
     </div>
   );
 }
-

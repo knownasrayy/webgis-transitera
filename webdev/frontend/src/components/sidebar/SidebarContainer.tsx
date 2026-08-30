@@ -737,9 +737,9 @@ export const SidebarContainer: React.FC<SidebarContainerProps> = ({
 
       {/* ══════ Bottom Actions ══════ */}
       <div className="border-t border-slate-800/80 px-2 py-2 space-y-0.5">
-        <NavItem icon={Settings} label="Settings" onClick={onOpenSettings} />
-        <NavItem icon={HelpCircle} label="Help" onClick={onOpenHelp} />
-        <NavItem icon={MessageSquare} label="Feedback" onClick={onOpenFeedback} />
+        <NavItem icon={Settings} label="Pengaturan" onClick={onOpenSettings} />
+        <NavItem icon={HelpCircle} label="Pusat Bantuan" onClick={onOpenHelp} />
+        <NavItem icon={MessageSquare} label="Kirim Feedback" onClick={onOpenFeedback} />
       </div>
     </aside>
   );
