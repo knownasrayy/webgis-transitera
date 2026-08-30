@@ -31,13 +31,17 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: '22'
           cache: 'npm'
           cache-dependency-path: webdev/frontend/package-lock.json
 
       - name: Install Dependencies
         working-directory: webdev/frontend
-        run: npm ci
+        run: npm ci --legacy-peer-deps
+
+      - name: Local Secret Scan
+        working-directory: webdev/frontend
+        run: npm run security:scan
 
       - name: TypeScript Check
         working-directory: webdev/frontend
