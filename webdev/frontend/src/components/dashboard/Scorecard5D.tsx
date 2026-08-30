@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import React from 'react';
 import { StationData } from '@/types';
@@ -36,11 +36,11 @@ export const Scorecard5D: React.FC<Scorecard5DProps> = ({ station }) => {
             <p className="text-xs font-semibold text-cyan-300 mt-1">{station.typology}</p>
           </div>
 
-          {/* %Î”NJOP Premium Badge */}
+          {/* %ΔNJOP Premium Badge */}
           <div className="text-right bg-blue-950/60 border border-blue-800/40 px-2.5 py-1.5 rounded-lg">
             <div className="text-[10px] text-blue-300 font-medium flex items-center gap-1 justify-end">
               <TrendingUp className="w-3 h-3 text-emerald-400" />
-              Est. %Î”NJOP
+              Est. %ΔNJOP
             </div>
             <div className="text-sm font-bold text-emerald-400">
               +{station.njop_premium.avg_njop_premium_pct}%

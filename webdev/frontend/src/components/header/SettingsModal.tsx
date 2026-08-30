@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import React, { useState } from 'react';
 import { Modal } from '@/components/ui/Modal';
@@ -141,7 +141,7 @@ export function SettingsModal({ isOpen, onClose, activePersona = 'government' }:
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} title="Pengaturan" maxWidth="md"
-      subtitle={`Konfigurasi platform TransitERA â€” mode ${personaInfo.label}`}
+      subtitle={`Konfigurasi platform TransitERA — mode ${personaInfo.label}`}
       icon={<Settings className="w-4 h-4" />}>
 
       {/* Persona Badge */}
@@ -156,13 +156,13 @@ export function SettingsModal({ isOpen, onClose, activePersona = 'government' }:
         </div>
       </div>
 
-      {/* â”€â”€ GLOBAL SETTINGS â”€â”€ */}
+      {/* ── GLOBAL SETTINGS ── */}
       <SettingSection title="Basemap" icon={<Map className="w-3.5 h-3.5" />}>
         <OptionGroup label="Gaya Peta Dasar"
-          options={[{ value: 'dark', label: 'ðŸŒ‘ Dark' }, { value: 'street', label: 'ðŸ—ºï¸ Street' }, { value: 'satellite', label: 'ðŸ›°ï¸ Satellite' }]}
+          options={[{ value: 'dark', label: 'Dark' }, { value: 'street', label: 'Street' }, { value: 'satellite', label: 'Satellite' }]}
           value={settings.basemap} onChange={(v) => update('basemap', v as AppSettings['basemap'])} />
         <OptionGroup label="Resolusi H3 Grid"
-          options={[{ value: 8, label: 'Res 8 â€“ Regional' }, { value: 9, label: 'Res 9 â€“ Detail' }]}
+          options={[{ value: 8, label: 'Res 8 – Regional' }, { value: 9, label: 'Res 9 – Detail' }]}
           value={settings.h3Resolution} onChange={(v) => update('h3Resolution', v as 8 | 9)} />
       </SettingSection>
 
@@ -175,7 +175,7 @@ export function SettingsModal({ isOpen, onClose, activePersona = 'government' }:
           value={settings.highContrast} onChange={(v) => update('highContrast', v)} />
       </SettingSection>
 
-      {/* â”€â”€ GOVERNMENT SETTINGS â”€â”€ */}
+      {/* ── GOVERNMENT SETTINGS ── */}
       {activePersona === 'government' && (
         <SettingSection title="Pengaturan Government" icon={<Building2 className="w-3.5 h-3.5" />}>
           <SliderRow label="Ambang Skor TOD Minimum" value={settings.todThreshold}
@@ -193,29 +193,29 @@ export function SettingsModal({ isOpen, onClose, activePersona = 'government' }:
         </SettingSection>
       )}
 
-      {/* â”€â”€ BUSINESS SETTINGS â”€â”€ */}
+      {/* ── BUSINESS SETTINGS ── */}
       {activePersona === 'business' && (
         <SettingSection title="Pengaturan Business" icon={<Briefcase className="w-3.5 h-3.5" />}>
           <OptionGroup label="Radius Analisis Investasi"
             options={[{ value: 500, label: '500 m' }, { value: 1000, label: '1 km' }, { value: 2000, label: '2 km' }]}
             value={settings.investRadius} onChange={(v) => update('investRadius', v as 500 | 1000 | 2000)} />
           <OptionGroup label="Tampilan Nilai NJOP"
-            options={[{ value: 'per_m2', label: 'per mÂ²' }, { value: 'per_unit', label: 'per Unit' }]}
+            options={[{ value: 'per_m2', label: 'per m²' }, { value: 'per_unit', label: 'per Unit' }]}
             value={settings.njopDisplay} onChange={(v) => update('njopDisplay', v as AppSettings['njopDisplay'])} />
           <OptionGroup label="Periode Kalkulasi ROI"
             options={[{ value: 5, label: '5 Tahun' }, { value: 10, label: '10 Tahun' }, { value: 15, label: '15 Tahun' }]}
             value={settings.roiPeriod} onChange={(v) => update('roiPeriod', v as 5 | 10 | 15)} />
           <Toggle label="Tampilkan Zona Premium"
-            description="Sorot kawasan dengan %Î”NJOP tertinggi di peta"
+            description="Sorot kawasan dengan %ΔNJOP tertinggi di peta"
             value={settings.showPremiumZone} onChange={(v) => update('showPremiumZone', v)} />
         </SettingSection>
       )}
 
-      {/* â”€â”€ COMMUTER SETTINGS â”€â”€ */}
+      {/* ── COMMUTER SETTINGS ── */}
       {activePersona === 'commuter' && (
         <SettingSection title="Pengaturan Commuter" icon={<Train className="w-3.5 h-3.5" />}>
           <OptionGroup label="Mode Transportasi Default"
-            options={[{ value: 'krl', label: 'ðŸš† KRL SRRL' }, { value: 'bus', label: 'ðŸšŒ Suroboyo Bus' }, { value: 'walk', label: 'ðŸš¶ Jalan Kaki' }]}
+            options={[{ value: 'krl', label: '🚆 KRL SRRL' }, { value: 'bus', label: '🚌 Suroboyo Bus' }, { value: 'walk', label: '🚶 Jalan Kaki' }]}
             value={settings.travelMode} onChange={(v) => update('travelMode', v as AppSettings['travelMode'])} />
           <Toggle label="Tampilkan Rute Feeder"
             description="Overlay rute Suroboyo Bus di peta"
@@ -226,17 +226,17 @@ export function SettingsModal({ isOpen, onClose, activePersona = 'government' }:
         </SettingSection>
       )}
 
-      {/* â”€â”€ UNIT & LANGUAGE â”€â”€ */}
+      {/* ── UNIT & LANGUAGE ── */}
       <SettingSection title="Unit & Bahasa" icon={<Globe className="w-3.5 h-3.5" />}>
         <OptionGroup label="Sistem Satuan"
           options={[{ value: 'metric', label: 'Metrik (m/km)' }, { value: 'imperial', label: 'Imperial (ft/mi)' }]}
           value={settings.units} onChange={(v) => update('units', v as AppSettings['units'])} />
         <OptionGroup label="Bahasa Antarmuka"
-          options={[{ value: 'id', label: 'ðŸ‡®ðŸ‡© Bahasa Indonesia' }, { value: 'en', label: 'ðŸ‡¬ðŸ‡§ English' }]}
+          options={[{ value: 'id', label: 'Bahasa Indonesia' }, { value: 'en', label: 'English' }]}
           value={settings.language} onChange={(v) => update('language', v as AppSettings['language'])} />
       </SettingSection>
 
-      {/* â”€â”€ SYSTEM INFO â”€â”€ */}
+      {/* ── SYSTEM INFO ── */}
       <SettingSection title="Info Sistem" icon={<Sliders className="w-3.5 h-3.5" />}>
         {[
           ['Versi Platform', 'TransitERA v1.0.0-beta'],
@@ -268,5 +268,3 @@ export function SettingsModal({ isOpen, onClose, activePersona = 'government' }:
     </Modal>
   );
 }
-
-

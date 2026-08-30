@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
 import { PersonaType } from '@/lib/persona';
@@ -21,7 +21,7 @@ interface Notification {
 }
 
 const ALL_NOTIFICATIONS: Notification[] = [
-  // â”€â”€ GOVERNMENT
+  // ── GOVERNMENT
   {
     id: 'g1', type: 'warning', personas: ['government'],
     title: 'Risiko Banjir Tinggi Terdeteksi',
@@ -37,7 +37,7 @@ const ALL_NOTIFICATIONS: Notification[] = [
   {
     id: 'g3', type: 'trend', personas: ['government'],
     title: 'Skor TOD St. Malang Meningkat',
-    description: 'Kawasan Stasiun Malang Kotalama mencatat kenaikan skor TOD +8 poin (dari 61 â†’ 69). Potensi penetapan kawasan prioritas TOD.',
+    description: 'Kawasan Stasiun Malang Kotalama mencatat kenaikan skor TOD +8 poin (dari 61 → 69). Potensi penetapan kawasan prioritas TOD.',
     time: '3 jam lalu', read: false,
   },
   {
@@ -53,11 +53,11 @@ const ALL_NOTIFICATIONS: Notification[] = [
     time: '3 hari lalu', read: true,
   },
 
-  // â”€â”€ BUSINESS
+  // ── BUSINESS
   {
     id: 'b1', type: 'trend', personas: ['business'],
     title: 'Zona NJOP Premium Baru Terdeteksi',
-    description: 'Radius 500m sekitar St. Gubeng mencatat kenaikan %Î”NJOP +23% (YoY). Potensi ROI investasi properti tinggi.',
+    description: 'Radius 500m sekitar St. Gubeng mencatat kenaikan %ΔNJOP +23% (YoY). Potensi ROI investasi properti tinggi.',
     time: '10 menit lalu', read: false,
   },
   {
@@ -85,11 +85,11 @@ const ALL_NOTIFICATIONS: Notification[] = [
     time: '2 hari lalu', read: true,
   },
 
-  // â”€â”€ COMMUTER
+  // ── COMMUTER
   {
     id: 'c1', type: 'warning', personas: ['commuter'],
-    title: 'Gangguan KRL Rute Semutâ€“Sidoarjo',
-    description: 'Keterlambatan 25â€“40 menit akibat perbaikan jalur di km 12+300. Perkiraan normal kembali pukul 20.00 WIB.',
+    title: 'Gangguan KRL Rute Semut–Sidoarjo',
+    description: 'Keterlambatan 25–40 menit akibat perbaikan jalur di km 12+300. Perkiraan normal kembali pukul 20.00 WIB.',
     time: '3 menit lalu', read: false,
   },
   {
@@ -101,7 +101,7 @@ const ALL_NOTIFICATIONS: Notification[] = [
   {
     id: 'c3', type: 'success', personas: ['commuter'],
     title: 'Rute Feeder Baru: SB-06',
-    description: 'Suroboyo Bus rute SB-06 (St. Pasar Turi â€“ Tunjungan Plaza) resmi beroperasi mulai hari ini pukul 06.00.',
+    description: 'Suroboyo Bus rute SB-06 (St. Pasar Turi – Tunjungan Plaza) resmi beroperasi mulai hari ini pukul 06.00.',
     time: '4 jam lalu', read: false,
   },
   {
@@ -257,7 +257,7 @@ export function NotificationDropdown({ activePersona = 'government' }: Notificat
           {visible.length > 0 && (
             <div className="px-4 py-2.5 border-t border-slate-800 text-center">
               <button className="text-[11px] text-brand-lime hover:text-brand-lime font-medium transition-colors">
-                Lihat semua aktivitas â†’
+                Lihat semua aktivitas →
               </button>
             </div>
           )}
@@ -273,4 +273,3 @@ export function NotificationDropdown({ activePersona = 'government' }: Notificat
     </div>
   );
 }
-

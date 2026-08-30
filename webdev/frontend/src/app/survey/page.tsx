@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { HeaderNav } from '@/components/ui/HeaderNav';
@@ -49,7 +49,7 @@ export default function SurveyPage() {
       collected: 100,
       icon: Home,
       color: 'border-purple-500/40 text-purple-400',
-      desc: 'Properti jual/sewa (ruko, rumah, kos) untuk validasi harga pasar terhadap %Î”NJOP.'
+      desc: 'Properti jual/sewa (ruko, rumah, kos) untuk validasi harga pasar terhadap %ΔNJOP.'
     }
   ];
 
@@ -108,7 +108,7 @@ export default function SurveyPage() {
             Galeri & Rekapitulasi 360 Titik Survei Primer
           </h1>
           <p className="text-sm text-slate-400 leading-relaxed">
-            Data dikumpulkan langsung melalui <strong>MAPID Apps (Activity & Mission)</strong> di 5 simpul stasiun SRRL Surabaya (Gubeng, Pasar Turi, Semut, Wonokromo, Waru) pada rentang catchment 0â€“1.000 meter.
+            Data dikumpulkan langsung melalui <strong>MAPID Apps (Activity & Mission)</strong> di 5 simpul stasiun SRRL Surabaya (Gubeng, Pasar Turi, Semut, Wonokromo, Waru) pada rentang catchment 0–1.000 meter.
           </p>
         </div>
 

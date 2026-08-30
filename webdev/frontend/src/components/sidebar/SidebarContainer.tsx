@@ -475,7 +475,7 @@ export const SidebarContainer: React.FC<SidebarContainerProps> = ({
           </>
         )}
 
-        {/* Ã¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢Â Business/Investor Sidebar Ã¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢Â */}
+        {/* ══════ Business/Investor Sidebar ══════ */}
         {activePersona === 'business' && (
           <>
             <SectionHeader label="Business/Investor Views" />
@@ -540,7 +540,7 @@ export const SidebarContainer: React.FC<SidebarContainerProps> = ({
                     </div>
                     <div className="bg-slate-800/50 rounded-lg p-2 text-center">
                       <div className={`text-sm font-bold ${demographics.incomeLevel === 'high' ? 'text-emerald-400' : demographics.incomeLevel === 'medium' ? 'text-brand-teal' : 'text-red-400'}`}>
-                        {demographics.incomeLevel === 'high' ? 'Ã¢â€“Â² Tinggi' : demographics.incomeLevel === 'medium' ? 'Ã¢â€”Â Sedang' : 'Ã¢â€“Â¼ Rendah'}
+                        {demographics.incomeLevel === 'high' ? '▲ Tinggi' : demographics.incomeLevel === 'medium' ? '● Sedang' : '▼ Rendah'}
                       </div>
                       <div className="text-[9px] text-slate-500">Income Level</div>
                     </div>
@@ -563,7 +563,7 @@ export const SidebarContainer: React.FC<SidebarContainerProps> = ({
                         <span className="text-sm font-black" style={{ color: environment.aqiColor }}>{environment.aqi}</span>
                       </div>
                       <div className="text-[10px] font-medium" style={{ color: environment.aqiColor }}>{environment.aqiLabel}</div>
-                      <div className="text-[9px] text-slate-500">PM2.5: {environment.pm25} ÃŽÂ¼g/mÃ‚Â³</div>
+                      <div className="text-[9px] text-slate-500">PM2.5: {environment.pm25} µg/m³</div>
                     </div>
                   </div>
                   {/* Flood Risk */}
@@ -584,10 +584,10 @@ export const SidebarContainer: React.FC<SidebarContainerProps> = ({
                       <TreePine className="w-4 h-4 text-emerald-400 mx-auto mb-1" />
                       <div className="text-sm font-bold text-emerald-400">{environment.greenSpacePct}%</div>
                       <div className="text-[9px] text-slate-500">RTH</div>
-</div>
+                    </div>
                     <div className="bg-slate-800/50 rounded-lg p-2 text-center">
                       <Thermometer className="w-4 h-4 text-red-400 mx-auto mb-1" />
-                      <div className="text-sm font-bold text-red-400">{environment.temperature}℃</div>
+                      <div className="text-sm font-bold text-red-400">{environment.temperature}°C</div>
                       <div className="text-[9px] text-slate-500">Suhu</div>
                     </div>
                   </div>
@@ -717,10 +717,10 @@ export const SidebarContainer: React.FC<SidebarContainerProps> = ({
                             <span className="text-[9px] text-brand-teal font-bold flex items-center gap-0.5">
                               <Star className="w-2.5 h-2.5 fill-brand-teal" /> {d.rating}
                             </span>
-                            <span className="text-[9px] text-slate-500">Ã‚Â·</span>
+                            <span className="text-[9px] text-slate-500">·</span>
                             <span className="text-[9px] text-slate-400">{d.distanceFromStation}</span>
-                            <span className="text-[9px] text-slate-500">Ã‚Â·</span>
-                            <span className="text-[9px] text-slate-400">Ã°Å¸Å¡Â¶ {d.walkTime}</span>
+                            <span className="text-[9px] text-slate-500">·</span>
+                            <span className="text-[9px] text-slate-400">{d.walkTime}</span>
                           </div>
                         </div>
                       </div>
@@ -735,7 +735,7 @@ export const SidebarContainer: React.FC<SidebarContainerProps> = ({
         )}
       </div>
 
-      {/* Ã¢â€â‚¬Ã¢â€â‚¬ Bottom Actions Ã¢â€â‚¬Ã¢â€â‚¬ */}
+      {/* ══════ Bottom Actions ══════ */}
       <div className="border-t border-slate-800/80 px-2 py-2 space-y-0.5">
         <NavItem icon={Settings} label="Settings" onClick={onOpenSettings} />
         <NavItem icon={HelpCircle} label="Help" onClick={onOpenHelp} />
@@ -744,7 +744,3 @@ export const SidebarContainer: React.FC<SidebarContainerProps> = ({
     </aside>
   );
 };
-
-
-
-

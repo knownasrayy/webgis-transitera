@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import React from 'react';
 import { Layers, Eye, Map, Check } from 'lucide-react';
@@ -87,7 +87,7 @@ export const LayerControl: React.FC<LayerControlProps> = ({
                 : 'bg-slate-900/40 border-slate-800/80 text-slate-400 hover:text-slate-300'
             }`}
           >
-            <span>Estimasi Nilai Lahan (%Î”NJOP)</span>
+            <span>Estimasi Nilai Lahan (%ΔNJOP)</span>
             {choroplethMode === 'njop_premium' && <Check className="w-3.5 h-3.5 text-brand-teal" />}
           </button>
 
@@ -131,7 +131,7 @@ export const LayerControl: React.FC<LayerControlProps> = ({
           {choroplethMode === 'tod_score'
             ? 'Legenda TOD Readiness Score'
             : choroplethMode === 'njop_premium'
-            ? 'Legenda Kenaikan %Î”NJOP'
+            ? 'Legenda Kenaikan %ΔNJOP'
             : 'Legenda Tipologi Kawasan'}
         </div>
 

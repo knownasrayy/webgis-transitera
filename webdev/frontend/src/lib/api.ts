@@ -1,4 +1,4 @@
-﻿import { StationData, StationId } from '@/types';
+import { StationData, StationId } from '@/types';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:8000/api';
 
@@ -52,8 +52,8 @@ export const FALLBACK_STATIONS: StationData[] = [
       { label: 'UMKM (Micro)', value: 18, color: 'bg-cyan-500' }
     ],
     travel_estimates: [
-      { destination: 'RSUD Dr. Soetomo', time: '10 min', icon: 'ðŸš¶' },
-      { destination: 'Grand City Mall', time: '5 min', icon: 'ðŸš—' }
+      { destination: 'RSUD Dr. Soetomo', time: '10 min', icon: '🚶' },
+      { destination: 'Grand City Mall', time: '5 min', icon: '🚗' }
     ]
   },
   {
@@ -105,8 +105,8 @@ export const FALLBACK_STATIONS: StationData[] = [
       { label: 'UMKM Keliling', value: 40, color: 'bg-cyan-500' }
     ],
     travel_estimates: [
-      { destination: 'Tugu Pahlawan', time: '12 min', icon: 'ðŸš¶' },
-      { destination: 'Pasar Turi Baru', time: '3 min', icon: 'ðŸš¶' }
+      { destination: 'Tugu Pahlawan', time: '12 min', icon: '🚶' },
+      { destination: 'Pasar Turi Baru', time: '3 min', icon: '🚶' }
     ]
   },
   {
@@ -413,7 +413,7 @@ function localAIResponder(prompt: string, activeStation?: StationId) {
         target_layer: 'h3_njop_premium',
         target_station: 'waru',
         view_state: { center: [112.7297, -7.3519], zoom: 14.2 },
-        text_response: `Estimasi Spatial Durbin Model menunjukkan kawasan sekitar **Stasiun Waru** berpotensi mengalami kenaikan nilai lahan (**%Î”NJOP**) rata-rata **+8,2%** (CI 95%: 5,5% - 10,9%) pasca penguatan koridor transit.`
+        text_response: `Estimasi Spatial Durbin Model menunjukkan kawasan sekitar **Stasiun Waru** berpotensi mengalami kenaikan nilai lahan (**%ΔNJOP**) rata-rata **+8,2%** (CI 95%: 5,5% - 10,9%) pasca penguatan koridor transit.`
       }
     };
   }

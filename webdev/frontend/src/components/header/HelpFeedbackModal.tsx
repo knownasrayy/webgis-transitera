@@ -1,11 +1,11 @@
-﻿'use client';
+'use client';
 
 import React, { useState } from 'react';
 import { Modal } from '@/components/ui/Modal';
 import { PersonaType } from '@/lib/persona';
 import {
-  HelpCircle, BookOpen, FileText, MessageSquare, ExternalLink,
-  ChevronDown, ChevronUp, CheckCircle2, Send, Bug, Lightbulb, Star,
+  HelpCircle, MessageSquare, BookOpen, ExternalLink, ChevronDown, ChevronUp,
+  Star, Send, CheckCircle2, Bug, Lightbulb, FileText,
   Building2, Briefcase, Train,
 } from 'lucide-react';
 
@@ -15,20 +15,20 @@ interface HelpFeedbackModalProps {
   activePersona?: PersonaType;
 }
 
-// â”€â”€ PERSONA-SPECIFIC FAQ â”€â”€
+// ── PERSONA-SPECIFIC FAQ ──
 const PERSONA_FAQ: Record<PersonaType, Array<{ q: string; a: string }>> = {
   government: [
     {
       q: 'Apa itu TOD Score dan bagaimana cara menghitungnya?',
-      a: 'TOD Score dihitung menggunakan AHP (Analytical Hierarchy Process) dengan 5 dimensi: Aksesibilitas, Kepadatan, Keberagaman, Desain, dan Demografi. Skor 0â€“100, di mana â‰¥75 = kawasan siap TOD. Detail metodologi tersedia di halaman Metodologi.',
+      a: 'TOD Score dihitung menggunakan AHP (Analytical Hierarchy Process) dengan 5 dimensi: Aksesibilitas, Kepadatan, Keberagaman, Desain, dan Demografi. Skor 0–100, di mana ≥75 = kawasan siap TOD. Detail metodologi tersedia di halaman Metodologi.',
     },
     {
       q: 'Bagaimana cara mengekspor data analisis spasial?',
-      a: 'Buka Settings â†’ Preferensi Government â†’ pilih Format Ekspor (GeoJSON, Shapefile, atau CSV). Tombol ekspor tersedia di panel Government setelah memilih kawasan analisis.',
+      a: 'Buka Settings → Preferensi Government → pilih Format Ekspor (GeoJSON, Shapefile, atau CSV). Tombol ekspor tersedia di panel Government setelah memilih kawasan analisis.',
     },
     {
       q: 'Apa perbedaan mode bobot AHP (Default, Kustom, Equal)?',
-      a: 'Default menggunakan bobot yang ditetapkan tim peneliti ITS (CR â‰¤ 0.10). Kustom memungkinkan penyesuaian bobot tiap dimensi secara manual. Equal memberikan bobot merata pada semua dimensi.',
+      a: 'Default menggunakan bobot yang ditetapkan tim peneliti ITS (CR ≤ 0.10). Kustom memungkinkan penyesuaian bobot tiap dimensi secara manual. Equal memberikan bobot merata pada semua dimensi.',
     },
     {
       q: 'Mengapa beberapa hexagon berwarna abu-abu di peta?',
@@ -36,21 +36,21 @@ const PERSONA_FAQ: Record<PersonaType, Array<{ q: string; a: string }>> = {
     },
     {
       q: 'Apa itu Spatial Durbin Model (SDM) dan mengapa digunakan?',
-      a: 'SDM adalah model regresi spasial yang memperhitungkan efek spillover antar kawasan tetangga. Digunakan untuk mengukur pengaruh skor TOD terhadap NJOP bumi dengan mempertimbangkan dependensi spasial (Ï) dan efek eksternalitas (Î¸).',
+      a: 'SDM adalah model regresi spasial yang memperhitungkan efek spillover antar kawasan tetangga. Digunakan untuk mengukur pengaruh skor TOD terhadap NJOP bumi dengan mempertimbangkan dependensi spasial (ρ) dan efek eksternalitas (θ).',
     },
   ],
   business: [
     {
-      q: 'Bagaimana cara menginterpretasi nilai %Î”NJOP?',
-      a: '%Î”NJOP menunjukkan persentase perubahan nilai tanah (NJOP bumi) dibandingkan tahun sebelumnya. Nilai positif (hijau) = apresiasi lahan; nilai negatif (merah) = depresiasi. Zona dengan %Î”NJOP >15% dikategorikan sebagai "Premium Zone".',
+      q: 'Bagaimana cara menginterpretasi nilai %ΔNJOP?',
+      a: '%ΔNJOP menunjukkan persentase perubahan nilai tanah (NJOP bumi) dibandingkan tahun sebelumnya. Nilai positif (hijau) = apresiasi lahan; nilai negatif (merah) = depresiasi. Zona dengan %ΔNJOP >15% dikategorikan sebagai "Premium Zone".',
     },
     {
       q: 'Apa itu Retail Success Score dan bagaimana menggunakannya?',
-      a: 'Retail Success Score (0â€“100) diprediksi menggunakan model Random Forest berdasarkan densitas pejalan kaki, mix-use index, dan aksesibilitas. Gunakan sebagai salah satu input keputusan investasi, bukan satu-satunya faktor.',
+      a: 'Retail Success Score (0–100) diprediksi menggunakan model Random Forest berdasarkan densitas pejalan kaki, mix-use index, dan aksesibilitas. Gunakan sebagai salah satu input keputusan investasi, bukan satu-satunya faktor.',
     },
     {
       q: 'Bagaimana cara menghitung potensi ROI investasi properti?',
-      a: 'ROI dihitung berdasarkan: (NJOP Proyeksi - NJOP Saat Ini) / NJOP Saat Ini Ã— 100%. Proyeksi menggunakan tren historis + korelasi dengan kenaikan skor TOD. Atur periode kalkulasi (5/10/15 tahun) di Settings â†’ Business.',
+      a: 'ROI dihitung berdasarkan: (NJOP Proyeksi - NJOP Saat Ini) / NJOP Saat Ini × 100%. Proyeksi menggunakan tren historis + korelasi dengan kenaikan skor TOD. Atur periode kalkulasi (5/10/15 tahun) di Settings → Business.',
     },
     {
       q: 'Apa yang dimaksud Optimal Tenant Mix?',
@@ -64,7 +64,7 @@ const PERSONA_FAQ: Record<PersonaType, Array<{ q: string; a: string }>> = {
   commuter: [
     {
       q: 'Bagaimana cara membaca jadwal KRL di aplikasi ini?',
-      a: 'Jadwal KRL SRRL ditampilkan dalam format HH:MM (jam keberangkatan â†’ jam kedatangan). Ikon warna menunjukkan status: hijau = tepat waktu, kuning = terlambat, abu-abu = sudah berangkat. Klik jadwal untuk detail rute dan stasiun transit.',
+      a: 'Jadwal KRL SRRL ditampilkan dalam format HH:MM (jam keberangkatan → jam kedatangan). Ikon warna menunjukkan status: hijau = tepat waktu, kuning = terlambat, abu-abu = sudah berangkat. Klik jadwal untuk detail rute dan stasiun transit.',
     },
     {
       q: 'Apa itu Suroboyo Bus Feeder dan bagaimana menggunakannya?',
@@ -76,16 +76,16 @@ const PERSONA_FAQ: Record<PersonaType, Array<{ q: string; a: string }>> = {
     },
     {
       q: 'Bagaimana cara menemukan destinasi wisata dari stasiun terdekat?',
-      a: 'Buka tab Commuter â†’ Tourist Destinations. Daftar destinasi wisata diurutkan berdasarkan jarak jalan kaki dari stasiun yang dipilih. Klik destinasi untuk melihat rating, kategori, dan jarak tempuh.',
+      a: 'Buka tab Commuter → Tourist Destinations. Daftar destinasi wisata diurutkan berdasarkan jarak jalan kaki dari stasiun yang dipilih. Klik destinasi untuk melihat rating, kategori, dan jarak tempuh.',
     },
     {
       q: 'Bagaimana cara mengaktifkan pengingat jadwal commute?',
-      a: 'Buka Settings â†’ Preferensi Commuter â†’ aktifkan toggle "Pengingat Jadwal Commute". Notifikasi akan muncul 15 menit sebelum jadwal keberangkatan yang kamu atur sebagai favorit.',
+      a: 'Buka Settings → Preferensi Commuter → aktifkan toggle "Pengingat Jadwal Commute". Notifikasi akan muncul 15 menit sebelum jadwal keberangkatan yang kamu atur sebagai favorit.',
     },
   ],
 };
 
-// â”€â”€ PERSONA-SPECIFIC QUICK LINKS â”€â”€
+// ── PERSONA-SPECIFIC QUICK LINKS ──
 const PERSONA_LINKS: Record<PersonaType, Array<{ label: string; href: string; icon: React.ReactNode }>> = {
   government: [
     { label: 'Halaman Metodologi', href: '/metodologi', icon: <BookOpen className="w-4 h-4" /> },
@@ -156,7 +156,7 @@ export function HelpFeedbackModal({ isOpen, onClose, activePersona = 'government
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} title="Bantuan & Umpan Balik" maxWidth="lg"
-      subtitle={`Panduan penggunaan TransitERA â€” mode ${PERSONA_LABEL[activePersona]}`}
+      subtitle={`Panduan penggunaan TransitERA — mode ${PERSONA_LABEL[activePersona]}`}
       icon={<HelpCircle className="w-4 h-4" />}>
 
       {/* Persona Badge */}
@@ -188,7 +188,7 @@ export function HelpFeedbackModal({ isOpen, onClose, activePersona = 'government
         ))}
       </div>
 
-      {/* â”€â”€ HELP TAB â”€â”€ */}
+      {/* ── HELP TAB ── */}
       {activeTab === 'help' && (
         <div>
           {/* Quick Links */}
@@ -208,7 +208,7 @@ export function HelpFeedbackModal({ isOpen, onClose, activePersona = 'government
 
           {/* FAQ Accordion */}
           <div className="px-5 py-4">
-            <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-3">FAQ â€” {PERSONA_LABEL[activePersona]}</p>
+            <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-3">FAQ — {PERSONA_LABEL[activePersona]}</p>
             <div className="space-y-2">
               {faqs.map((item, idx) => (
                 <div key={idx} className={`rounded-xl border transition-colors overflow-hidden ${
@@ -249,7 +249,7 @@ export function HelpFeedbackModal({ isOpen, onClose, activePersona = 'government
         </div>
       )}
 
-      {/* â”€â”€ FEEDBACK TAB â”€â”€ */}
+      {/* ── FEEDBACK TAB ── */}
       {activeTab === 'feedback' && (
         <div className="px-5 py-4">
           {submitted ? (
@@ -327,4 +327,3 @@ export function HelpFeedbackModal({ isOpen, onClose, activePersona = 'government
     </Modal>
   );
 }
-

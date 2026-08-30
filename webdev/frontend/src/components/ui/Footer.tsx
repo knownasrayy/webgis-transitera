@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import React from 'react';
 import { PersonaType, getPersonaConfig } from '@/lib/persona';
@@ -13,7 +13,7 @@ export const Footer: React.FC<FooterProps> = ({ activePersona }) => {
   return (
     <footer className="h-7 bg-slate-950 border-t border-slate-800 flex items-center justify-between px-4 text-[9px] text-slate-500 tabular-nums z-40 relative flex-shrink-0">
       <div className="flex items-center gap-2 flex-1">
-        <span>Â© 2024 TransitERA Decision Support System. H3 Resolution 8/9 Engine.</span>
+        <span>© 2024 TransitERA Decision Support System. H3 Resolution 8/9 Engine.</span>
         <span className="hidden sm:inline">|</span>
         <span className="text-slate-400 font-bold hidden sm:inline">Data: {config.footerDataSource}</span>
       </div>
