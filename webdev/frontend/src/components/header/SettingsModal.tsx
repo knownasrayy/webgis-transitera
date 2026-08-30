@@ -93,7 +93,7 @@ function Toggle({ label, description, value, onChange }: {
       </div>
       <button onClick={() => onChange(!value)}
         className={`relative flex-shrink-0 w-9 h-5 rounded-full transition-colors ${value ? 'bg-brand-teal' : 'bg-slate-700'}`}>
-        <span className={`absolute top-0.5 w-4 h-4 bg-white rounded-full shadow transition-transform ${value ? 'translate-x-4' : 'translate-x-0.5'}`} />
+        <span className={`absolute top-0.5 left-0.5 w-4 h-4 bg-white rounded-full shadow transition-transform ${value ? 'translate-x-4' : 'translate-x-0'}`} />
       </button>
     </div>
   );
