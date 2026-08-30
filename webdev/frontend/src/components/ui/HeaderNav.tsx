@@ -94,7 +94,7 @@ export const HeaderNav: React.FC<HeaderNavProps> = ({
               <select
                 value={activeStation}
                 onChange={(e) => onSelectStation(e.target.value as StationId)}
-                className="appearance-none bg-slate-900/70 hover:bg-slate-800 text-slate-200 text-xs font-semibold py-1.5 pl-3 pr-7 rounded-lg border border-slate-700 focus:outline-none focus:ring-1 focus:ring-brand-lime/50 cursor-pointer transition-colors"
+                className="max-w-[110px] sm:max-w-[150px] md:max-w-none text-ellipsis overflow-hidden whitespace-nowrap appearance-none bg-slate-900/70 hover:bg-slate-800 text-slate-200 text-xs font-semibold py-1.5 pl-3 pr-7 rounded-lg border border-slate-700 focus:outline-none focus:ring-1 focus:ring-brand-lime/50 cursor-pointer transition-colors"
               >
                 {FALLBACK_STATIONS.map((s) => (
                   <option key={s.id} value={s.id} className="bg-slate-900 text-slate-200">
@@ -112,7 +112,7 @@ export const HeaderNav: React.FC<HeaderNavProps> = ({
           {/* Help */}
           <button
             onClick={() => onOpenHelp ? onOpenHelp() : undefined}
-            className="p-1.5 rounded-lg text-slate-400 hover:text-slate-200 hover:bg-slate-800/60 transition-colors"
+            className="hidden sm:flex p-1.5 rounded-lg text-slate-400 hover:text-slate-200 hover:bg-slate-800/60 transition-colors"
             title="Bantuan & Feedback"
           >
             <HelpCircle className="w-4 h-4" />
@@ -121,7 +121,7 @@ export const HeaderNav: React.FC<HeaderNavProps> = ({
           {/* Settings */}
           <button
             onClick={() => onOpenSettings ? onOpenSettings() : undefined}
-            className="p-1.5 rounded-lg text-slate-400 hover:text-slate-200 hover:bg-slate-800/60 transition-colors"
+            className="hidden sm:flex p-1.5 rounded-lg text-slate-400 hover:text-slate-200 hover:bg-slate-800/60 transition-colors"
             title="Pengaturan"
           >
             <Settings className="w-4 h-4" />
