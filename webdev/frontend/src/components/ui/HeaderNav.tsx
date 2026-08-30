@@ -57,7 +57,7 @@ export const HeaderNav: React.FC<HeaderNavProps> = ({
         </div>
 
         {/* ── Persona Tabs (Center) ── */}
-        <nav className="flex items-center gap-0.5 overflow-x-auto no-scrollbar whitespace-nowrap mask-edges px-2">
+        <nav className="flex-1 min-w-0 flex items-center gap-0.5 overflow-x-auto scrollbar-hide whitespace-nowrap px-2 touch-pan-x">
           {PERSONA_TABS.map((tab) => (
             <button
               key={tab.id}
@@ -77,7 +77,7 @@ export const HeaderNav: React.FC<HeaderNavProps> = ({
         </nav>
 
         {/* ── Right Actions ── */}
-        <div className="flex items-center gap-1.5">
+        <div className="flex items-center gap-1.5 shrink-0">
           {/* Search (desktop) */}
           <div className="hidden lg:flex items-center bg-slate-900/70 border border-slate-700 rounded-lg px-2.5 py-1.5 gap-2 w-44 focus-within:border-brand-lime/50 transition-colors">
             <Search className="w-3.5 h-3.5 text-slate-500" />
