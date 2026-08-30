@@ -62,7 +62,7 @@ export const HeaderNav: React.FC<HeaderNavProps> = ({
             <button
               key={tab.id}
               onClick={() => onChangePersona?.(tab.id)}
-              className={`px-3 md:px-4 py-1.5 text-xs md:text-sm font-semibold transition-all relative shrink-0 ${
+              className={`px-1.5 md:px-4 py-1.5 text-[10px] md:text-sm font-semibold transition-all relative shrink-0 ${
                 activePersona === tab.id
                   ? 'text-brand-lime'
                   : 'text-slate-400 hover:text-slate-200'
@@ -70,7 +70,7 @@ export const HeaderNav: React.FC<HeaderNavProps> = ({
             >
               {tab.label}
               {activePersona === tab.id && (
-                <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-6 md:w-8 h-0.5 bg-brand-lime rounded-full" />
+                <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-4 md:w-8 h-0.5 bg-brand-lime rounded-full" />
               )}
             </button>
           ))}
@@ -94,7 +94,7 @@ export const HeaderNav: React.FC<HeaderNavProps> = ({
               <select
                 value={activeStation}
                 onChange={(e) => onSelectStation(e.target.value as StationId)}
-                className="max-w-[110px] sm:max-w-[150px] md:max-w-none text-ellipsis overflow-hidden whitespace-nowrap appearance-none bg-slate-900/70 hover:bg-slate-800 text-slate-200 text-xs font-semibold py-1.5 pl-3 pr-7 rounded-lg border border-slate-700 focus:outline-none focus:ring-1 focus:ring-brand-lime/50 cursor-pointer transition-colors"
+                className="max-w-[90px] sm:max-w-[150px] md:max-w-none text-ellipsis overflow-hidden whitespace-nowrap appearance-none bg-slate-900/70 hover:bg-slate-800 text-slate-200 text-[10px] md:text-xs font-semibold py-1.5 pl-2 pr-6 md:pl-3 md:pr-7 rounded-lg border border-slate-700 focus:outline-none focus:ring-1 focus:ring-brand-lime/50 cursor-pointer transition-colors"
               >
                 {FALLBACK_STATIONS.map((s) => (
                   <option key={s.id} value={s.id} className="bg-slate-900 text-slate-200">
