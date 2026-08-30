@@ -18,6 +18,7 @@ import { FeedbackModal } from '@/components/header/FeedbackModal';
 import { GovernmentPanel } from '@/components/dashboard/GovernmentPanel';
 import { InvestorPanel } from '@/components/dashboard/InvestorPanel';
 import { CommuterPanel } from '@/components/dashboard/CommuterPanel';
+import { Map, SlidersHorizontal, LayoutDashboard, MessageSquare } from 'lucide-react';
 
 const MapContainer = dynamic(
   () => import('@/components/map/MapContainer').then((mod) => mod.MapContainer),
@@ -50,6 +51,9 @@ export default function WebGISPage() {
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [helpOpen, setHelpOpen] = useState(false);
   const [feedbackOpen, setFeedbackOpen] = useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false); // Tablet/Desktop sidebar toggle
+  
+  const [mobileTab, setMobileTab] = useState<'map' | 'filter' | 'ai' | 'dashboard'>('map');
 
   const currentStation: StationData =
     FALLBACK_STATIONS.find((s) => s.id === activeStation) || FALLBACK_STATIONS[0];
@@ -91,12 +95,14 @@ export default function WebGISPage() {
         onChangePersona={setActivePersona}
         onOpenSettings={() => setSettingsOpen(true)}
         onOpenHelp={() => setHelpOpen(true)}
+        onToggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)}
       />
 
       {/* 2. Main Work Area: Sidebar + Map + Analytics */}
-      <main className="relative flex-1 flex overflow-hidden">
+      <main className="relative flex-1 flex overflow-hidden pb-14 md:pb-0">
         
-        {/* Left Sidebar */}
+        {/* Left Sidebar (Tablet & Desktop) */}
+        <div className="hidden md:flex h-full">
         <SidebarContainer
           activePersona={activePersona}
           activeStation={activeStation}
@@ -113,7 +119,10 @@ export default function WebGISPage() {
           onOpenSettings={() => setSettingsOpen(true)}
           onOpenHelp={() => setHelpOpen(true)}
           onOpenFeedback={() => setFeedbackOpen(true)}
+          isOpen={isSidebarOpen}
+          onClose={() => setIsSidebarOpen(false)}
         />
+        </div>
 
         {/* Central Map Canvas */}
         <div className="relative flex-1 h-full w-full">
@@ -160,34 +169,61 @@ export default function WebGISPage() {
           )}
         </aside>
 
-        {/* Mobile Responsive Bottom Sheet */}
-        <MobileBottomSheet activePersona={activePersona} onChangePersona={setActivePersona}>
-          {activePersona === 'government' && (
-            <GovernmentPanel 
-              station={currentStation} 
-              activeStation={activeStation}
-              activeH3Index={selectedH3Index}
-              onExecuteMapAction={handleExecuteMapAction}
-            />
-          )}
-          {activePersona === 'business' && (
-            <InvestorPanel 
-              station={currentStation} 
-              activeStation={activeStation}
-              activeH3Index={selectedH3Index}
-              onExecuteMapAction={handleExecuteMapAction}
-            />
-          )}
-          {activePersona === 'commuter' && (
-            <CommuterPanel 
-              station={currentStation} 
-              activeStation={activeStation}
-              activeH3Index={selectedH3Index}
-              onExecuteMapAction={handleExecuteMapAction}
-            />
-          )}
-        </MobileBottomSheet>
+        {/* Mobile Responsive Bottom Sheet (only shows if tab is not 'map' and on mobile) */}
+        {mobileTab !== 'map' && (
+          <MobileBottomSheet activePersona={activePersona} onChangePersona={setActivePersona}>
+            {mobileTab === 'dashboard' && activePersona === 'government' && (
+              <GovernmentPanel station={currentStation} activeStation={activeStation} activeH3Index={selectedH3Index} onExecuteMapAction={handleExecuteMapAction} />
+            )}
+            {mobileTab === 'dashboard' && activePersona === 'business' && (
+              <InvestorPanel station={currentStation} activeStation={activeStation} activeH3Index={selectedH3Index} onExecuteMapAction={handleExecuteMapAction} />
+            )}
+            {mobileTab === 'dashboard' && activePersona === 'commuter' && (
+              <CommuterPanel station={currentStation} activeStation={activeStation} activeH3Index={selectedH3Index} onExecuteMapAction={handleExecuteMapAction} />
+            )}
+            {mobileTab === 'filter' && (
+              <SidebarContainer
+                activePersona={activePersona}
+                activeStation={activeStation}
+                choroplethMode={choroplethMode}
+                onChangeChoroplethMode={setChoroplethMode}
+                showSurveyPoints={showSurveyPoints}
+                onToggleSurveyPoints={() => setShowSurveyPoints(!showSurveyPoints)}
+                basemapStyle={basemapStyle}
+                onChangeBasemapStyle={setBasemapStyle}
+                h3ScoreRange={h3ScoreRange}
+                onChangeH3ScoreRange={setH3ScoreRange}
+                h3RingFilter={h3RingFilter}
+                onChangeH3RingFilter={setH3RingFilter}
+                isMobileMode={true}
+              />
+            )}
+            {mobileTab === 'ai' && (
+              <div className="flex items-center justify-center h-full text-slate-400">AI Chat feature coming soon!</div>
+            )}
+          </MobileBottomSheet>
+        )}
       </main>
+
+      {/* Mobile Bottom Navigation Bar */}
+      <nav className="md:hidden fixed bottom-0 left-0 right-0 h-14 bg-slate-900 border-t border-slate-800 z-50 flex items-center justify-around px-2 shadow-[0_-5px_20px_rgba(0,0,0,0.5)]">
+        <button onClick={() => setMobileTab('map')} className={`flex flex-col items-center justify-center w-16 h-full gap-1 transition-colors ${mobileTab === 'map' ? 'text-brand-lime' : 'text-slate-400 hover:text-slate-200'}`}>
+          <Map className="w-5 h-5" />
+          <span className="text-[10px] font-medium">Peta</span>
+        </button>
+        <button onClick={() => setMobileTab('filter')} className={`flex flex-col items-center justify-center w-16 h-full gap-1 transition-colors ${mobileTab === 'filter' ? 'text-brand-lime' : 'text-slate-400 hover:text-slate-200'}`}>
+          <SlidersHorizontal className="w-5 h-5" />
+          <span className="text-[10px] font-medium">Filter</span>
+        </button>
+        <button onClick={() => setMobileTab('ai')} className={`flex flex-col items-center justify-center w-16 h-full gap-1 transition-colors ${mobileTab === 'ai' ? 'text-brand-lime' : 'text-slate-400 hover:text-slate-200'}`}>
+          <MessageSquare className="w-5 h-5" />
+          <span className="text-[10px] font-medium">AI Chat</span>
+        </button>
+        <button onClick={() => setMobileTab('dashboard')} className={`flex flex-col items-center justify-center w-16 h-full gap-1 transition-colors ${mobileTab === 'dashboard' ? 'text-brand-lime' : 'text-slate-400 hover:text-slate-200'}`}>
+          <LayoutDashboard className="w-5 h-5" />
+          <span className="text-[10px] font-medium">Dashboard</span>
+        </button>
+      </nav>
 
       {/* 3. Footer Data Attribution */}
       <Footer activePersona={activePersona} />

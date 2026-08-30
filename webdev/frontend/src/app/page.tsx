@@ -1,12 +1,15 @@
-﻿'use client';
+'use client';
 
 import React, { useState, useRef } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { motion, useScroll, useTransform, useMotionValueEvent, useReducedMotion } from 'framer-motion';
 
+import { Menu, X } from 'lucide-react';
+
 export default function LandingPage() {
   const [isScrolled, setIsScrolled] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { scrollY } = useScroll();
   const showcaseRef = useRef<HTMLElement>(null);
   const prefersReducedMotion = useReducedMotion();
@@ -73,18 +76,43 @@ export default function LandingPage() {
               <Link className="text-sm font-medium text-on-surface hover:text-white transition-colors" href="#use-cases">Use Cases</Link>
               <Link className="text-sm font-medium text-on-surface hover:text-white transition-colors" href="#about">About</Link>
             </div>
-            <div className="flex items-center space-x-4">
-              <Link className="px-5 py-2.5 text-sm font-semibold text-surface-container-lowest bg-brand-lime hover:bg-[#8CE0C4] rounded transition-colors shadow-[0_0_15px_rgba(177,252,145,0.3)] flex items-center gap-2" href="/map">
+            <div className="flex items-center space-x-2 md:space-x-4">
+              <Link className="hidden md:flex px-5 py-2.5 text-sm font-semibold text-surface-container-lowest bg-brand-lime hover:bg-[#8CE0C4] rounded transition-colors shadow-[0_0_15px_rgba(177,252,145,0.3)] items-center gap-2" href="/map">
                 <span>Launch App</span>
               </Link>
+              <button 
+                className="md:hidden p-2 text-on-surface hover:text-brand-lime transition-colors focus:outline-none"
+                onClick={() => setIsMobileMenuOpen(true)}
+              >
+                <Menu className="w-6 h-6" />
+              </button>
             </div>
           </div>
         </div>
+
+        {/* Mobile Menu Overlay */}
+        {isMobileMenuOpen && (
+          <div className="fixed inset-0 z-[100] bg-surface-container-lowest/95 backdrop-blur-xl flex flex-col items-center justify-center space-y-8 p-4">
+            <button 
+              className="absolute top-6 right-6 p-2 text-on-surface hover:text-brand-lime transition-colors"
+              onClick={() => setIsMobileMenuOpen(false)}
+            >
+              <X className="w-8 h-8" />
+            </button>
+            <Link className="text-2xl font-bold text-white hover:text-brand-lime transition-colors" href="#platform" onClick={() => setIsMobileMenuOpen(false)}>Platform</Link>
+            <Link className="text-2xl font-bold text-white hover:text-brand-lime transition-colors" href="#solutions" onClick={() => setIsMobileMenuOpen(false)}>Solutions</Link>
+            <Link className="text-2xl font-bold text-white hover:text-brand-lime transition-colors" href="#use-cases" onClick={() => setIsMobileMenuOpen(false)}>Use Cases</Link>
+            <Link className="text-2xl font-bold text-white hover:text-brand-lime transition-colors" href="#about" onClick={() => setIsMobileMenuOpen(false)}>About</Link>
+            <Link className="mt-8 px-8 py-4 text-xl font-bold text-surface-container-lowest bg-brand-lime rounded-full shadow-[0_0_20px_rgba(177,252,145,0.4)]" href="/map" onClick={() => setIsMobileMenuOpen(false)}>
+              Launch App
+            </Link>
+          </div>
+        )}
       </motion.nav>
       {/* END: Navigation */}
 
       {/* BEGIN: Hero Section */}
-      <section className="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden min-h-[90vh] flex items-center">
+      <section className="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden min-h-[90svh] flex items-center">
         {/* Background Image with Slow Zoom */}
         <div className="absolute inset-0 z-0 overflow-hidden">
           <motion.img
@@ -110,7 +138,7 @@ export default function LandingPage() {
             </div>
           </motion.div>
           
-          <motion.h1 variants={heroItemVars} className="text-[32px] font-bold text-white tracking-[-0.02em] mb-6 leading-tight">
+          <motion.h1 variants={heroItemVars} className="text-4xl sm:text-5xl md:text-7xl font-bold text-white tracking-[-0.02em] mb-6 leading-tight">
             Spatial Intelligence for <br /> <span className="text-gradient italic font-serif">Mass Transportation</span>
           </motion.h1>
           
@@ -149,7 +177,7 @@ export default function LandingPage() {
               </p>
               <div className="space-y-6">
                 <motion.div 
-                  className="glass-panel-stitch p-6 rounded-2xl border-l-4 border-l-brand-lime"
+                  className="glass-panel-stitch p-4 sm:p-6 rounded-2xl border-l-4 border-l-brand-lime"
                   initial={{ opacity: 0, x: prefersReducedMotion ? 0 : -20 }}
                   whileInView={{ opacity: 1, x: 0 }}
                   viewport={{ once: true }}
@@ -162,7 +190,7 @@ export default function LandingPage() {
                 </motion.div>
                 
                 <motion.div 
-                  className="glass-panel-stitch p-6 rounded-2xl border-l-4 border-l-brand-600"
+                  className="glass-panel-stitch p-4 sm:p-6 rounded-2xl border-l-4 border-l-brand-600"
                   initial={{ opacity: 0, x: prefersReducedMotion ? 0 : -20 }}
                   whileInView={{ opacity: 1, x: 0 }}
                   viewport={{ once: true }}
@@ -211,17 +239,17 @@ export default function LandingPage() {
           </motion.div>
 
           <motion.div 
-            className="grid grid-cols-1 md:grid-cols-3 gap-8"
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
             variants={cardContainerVars}
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, amount: 0.1 }}
           >
             {/* Government */}
-            <motion.div variants={cardVars} className="group relative rounded-3xl overflow-hidden bg-surface-container h-[400px] transition-transform duration-300 hover:-translate-y-2 hover:shadow-2xl hover:shadow-brand-900/40">
-              <Image alt="Government Urban Planning" className="object-cover opacity-40 group-hover:opacity-60 transition-opacity duration-500" src="/assets/landing/a_high_tech_futuristic_aerial_view_of_a_smart_city_transit_corridor_in_surabaya.png" fill sizes="(max-width: 768px) 100vw, 33vw" />
+            <motion.div variants={cardVars} className="group relative rounded-3xl overflow-hidden bg-surface-container h-[280px] sm:h-[340px] lg:h-[400px] transition-transform duration-300 hover:-translate-y-2 hover:shadow-2xl hover:shadow-brand-900/40">
+              <Image alt="Government Urban Planning" className="object-cover opacity-60 group-hover:opacity-80 transition-opacity duration-500" src="/assets/landing/a_high_tech_futuristic_aerial_view_of_a_smart_city_transit_corridor_in_surabaya.png" fill sizes="(max-width: 768px) 100vw, 33vw" />
               <div className="absolute inset-0 bg-gradient-to-t from-surface-container-lowest via-surface-container-lowest/80 to-transparent"></div>
-              <div className="absolute bottom-0 left-0 p-8">
+              <div className="absolute bottom-0 left-0 p-6 lg:p-8">
                 <span className="px-3 py-1 rounded-full bg-surface-container/80 text-on-surface border border-surface-container-highest text-xs font-semibold mb-4 inline-block backdrop-blur-sm">Government</span>
                 <h3 className="text-2xl font-bold text-white mb-2">Policy &amp; Planning</h3>
                 <p className="text-on-surface-variant text-sm">Analyze TOD readiness, plan feeder routes, and simulate urban impact with high-resolution spatial overlays.</p>
@@ -229,10 +257,10 @@ export default function LandingPage() {
             </motion.div>
 
             {/* Business */}
-            <motion.div variants={cardVars} className="group relative rounded-3xl overflow-hidden bg-surface-container h-[400px] transition-transform duration-300 hover:-translate-y-2 hover:shadow-2xl hover:shadow-brand-lime/20">
-              <Image alt="Business Retail Area" className="object-cover opacity-40 group-hover:opacity-60 transition-opacity duration-500" src="/assets/landing/a_futuristic_tech_enabled_retail_shopping_district_near_a_transit_hub._subtle.png" fill sizes="(max-width: 768px) 100vw, 33vw" />
+            <motion.div variants={cardVars} className="group relative rounded-3xl overflow-hidden bg-surface-container h-[280px] sm:h-[340px] lg:h-[400px] transition-transform duration-300 hover:-translate-y-2 hover:shadow-2xl hover:shadow-brand-lime/20">
+              <Image alt="Business Retail Area" className="object-cover opacity-60 group-hover:opacity-80 transition-opacity duration-500" src="/assets/landing/a_futuristic_tech_enabled_retail_shopping_district_near_a_transit_hub._subtle.png" fill sizes="(max-width: 768px) 100vw, 33vw" />
               <div className="absolute inset-0 bg-gradient-to-t from-surface-container-lowest via-surface-container-lowest/80 to-transparent"></div>
-              <div className="absolute bottom-0 left-0 p-8">
+              <div className="absolute bottom-0 left-0 p-6 lg:p-8">
                 <span className="px-3 py-1 rounded-full bg-brand-lime/20 text-brand-lime border border-brand-lime/30 text-xs font-semibold mb-4 inline-block backdrop-blur-sm">Business &amp; Investor</span>
                 <h3 className="text-2xl font-bold text-white mb-2">Commercial Viability</h3>
                 <p className="text-on-surface-variant text-sm">Discover high-yield locations, analyze foot traffic, and optimize tenant mix near major transit hubs.</p>
@@ -240,10 +268,10 @@ export default function LandingPage() {
             </motion.div>
 
             {/* Commuter */}
-            <motion.div variants={cardVars} className="group relative rounded-3xl overflow-hidden bg-surface-container h-[400px] transition-transform duration-300 hover:-translate-y-2 hover:shadow-2xl hover:shadow-accent-green/20">
-              <Image alt="Commuter Transit Station" className="object-cover opacity-40 group-hover:opacity-60 transition-opacity duration-500" src="/assets/landing/a_first_person_perspective_of_a_commuter_walking_through_a_modern_clean_and.png" fill sizes="(max-width: 768px) 100vw, 33vw" />
+            <motion.div variants={cardVars} className="group relative rounded-3xl overflow-hidden bg-surface-container h-[280px] sm:h-[340px] lg:h-[400px] transition-transform duration-300 hover:-translate-y-2 hover:shadow-2xl hover:shadow-accent-green/20">
+              <Image alt="Commuter Transit Station" className="object-cover opacity-60 group-hover:opacity-80 transition-opacity duration-500" src="/assets/landing/a_first_person_perspective_of_a_commuter_walking_through_a_modern_clean_and.png" fill sizes="(max-width: 768px) 100vw, 33vw" />
               <div className="absolute inset-0 bg-gradient-to-t from-surface-container-lowest via-surface-container-lowest/80 to-transparent"></div>
-              <div className="absolute bottom-0 left-0 p-8">
+              <div className="absolute bottom-0 left-0 p-6 lg:p-8">
                 <span className="px-3 py-1 rounded-full bg-success-green/20 text-success-green border border-success-green/30 text-xs font-semibold mb-4 inline-block backdrop-blur-sm">Commuter &amp; Tourist</span>
                 <h3 className="text-2xl font-bold text-white mb-2">Seamless Transit</h3>
                 <p className="text-on-surface-variant text-sm">Navigate complex transit networks, discover local POIs, and evaluate walkability indexes for better journeys.</p>

@@ -6,7 +6,7 @@ import Image from 'next/image';
 import { StationId } from '@/types';
 import { PersonaType } from '@/lib/persona';
 import { FALLBACK_STATIONS } from '@/lib/api';
-import { Train, Settings, ChevronDown, Search, HelpCircle } from 'lucide-react';
+import { Train, Settings, ChevronDown, Search, HelpCircle, Menu } from 'lucide-react';
 
 import { NotificationDropdown } from '@/components/header/NotificationDropdown';
 import { ProfileDropdown } from '@/components/header/ProfileDropdown';
@@ -18,6 +18,7 @@ interface HeaderNavProps {
   onChangePersona?: (persona: PersonaType) => void;
   onOpenSettings?: () => void;
   onOpenHelp?: () => void;
+  onToggleSidebar?: () => void;
 }
 
 const PERSONA_TABS: { id: PersonaType; label: string }[] = [
@@ -36,13 +37,13 @@ export const HeaderNav: React.FC<HeaderNavProps> = ({
 }) => {
   return (
     <>
-      <header className="glass-header sticky top-0 z-40 w-full px-4 py-2 flex items-center justify-between shadow-lg">
-        {/* â”€â”€ Brand / Logo â”€â”€ */}
-        <div className="flex items-center gap-3">
-          <Link href="/" className="flex items-center gap-2.5 group">
+      <header className="glass-header sticky top-0 z-40 w-full px-2 md:px-4 py-2 flex items-center justify-between shadow-lg gap-2">
+        {/* ── Brand / Logo ── */}
+        <div className="flex items-center gap-1.5 md:gap-3 shrink-0">
+          <Link href="/" className="flex items-center gap-2 group">
             <Image
               alt="TransitERA Logo"
-              className="h-8 w-auto object-contain group-hover:scale-105 transition-transform"
+              className="h-7 w-auto md:h-8 object-contain group-hover:scale-105 transition-transform"
               src="/assets/landing/LOGO.png"
               width={32}
               height={32}
@@ -55,13 +56,13 @@ export const HeaderNav: React.FC<HeaderNavProps> = ({
           </Link>
         </div>
 
-        {/* â”€â”€ Persona Tabs (Center) â”€â”€ */}
-        <nav className="flex items-center gap-0.5">
+        {/* ── Persona Tabs (Center) ── */}
+        <nav className="flex items-center gap-0.5 overflow-x-auto no-scrollbar whitespace-nowrap mask-edges px-2">
           {PERSONA_TABS.map((tab) => (
             <button
               key={tab.id}
               onClick={() => onChangePersona?.(tab.id)}
-              className={`px-4 py-1.5 text-sm font-semibold transition-all relative ${
+              className={`px-3 md:px-4 py-1.5 text-xs md:text-sm font-semibold transition-all relative shrink-0 ${
                 activePersona === tab.id
                   ? 'text-brand-lime'
                   : 'text-slate-400 hover:text-slate-200'
@@ -69,13 +70,13 @@ export const HeaderNav: React.FC<HeaderNavProps> = ({
             >
               {tab.label}
               {activePersona === tab.id && (
-                <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-8 h-0.5 bg-brand-lime rounded-full" />
+                <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-6 md:w-8 h-0.5 bg-brand-lime rounded-full" />
               )}
             </button>
           ))}
         </nav>
 
-        {/* â”€â”€ Right Actions â”€â”€ */}
+        {/* ── Right Actions ── */}
         <div className="flex items-center gap-1.5">
           {/* Search (desktop) */}
           <div className="hidden lg:flex items-center bg-slate-900/70 border border-slate-700 rounded-lg px-2.5 py-1.5 gap-2 w-44 focus-within:border-brand-lime/50 transition-colors">

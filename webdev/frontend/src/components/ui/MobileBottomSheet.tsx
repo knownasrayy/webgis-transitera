@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import React, { useState } from 'react';
 import { PersonaType } from '@/lib/persona';
@@ -31,7 +31,7 @@ export const MobileBottomSheet: React.FC<MobileBottomSheetProps> = ({
 
   return (
     <div
-      className={`fixed bottom-0 left-0 right-0 z-30 md:hidden glass-panel-accent border-t rounded-t-2xl shadow-2xl transition-all duration-300 flex flex-col ${heightClasses[snapState]}`}
+      className={`fixed bottom-14 left-0 right-0 z-40 md:hidden glass-panel-accent border-t rounded-t-2xl shadow-[0_-10px_40px_rgba(0,0,0,0.5)] transition-all duration-300 flex flex-col ${heightClasses[snapState]}`}
     >
       {/* Draggable Handle & Tab Bar */}
       <div className="pt-2 pb-1.5 px-4 flex flex-col items-center cursor-pointer select-none" onClick={toggleSnap}>

@@ -38,6 +38,9 @@ interface SidebarContainerProps {
   onOpenSettings?: () => void;
   onOpenHelp?: () => void;
   onOpenFeedback?: () => void;
+  isOpen?: boolean;
+  onClose?: () => void;
+  isMobileMode?: boolean;
 }
 
 /* ── Orange Toggle ── */
@@ -51,29 +54,27 @@ function Toggle({ active, onToggle, label }: { active: boolean; onToggle: () => 
 }
 
 /* ── Nav Item ── */
-function NavItem({ icon: Icon, label, active, onClick, badge, expandable, expanded }: {
-  icon: React.ElementType; label: string; active?: boolean; onClick?: () => void; badge?: string; expandable?: boolean; expanded?: boolean;
+function NavItem({ icon: Icon, label, active, onClick, badge, expandable, expanded, showLabelOnDesktop = true }: {
+  icon: React.ElementType; label: string; active?: boolean; onClick?: () => void; badge?: string; expandable?: boolean; expanded?: boolean; showLabelOnDesktop?: boolean;
 }) {
   return (
     <button
       onClick={onClick}
-      className={`w-full flex items-center gap-2.5 py-2 px-3 rounded-lg text-xs font-medium transition-all ${
-        active
-          ? 'bg-brand-lime/15 text-brand-lime border border-brand-lime/25'
-          : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/40 border border-transparent'
+      className={`w-full flex items-center justify-between py-2 px-3 rounded-lg transition-colors group/item ${
+        active ? 'bg-brand-500/20 text-brand-lime' : 'hover:bg-slate-800/40 text-slate-300'
       }`}
     >
-      <Icon className={`w-4 h-4 flex-shrink-0 ${active ? 'text-brand-lime' : 'text-slate-500'}`} />
-      <span className="flex-1 text-left">{label}</span>
-      {badge && (
-        <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-brand-lime/15 text-brand-lime border border-brand-lime/25">
-          {badge}
+      <div className="flex items-center gap-3 overflow-hidden">
+        <Icon className={`w-4 h-4 shrink-0 ${active ? 'text-brand-lime' : 'text-slate-400 group-hover/item:text-slate-200'}`} />
+        <span className={`text-xs font-medium truncate ${showLabelOnDesktop ? 'md:hidden group-hover:block lg:block' : ''}`}>
+          {label}
         </span>
-      )}
-      {expandable ? (
-        expanded ? <ChevronDown className="w-3 h-3 text-slate-500" /> : <ChevronRight className="w-3 h-3 text-slate-600" />
-      ) : (
-        !badge && <ChevronRight className="w-3 h-3 text-slate-600" />
+      </div>
+      {badge && <span className={`text-[9px] px-1.5 py-0.5 rounded uppercase font-bold tracking-wider shrink-0 ${showLabelOnDesktop ? 'md:hidden group-hover:block lg:block' : ''} ${active ? 'bg-brand-lime text-brand-900' : 'bg-slate-700 text-slate-300'}`}>{badge}</span>}
+      {expandable && (
+        <div className={`shrink-0 ${showLabelOnDesktop ? 'md:hidden group-hover:block lg:block' : ''}`}>
+          {expanded ? <ChevronDown className="w-3.5 h-3.5 opacity-50" /> : <ChevronRight className="w-3.5 h-3.5 opacity-50" />}
+        </div>
       )}
     </button>
   );
@@ -135,13 +136,15 @@ export const SidebarContainer: React.FC<SidebarContainerProps> = ({
   onOpenSettings,
   onOpenHelp,
   onOpenFeedback,
+  isOpen = false,
+  onClose,
+  isMobileMode
 }) => {
-  const config = getPersonaConfig(activePersona);
+  const [govActiveTab, setGovActiveTab] = useState<'filter' | 'layers' | 'legends' | 'demographics' | 'environment'>('filter');
+  const [bizActiveTab, setBizActiveTab] = useState<'filter' | 'layers' | 'legends' | 'competitors' | 'poilist'>('filter');
+  const [comActiveTab, setComActiveTab] = useState<'filter' | 'layers' | 'legends' | 'schedules' | 'routes' | 'tourist'>('filter');
 
-  // Global active tab state per persona
-  const [govActiveTab, setGovActiveTab] = useState<'demographics' | 'environment' | 'filter' | 'layers' | 'legends'>('layers');
-  const [bizActiveTab, setBizActiveTab] = useState<'demographics' | 'environment' | 'filter' | 'layers' | 'legends'>('layers');
-  const [commuterActiveTab, setCommuterActiveTab] = useState<'schedules' | 'tourist' | 'filter' | 'layers' | 'legends'>('schedules');
+  const config = getPersonaConfig(activePersona);
 
   // General Layer States
   const [showEconomicPOI, setShowEconomicPOI] = useState(true);
@@ -152,8 +155,7 @@ export const SidebarContainer: React.FC<SidebarContainerProps> = ({
   const [showTraffic, setShowTraffic] = useState(false);
 
   // Business Specific State
-  const [njopRange, setNjopRange] = useState<[number, number]>([0, 25]);
-  const [propertyType, setPropertyType] = useState('all');
+  const [njopRange, setNjopRange] = useState<[number, number]>([10, 50]);
 
   // Commuter Specific State
   const [showKRL, setShowKRL] = useState(true);
@@ -165,7 +167,6 @@ export const SidebarContainer: React.FC<SidebarContainerProps> = ({
   const busRoutes = getBusRoutesForStation(activeStation);
   const touristSpots = getTouristDestinationsForStation(activeStation);
 
-  // ---------------------------------------------------------------------------
   // SHARED UI RENDERERS (FILTER, LAYERS, LEGENDS)
   // ---------------------------------------------------------------------------
   
@@ -319,13 +320,175 @@ export const SidebarContainer: React.FC<SidebarContainerProps> = ({
     </div>
   );
 
+  if (isMobileMode) {
+    return (
+      <div className="flex-1 overflow-y-auto py-1 px-2 w-full h-full">
+        {/* ══════ Government Sidebar ══════ */}
+        {activePersona === 'government' && (
+          <>
+            <SectionHeader label="Government Tools (PWK)" />
+            <div className="px-2 space-y-0.5">
+              <NavItem icon={SlidersHorizontal} label="Filter Spasial" active={govActiveTab === 'filter'} onClick={() => setGovActiveTab('filter')} badge={h3ScoreRange[0] > 0 || h3ScoreRange[1] < 100 || h3RingFilter < 5 || njopRange[0] > 0 || njopRange[1] < 25 ? 'Aktif' : undefined} />
+              <NavItem icon={Layers} label="Lapisan Peta (Layers)" active={govActiveTab === 'layers'} onClick={() => setGovActiveTab('layers')} />
+              <NavItem icon={Map} label="Legenda (Legends)" active={govActiveTab === 'legends'} onClick={() => setGovActiveTab('legends')} />
+              <div className="my-1 border-t border-slate-800/80" />
+              <NavItem icon={Users} label="Demografi Spasial" active={govActiveTab === 'demographics'} onClick={() => setGovActiveTab('demographics')} />
+              <NavItem icon={TreePine} label="Lingkungan & RTH" active={govActiveTab === 'environment'} onClick={() => setGovActiveTab('environment')} />
+            </div>
+
+            {/* General Features Rendering */}
+            {govActiveTab === 'filter' && renderFilterTab()}
+            {govActiveTab === 'layers' && renderLayersTab(true)}
+            {govActiveTab === 'legends' && renderLegendsTab(false)}
+
+            {/* Demographics Panel for Government */}
+            {govActiveTab === 'demographics' && demographics && (
+              <div className="px-3 py-3 space-y-3 border-t border-slate-800/60 mt-2">
+                <div className="flex items-center justify-between">
+                  <div className="text-[10px] font-bold text-brand-lime uppercase tracking-wider">
+                    Statistik Radius 1km
+                  </div>
+                </div>
+                <div className="grid grid-cols-2 gap-2">
+                  <div className="bg-slate-800/30 p-2 rounded-lg border border-slate-700/50">
+                    <div className="text-[10px] text-slate-400 mb-1">Populasi</div>
+                    <div className="font-mono text-sm text-slate-200">{demographics.population.toLocaleString()}</div>
+                  </div>
+                  <div className="bg-slate-800/30 p-2 rounded-lg border border-slate-700/50">
+                    <div className="text-[10px] text-slate-400 mb-1">Kepadatan (jiwa/km²)</div>
+                    <div className="font-mono text-sm text-slate-200">{demographics.density.toLocaleString()}</div>
+                  </div>
+                </div>
+              </div>
+            )}
+            
+            {/* Environment Panel for Government */}
+            {govActiveTab === 'environment' && environment && (
+              <div className="px-3 py-3 space-y-3 border-t border-slate-800/60 mt-2">
+                <div className="flex items-center justify-between">
+                  <div className="text-[10px] font-bold text-brand-lime uppercase tracking-wider">
+                    Indikator RTH & Polusi
+                  </div>
+                </div>
+                <div className="space-y-2">
+                  <div className="flex justify-between items-center text-xs">
+                    <span className="text-slate-400">Air Quality Index</span>
+                    <span className={`font-mono ${environment.aqi > 100 ? 'text-red-400' : 'text-brand-lime'}`}>{environment.aqi}</span>
+                  </div>
+                  <div className="flex justify-between items-center text-xs">
+                    <span className="text-slate-400">Cakupan RTH</span>
+                    <span className="font-mono text-slate-200">{environment.greenSpacePct}%</span>
+                  </div>
+                  <div className="flex justify-between items-center text-xs">
+                    <span className="text-slate-400">Flood Risk</span>
+                    <span className="font-mono text-slate-200">{environment.floodRisk}</span>
+                  </div>
+                </div>
+              </div>
+            )}
+          </>
+        )}
+
+        {/* ══════ Business Sidebar ══════ */}
+        {activePersona === 'business' && (
+          <>
+            <SectionHeader label="Business & Investor" />
+            <div className="px-2 space-y-0.5">
+              <NavItem icon={SlidersHorizontal} label="Filter Spasial" active={bizActiveTab === 'filter'} onClick={() => setBizActiveTab('filter')} badge={h3ScoreRange[0] > 0 || h3ScoreRange[1] < 100 || h3RingFilter < 5 || njopRange[0] > 0 || njopRange[1] < 25 ? 'Aktif' : undefined} />
+              <NavItem icon={Layers} label="Lapisan Peta" active={bizActiveTab === 'layers'} onClick={() => setBizActiveTab('layers')} />
+              <NavItem icon={Map} label="Legenda" active={bizActiveTab === 'legends'} onClick={() => setBizActiveTab('legends')} />
+              <div className="my-1 border-t border-slate-800/80" />
+              <NavItem icon={Store} label="Daftar Kompetitor" active={bizActiveTab === 'competitors'} onClick={() => setBizActiveTab('competitors')} />
+              <NavItem icon={Landmark} label="POI Utama" active={bizActiveTab === 'poilist'} onClick={() => setBizActiveTab('poilist')} />
+            </div>
+
+            {bizActiveTab === 'filter' && renderFilterTab()}
+            {bizActiveTab === 'layers' && renderLayersTab(true)}
+            {bizActiveTab === 'legends' && renderLegendsTab(true)}
+          </>
+        )}
+
+        {/* ══════ Commuter Sidebar ══════ */}
+        {activePersona === 'commuter' && (
+          <>
+            <SectionHeader label="Commuter Transit" />
+            <div className="px-2 space-y-0.5">
+              <NavItem icon={SlidersHorizontal} label="Filter Area" active={comActiveTab === 'filter'} onClick={() => setComActiveTab('filter')} badge={h3ScoreRange[0] > 0 || h3ScoreRange[1] < 100 || h3RingFilter < 5 ? 'Aktif' : undefined} />
+              <NavItem icon={Layers} label="Lapisan Peta" active={comActiveTab === 'layers'} onClick={() => setComActiveTab('layers')} />
+              <NavItem icon={Map} label="Legenda" active={comActiveTab === 'legends'} onClick={() => setComActiveTab('legends')} />
+              <div className="my-1 border-t border-slate-800/80" />
+              <NavItem icon={TrainIcon} label="Jadwal Kereta" active={comActiveTab === 'schedules'} onClick={() => setComActiveTab('schedules')} />
+              <NavItem icon={Bus} label="Rute Feeder/Bus" active={comActiveTab === 'routes'} onClick={() => setComActiveTab('routes')} />
+              <NavItem icon={MapPin} label="Destinasi Wisata" active={comActiveTab === 'tourist'} onClick={() => setComActiveTab('tourist')} />
+            </div>
+
+            {comActiveTab === 'filter' && renderFilterTab()}
+            {comActiveTab === 'layers' && renderLayersTab(false)}
+            {comActiveTab === 'legends' && renderLegendsTab(false)}
+
+            {/* Train Schedules Panel */}
+            {comActiveTab === 'schedules' && (
+              <div className="px-3 py-3 space-y-2 border-t border-slate-800/60 mt-2">
+                <div className="text-[10px] font-bold text-brand-lime uppercase tracking-wider mb-2">Keberangkatan Mendatang</div>
+                {trainSchedules.map((ts, idx) => (
+                  <div key={idx} className="flex items-center justify-between bg-slate-800/30 p-2 rounded border border-slate-700/50">
+                    <div>
+                      <div className="text-xs font-bold text-slate-200">{ts.trainName}</div>
+                      <div className="text-[10px] text-slate-400">Ke: {ts.destination}</div>
+                    </div>
+                    <div className="text-right">
+                      <div className="font-mono text-xs text-brand-lime">{ts.departureTime}</div>
+                      <div className="text-[9px] text-slate-500">{ts.status}</div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+            
+            {/* Bus Routes Panel */}
+            {comActiveTab === 'routes' && (
+              <div className="px-3 py-3 space-y-2 border-t border-slate-800/60 mt-2">
+                <div className="text-[10px] font-bold text-brand-lime uppercase tracking-wider mb-2">Feeder Terintegrasi</div>
+                {busRoutes.map((br, idx) => (
+                  <div key={idx} className="flex items-center justify-between bg-slate-800/30 p-2 rounded border border-slate-700/50">
+                    <div className="flex items-center gap-2">
+                      <div className="w-2 h-2 rounded-full" style={{ backgroundColor: br.color }}></div>
+                      <div>
+                        <div className="text-xs font-bold text-slate-200">{br.routeName}</div>
+                        <div className="text-[10px] text-slate-400">Frek: {br.frequency}</div>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </>
+        )}
+      </div>
+    );
+  }
+
   return (
-    <aside className="hidden md:flex w-[var(--sidebar-width)] h-full flex-col glass-sidebar z-20 overflow-hidden">
+    <>
+      {/* Mobile Backdrop - Left for safety, but typically unused if isMobileMode handles mobile view */}
+      {isOpen && (
+        <div 
+          className="fixed inset-0 z-40 bg-slate-950/80 backdrop-blur-sm md:hidden transition-opacity"
+          onClick={onClose}
+        />
+      )}
+
+      {/* Sidebar Panel with group hover for Tablet */}
+      <aside 
+        className={`fixed inset-y-0 left-0 z-50 w-[85vw] max-w-[300px] bg-slate-900/95 backdrop-blur-xl border-r border-slate-800/80 flex flex-col h-full shadow-2xl overflow-hidden flex-shrink-0 transition-all duration-300 md:relative md:translate-x-0 ${
+          isOpen ? 'translate-x-0' : '-translate-x-full'
+        } md:w-[80px] lg:w-[300px] hover:w-[300px] group`}
+      >
       {/* ── Sidebar Header ── */}
       <div className="px-4 py-3 border-b border-slate-800/80">
         <div className="flex items-center gap-2">
-          <div className="w-2 h-2 rounded-full bg-brand-lime" />
-          <div>
+          <div className="w-2 h-2 rounded-full bg-brand-lime shrink-0" />
+          <div className="md:hidden group-hover:block lg:block whitespace-nowrap overflow-hidden transition-all">
             <h3 className="text-xs font-bold text-brand-lime">{config.sidebarTitle}</h3>
             <p className="text-[10px] text-slate-500">{config.sidebarSubtitle}</p>
           </div>
@@ -484,116 +647,14 @@ export const SidebarContainer: React.FC<SidebarContainerProps> = ({
               <NavItem icon={Layers} label="Lapisan Peta (Layers)" active={bizActiveTab === 'layers'} onClick={() => setBizActiveTab('layers')} />
               <NavItem icon={Map} label="Legenda (Legends)" active={bizActiveTab === 'legends'} onClick={() => setBizActiveTab('legends')} />
               <div className="my-1 border-t border-slate-800/80" />
-              <NavItem icon={Users} label="Demografi Spasial" active={bizActiveTab === 'demographics'} onClick={() => setBizActiveTab('demographics')} />
-              <NavItem icon={TreePine} label="Lingkungan & RTH" active={bizActiveTab === 'environment'} onClick={() => setBizActiveTab('environment')} />
+              <NavItem icon={Store} label="Daftar Kompetitor" active={bizActiveTab === 'competitors'} onClick={() => setBizActiveTab('competitors')} />
+              <NavItem icon={Landmark} label="POI Utama" active={bizActiveTab === 'poilist'} onClick={() => setBizActiveTab('poilist')} />
             </div>
 
             {/* General Features Rendering */}
             {bizActiveTab === 'filter' && renderFilterTab()}
             {bizActiveTab === 'layers' && renderLayersTab(true)}
             {bizActiveTab === 'legends' && renderLegendsTab(true)}
-
-
-            {/* Demographics Panel */}
-            {bizActiveTab === 'demographics' && demographics && (
-              <div className="px-3 py-3 space-y-3 border-t border-slate-800/60 mt-2">
-                <div className="text-[10px] font-bold text-cyan-400 uppercase tracking-wider">
-                  {demographics.kecamatan}
-                </div>
-                <div className="space-y-2">
-                  <div className="bg-slate-800/50 rounded-lg p-3">
-                    <div className="text-[10px] text-slate-400 mb-2">Distribusi Usia</div>
-                    <div className="space-y-1.5">
-                      <div>
-                        <div className="flex justify-between text-[10px] mb-0.5">
-                          <span className="text-slate-400">Muda (0-17)</span>
-                          <span className="text-slate-200 font-bold">{demographics.ageDistribution.youth}%</span>
-                        </div>
-                        <div className="w-full bg-slate-700 h-1.5 rounded-full overflow-hidden">
-                          <div className="h-full bg-blue-500 rounded-full transition-all" style={{ width: `${demographics.ageDistribution.youth}%` }} />
-                        </div>
-                      </div>
-                      <div>
-                        <div className="flex justify-between text-[10px] mb-0.5">
-                          <span className="text-slate-400">Produktif (18-55)</span>
-                          <span className="text-slate-200 font-bold">{demographics.ageDistribution.productive}%</span>
-                        </div>
-                        <div className="w-full bg-slate-700 h-1.5 rounded-full overflow-hidden">
-                          <div className="h-full bg-emerald-500 rounded-full transition-all" style={{ width: `${demographics.ageDistribution.productive}%` }} />
-                        </div>
-                      </div>
-                      <div>
-                        <div className="flex justify-between text-[10px] mb-0.5">
-                          <span className="text-slate-400">Lansia (56+)</span>
-                          <span className="text-slate-200 font-bold">{demographics.ageDistribution.elderly}%</span>
-                        </div>
-                        <div className="w-full bg-slate-700 h-1.5 rounded-full overflow-hidden">
-                          <div className="h-full bg-amber-500 rounded-full transition-all" style={{ width: `${demographics.ageDistribution.elderly}%` }} />
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="grid grid-cols-2 gap-1.5">
-                    <div className="bg-slate-800/50 rounded-lg p-2 text-center">
-                      <div className="text-sm font-bold text-slate-200">{demographics.householdCount.toLocaleString()}</div>
-                      <div className="text-[9px] text-slate-500">Rumah Tangga</div>
-                    </div>
-                    <div className="bg-slate-800/50 rounded-lg p-2 text-center">
-                      <div className={`text-sm font-bold ${demographics.incomeLevel === 'high' ? 'text-emerald-400' : demographics.incomeLevel === 'medium' ? 'text-brand-teal' : 'text-red-400'}`}>
-                        {demographics.incomeLevel === 'high' ? '▲ Tinggi' : demographics.incomeLevel === 'medium' ? '● Sedang' : '▼ Rendah'}
-                      </div>
-                      <div className="text-[9px] text-slate-500">Income Level</div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {/* Environment Panel */}
-            {bizActiveTab === 'environment' && environment && (
-              <div className="px-3 py-3 space-y-2 border-t border-slate-800/60 mt-2">
-                <div className="text-[10px] font-bold text-cyan-400 uppercase tracking-wider">Kondisi Lingkungan</div>
-                <div className="space-y-2">
-                  {/* AQI */}
-                  <div className="bg-slate-800/50 rounded-lg p-3 flex items-center gap-3">
-                    <Wind className="w-5 h-5 flex-shrink-0" style={{ color: environment.aqiColor }} />
-                    <div className="flex-1">
-                      <div className="flex justify-between items-baseline">
-                        <span className="text-[10px] text-slate-400">Air Quality (AQI)</span>
-                        <span className="text-sm font-black" style={{ color: environment.aqiColor }}>{environment.aqi}</span>
-                      </div>
-                      <div className="text-[10px] font-medium" style={{ color: environment.aqiColor }}>{environment.aqiLabel}</div>
-                      <div className="text-[9px] text-slate-500">PM2.5: {environment.pm25} µg/m³</div>
-                    </div>
-                  </div>
-                  {/* Flood Risk */}
-                  <div className="bg-slate-800/50 rounded-lg p-3 flex items-center gap-3">
-                    <Droplets className="w-5 h-5 flex-shrink-0" style={{ color: environment.floodRiskColor }} />
-                    <div className="flex-1">
-                      <div className="flex justify-between items-baseline">
-                        <span className="text-[10px] text-slate-400">Risiko Banjir</span>
-                        <span className="text-xs font-bold uppercase px-1.5 py-0.5 rounded" style={{ color: environment.floodRiskColor, backgroundColor: `${environment.floodRiskColor}15`, border: `1px solid ${environment.floodRiskColor}40` }}>
-                          {environment.floodRisk}
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                  {/* Green Space & Noise */}
-                  <div className="grid grid-cols-2 gap-1.5">
-                    <div className="bg-slate-800/50 rounded-lg p-2 text-center">
-                      <TreePine className="w-4 h-4 text-emerald-400 mx-auto mb-1" />
-                      <div className="text-sm font-bold text-emerald-400">{environment.greenSpacePct}%</div>
-                      <div className="text-[9px] text-slate-500">RTH</div>
-                    </div>
-                    <div className="bg-slate-800/50 rounded-lg p-2 text-center">
-                      <Thermometer className="w-4 h-4 text-red-400 mx-auto mb-1" />
-                      <div className="text-sm font-bold text-red-400">{environment.temperature}°C</div>
-                      <div className="text-[9px] text-slate-500">Suhu</div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            )}
 
 
           </>
@@ -604,21 +665,21 @@ export const SidebarContainer: React.FC<SidebarContainerProps> = ({
           <>
             <SectionHeader label="Navigation" />
             <div className="px-2 space-y-0.5">
-              <NavItem icon={SlidersHorizontal} label="Filter Spasial" active={commuterActiveTab === 'filter'} onClick={() => setCommuterActiveTab('filter')} badge={h3ScoreRange[0] > 0 || h3ScoreRange[1] < 100 || h3RingFilter < 5 || njopRange[0] > 0 || njopRange[1] < 25 ? 'Aktif' : undefined} />
-              <NavItem icon={Layers} label="Lapisan Peta (Layers)" active={commuterActiveTab === 'layers'} onClick={() => setCommuterActiveTab('layers')} />
-              <NavItem icon={Map} label="Legenda (Legends)" active={commuterActiveTab === 'legends'} onClick={() => setCommuterActiveTab('legends')} />
-              <div className="my-1 border-t border-slate-800/80" />
-              <NavItem icon={TrainIcon} label="Jadwal Transit" active={commuterActiveTab === 'schedules'} onClick={() => setCommuterActiveTab('schedules')} badge={`${trainSchedules.length + busRoutes.length}`} />
-              <NavItem icon={MapPin} label="Destinasi Terdekat" active={commuterActiveTab === 'tourist'} onClick={() => setCommuterActiveTab('tourist')} badge={`${touristSpots.length}`} />
+              <NavItem icon={SlidersHorizontal} label="Filter Spasial" active={comActiveTab === 'filter'} onClick={() => setComActiveTab('filter')} badge={h3ScoreRange[0] > 0 || h3ScoreRange[1] < 100 || h3RingFilter < 5 || njopRange[0] > 0 || njopRange[1] < 25 ? 'Aktif' : undefined} />
+              <NavItem icon={Layers} label="Lapisan Peta (Layers)" active={comActiveTab === 'layers'} onClick={() => setComActiveTab('layers')} />
+              <NavItem icon={Map} label="Legenda (Legends)" active={comActiveTab === 'legends'} onClick={() => setComActiveTab('legends')} />
+                <div className="my-1 border-t border-slate-800/80" />
+              <NavItem icon={TrainIcon} label="Jadwal Transit" active={comActiveTab === 'schedules'} onClick={() => setComActiveTab('schedules')} badge={`${trainSchedules.length + busRoutes.length}`} />
+              <NavItem icon={MapPin} label="Destinasi Terdekat" active={comActiveTab === 'tourist'} onClick={() => setComActiveTab('tourist')} badge={`${touristSpots.length}`} />
             </div>
 
             {/* General Features Rendering */}
-            {commuterActiveTab === 'filter' && renderFilterTab()}
-            {commuterActiveTab === 'layers' && renderLayersTab(false)}
-            {commuterActiveTab === 'legends' && renderLegendsTab(false)}
+            {comActiveTab === 'filter' && renderFilterTab()}
+            {comActiveTab === 'layers' && renderLayersTab(false)}
+            {comActiveTab === 'legends' && renderLegendsTab(false)}
 
             {/* Consolidated Schedules */}
-            {commuterActiveTab === 'schedules' && (
+            {comActiveTab === 'schedules' && (
               <div className="px-3 py-3 space-y-2 border-t border-slate-800/60 mt-2">
                 <div className="text-[10px] font-bold text-cyan-400 uppercase tracking-wider">Jadwal Transportasi</div>
                 
@@ -629,80 +690,65 @@ export const SidebarContainer: React.FC<SidebarContainerProps> = ({
                   <Toggle active={showBus} onToggle={() => setShowBus(!showBus)} label="Feeder Suroboyo Bus" />
                 </div>
 
-                <div className="space-y-2 max-h-[320px] overflow-y-auto pr-1">
-                  {showKRL && trainSchedules.map((t) => (
-                    <div key={t.id} className="bg-slate-800/50 rounded-lg p-2.5 border border-slate-700/50 hover:border-brand-lime/30 transition-colors">
-                      <div className="flex items-center justify-between mb-1">
-                        <div className="flex items-center gap-1.5">
-                          <TrainIcon className="w-3.5 h-3.5 text-brand-lime" />
-                          <span className="text-[11px] font-bold text-slate-200">{t.trainNumber}</span>
+                <div className="space-y-3 max-h-[320px] overflow-y-auto pr-1">
+                  {/* Commuter Line */}
+                  {showKRL && trainSchedules.map((ts, idx) => (
+                    <div key={`krl-${idx}`} className="bg-slate-800/50 rounded-lg p-2.5 border border-slate-700/50 hover:border-brand-lime/30 transition-colors">
+                      <div className="flex justify-between items-start mb-2">
+                        <div className="flex items-center gap-2">
+                          <TrainIcon className="w-4 h-4 text-blue-400" />
+                          <div>
+                            <div className="text-xs font-bold text-slate-200">{ts.trainName} - {ts.trainNumber}</div>
+                            <div className="text-[9px] text-slate-400">{ts.origin} → {ts.destination}</div>
+                          </div>
                         </div>
-                        <span className={`text-[9px] font-bold px-1.5 py-0.5 rounded ${
-                          t.status === 'on_time' ? 'bg-emerald-500/15 text-emerald-400 border border-emerald-500/25' :
-                          t.status === 'delayed' ? 'bg-amber-500/15 text-brand-teal border border-amber-500/25' :
-                          'bg-slate-700 text-slate-400 border border-slate-600'
-                        }`}>
-                          {t.status === 'on_time' ? '● On Time' : t.status === 'delayed' ? '⚠ Delayed' : '✓ Departed'}
-                        </span>
+                        <div className="text-right">
+                          <div className="text-sm font-black text-brand-lime font-mono">{ts.departureTime}</div>
+                          <div className={`text-[9px] font-bold uppercase ${ts.status === 'on_time' ? 'text-emerald-400' : ts.status === 'delayed' ? 'text-amber-400' : 'text-slate-500'}`}>
+                            {ts.status.replace('_', ' ')}
+                          </div>
+                        </div>
                       </div>
-                      <div className="text-[10px] text-slate-400 flex items-center gap-1">
-                        <Clock className="w-3 h-3" />
-                        <span className="tabular-nums text-slate-200">{t.departureTime}</span>
-                        <span className="text-slate-600">→</span>
-                        <span className="tabular-nums text-slate-200">{t.arrivalTime}</span>
-                      </div>
-                      <div className="text-[10px] text-slate-500 mt-0.5">
-                        {t.origin} → {t.destination}
-                      </div>
-                      <div className="text-[9px] text-slate-600 mt-0.5">
-                        Platform {t.platform} · {t.type}
+                      <div className="flex items-center justify-between mt-2 pt-2 border-t border-slate-700/50 text-[10px]">
+                        <span className="text-slate-400">Jalur {ts.platform}</span>
+                        <span className="text-slate-300 font-medium">Tiba: {ts.arrivalTime}</span>
                       </div>
                     </div>
                   ))}
 
-                  {showBus && busRoutes.length === 0 && (
-                    <div className="text-[11px] text-slate-500 text-center py-4 border border-dashed border-slate-700 rounded-lg">
-                      Belum ada rute feeder yang melayani stasiun ini.
+                  {/* Suroboyo Bus */}
+                  {showBus && busRoutes.map((br, idx) => (
+                    <div key={`bus-${idx}`} className="bg-slate-800/50 rounded-lg p-2.5 border border-slate-700/50 hover:border-brand-lime/30 transition-colors">
+                      <div className="flex justify-between items-start mb-2">
+                        <div className="flex items-center gap-2">
+                          <Bus className="w-4 h-4" style={{ color: br.color }} />
+                          <div>
+                            <div className="text-xs font-bold text-slate-200">{br.routeCode}</div>
+                            <div className="text-[9px] text-slate-400">{br.routeName}</div>
+                          </div>
+                        </div>
+                        <div className="text-right">
+                          <div className="text-[10px] font-bold text-slate-300 bg-slate-700/50 px-1.5 py-0.5 rounded">{br.estimatedTime}</div>
+                        </div>
+                      </div>
+                      <div className="text-[10px] text-slate-400 mt-1 flex justify-between">
+                        <span>{br.frequency}</span>
+                        <span>{br.fare}</span>
+                      </div>
+                    </div>
+                  ))}
+
+                  {(!showKRL && !showBus) && (
+                    <div className="text-center py-4 text-xs text-slate-500 italic">
+                      Silakan pilih moda transportasi
                     </div>
                   )}
-
-                  {showBus && busRoutes.map((r) => (
-                    <div key={r.id} className="bg-slate-800/50 rounded-lg p-2.5 border border-slate-700/50 hover:border-brand-lime/30 transition-colors">
-                      <div className="flex items-center justify-between mb-1.5">
-                        <div className="flex items-center gap-2">
-                          <span className="text-[10px] font-black px-1.5 py-0.5 rounded text-white" style={{ backgroundColor: r.color }}>
-                            {r.routeCode}
-                          </span>
-                          <span className="text-[11px] font-bold text-slate-200">{r.routeName}</span>
-                        </div>
-                      </div>
-                      <div className="text-[10px] text-slate-400 space-y-0.5">
-                        <div className="flex items-center gap-1"><Clock className="w-3 h-3" /><span>{r.frequency}</span></div>
-                        <div className="flex items-center gap-1"><Bus className="w-3 h-3" /><span>{r.operatingHours}</span></div>
-                        <div className="text-emerald-400 font-medium">{r.fare}</div>
-                      </div>
-                      <div className="mt-2 pt-2 border-t border-slate-700/50">
-                        <div className="text-[9px] text-slate-500 font-bold mb-1">HALTE ({r.stops.length} pemberhentian)</div>
-                        <div className="space-y-0.5">
-                          {r.stops.map((stop, i) => (
-                            <div key={i} className="flex items-center gap-1.5 text-[10px]">
-                              <div className="w-1.5 h-1.5 rounded-full flex-shrink-0" style={{ backgroundColor: r.color }} />
-                              <span className={`${i === 0 || i === r.stops.length - 1 ? 'text-slate-200 font-medium' : 'text-slate-500'}`}>
-                                {stop.name}
-                              </span>
-                            </div>
-                          ))}
-                        </div>
-                        <div className="text-[9px] text-slate-500 mt-1">Est. waktu: {r.estimatedTime}</div>
-                      </div>
-                    </div>
-                  ))}
                 </div>
               </div>
             )}
 
             {/* Tourist Destinations */}
-            {commuterActiveTab === 'tourist' && (
+            {comActiveTab === 'tourist' && (
               <div className="px-3 py-3 space-y-2 border-t border-slate-800/60 mt-2">
                 <div className="text-[10px] font-bold text-cyan-400 uppercase tracking-wider">Destinasi Terdekat</div>
                 <div className="space-y-1.5 max-h-[320px] overflow-y-auto pr-1">
@@ -742,5 +788,6 @@ export const SidebarContainer: React.FC<SidebarContainerProps> = ({
         <NavItem icon={MessageSquare} label="Kirim Feedback" onClick={onOpenFeedback} />
       </div>
     </aside>
+    </>
   );
 };
