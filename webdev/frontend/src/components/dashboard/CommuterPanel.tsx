@@ -22,9 +22,9 @@ export const CommuterPanel: React.FC<CommuterPanelProps> = ({
   onExecuteMapAction,
 }) => {
   return (
-    <div className="flex flex-col h-full overflow-hidden">
+    <div className="flex flex-col h-full overflow-hidden bg-slate-950/80">
       {/* Panel Header */}
-      <div className="px-4 py-3 border-b border-slate-800/80 flex-shrink-0">
+      <div className="px-4 py-3 border-b border-slate-800/80 flex-shrink-0 bg-slate-900/95 backdrop-blur-md z-10">
         <h3 className="text-xs font-bold text-slate-100">Analytical Insights</h3>
         <p className="text-[10px] text-slate-500">Commuter Companion</p>
       </div>

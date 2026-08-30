@@ -33,10 +33,12 @@ export const AIChatPanel: React.FC<AIChatPanelProps> = ({
   ]);
   const [inputText, setInputText] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const messagesEndRef = useRef<HTMLDivElement>(null);
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    if (scrollContainerRef.current) {
+      scrollContainerRef.current.scrollTop = scrollContainerRef.current.scrollHeight;
+    }
   }, [messages, isLoading]);
 
   const sanitizeHtml = (rawHtml: string) => {
@@ -137,7 +139,7 @@ export const AIChatPanel: React.FC<AIChatPanelProps> = ({
       </div>
 
       {/* Messages List Area */}
-      <div className="flex-1 overflow-y-auto p-3.5 space-y-3">
+      <div ref={scrollContainerRef} className="flex-1 overflow-y-auto p-3.5 space-y-3">
         {messages.map((msg) => (
           <div
             key={msg.id}
@@ -184,7 +186,6 @@ export const AIChatPanel: React.FC<AIChatPanelProps> = ({
             <span>Menganalisis data spasial & menjalankan fungsi...</span>
           </div>
         )}
-        <div ref={messagesEndRef} />
       </div>
 
       {/* Curated Prompt Chips */}

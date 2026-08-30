@@ -37,9 +37,9 @@ export const InvestorPanel: React.FC<InvestorPanelProps> = ({
   ];
 
   return (
-    <div className="flex flex-col h-full overflow-hidden">
+    <div className="flex flex-col h-full overflow-hidden bg-slate-950/80">
       {/* Panel Header */}
-      <div className="px-4 py-3 border-b border-slate-800/80 flex-shrink-0">
+      <div className="px-4 py-3 border-b border-slate-800/80 flex-shrink-0 bg-slate-900/95 backdrop-blur-md z-10">
         <h3 className="text-xs font-bold text-slate-100">Investor Advisory</h3>
         <p className="text-[10px] text-slate-500">{station.name.replace('Stasiun Surabaya ', 'St. ').replace('Stasiun ', 'St. ')} Sector</p>
       </div>
