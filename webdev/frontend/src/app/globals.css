@@ -196,6 +196,10 @@ body {
 }
 
 /* ── MapLibre Popups (Orange Accent) ───────────────── */
+.maplibregl-popup {
+  z-index: 60 !important;
+}
+
 .maplibregl-popup-content {
   background: rgba(13, 19, 33, 0.96) !important;
   border: 1px solid rgba(255, 124, 0, 0.35) !important;

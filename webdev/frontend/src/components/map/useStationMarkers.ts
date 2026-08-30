@@ -20,7 +20,7 @@ export function useStationMarkers(
     console.log('Adding station markers to map...');
     FALLBACK_STATIONS.forEach((st: StationData) => {
       const el = document.createElement('div');
-      el.className = 'station-marker-pin cursor-pointer group z-50';
+      el.className = 'station-marker-pin cursor-pointer group z-10';
       el.innerHTML = `
         <div style="position: relative; display: flex; align-items: center; justify-content: center;">
           <div style="width: 32px; height: 32px; border-radius: 50%; background: linear-gradient(to top right, #4FC5C2, #B1FC91); border: 2px solid #12175E; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; color: white;">
