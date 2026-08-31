@@ -305,7 +305,7 @@ export default function LandingPage() {
               style={{ y: backY }}
               className="absolute hidden md:block right-[10%] top-[15%] w-3/4 max-w-4xl opacity-40 blur-[4px] z-10"
             >
-              <Image alt="Investor Dashboard Background" className="w-full rounded-lg shadow-xl" src="/assets/landing/screen.png" width={1200} height={800} />
+              <Image alt="Investor Dashboard Background" className="w-full rounded-lg shadow-xl" src="/assets/landing/dashboard-beta.png" width={1200} height={800} />
             </motion.div>
 
             {/* Middle Layer (Commuter - Left) */}
@@ -313,7 +313,7 @@ export default function LandingPage() {
               style={{ y: middleY }}
               className="absolute hidden md:block left-[10%] top-[10%] w-3/4 max-w-4xl opacity-50 blur-[2px] z-20"
             >
-              <Image alt="Commuter Dashboard Background" className="w-full rounded-lg shadow-xl" src="/assets/landing/screen.png" width={1200} height={800} />
+              <Image alt="Commuter Dashboard Background" className="w-full rounded-lg shadow-xl" src="/assets/landing/dashboard-beta.png" width={1200} height={800} />
             </motion.div>
 
             {/* Front Layer (Main Showcase) */}
@@ -321,7 +321,7 @@ export default function LandingPage() {
               style={{ y: frontY }}
               className="absolute top-0 w-full max-w-5xl px-4 md:px-0 z-30"
             >
-              <Image alt="Platform Dashboard Showcase" className="w-full rounded-lg shadow-[0_20px_50px_rgba(0,0,0,0.5)] border border-white/5" src="/assets/landing/screen.png" width={1200} height={800} />
+              <Image alt="Platform Dashboard Showcase" className="w-full rounded-lg shadow-[0_20px_50px_rgba(0,0,0,0.5)] border border-white/5" src="/assets/landing/dashboard-beta.png" width={1200} height={800} />
             </motion.div>
           </div>
         </div>
