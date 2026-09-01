@@ -1,4 +1,6 @@
+import math
 from typing import Dict, Any, List
+
 from app.spatial.h3_grid import generate_station_h3_cluster
 
 STATIONS_DATA: Dict[str, Dict[str, Any]] = {
@@ -101,7 +103,7 @@ STATIONS_DATA: Dict[str, Dict[str, Any]] = {
             "distance_to_transit": 78.0
         },
         "typology": "Mixed-Use Heritage Core",
-        "weakest_dimension": "Design",
+        "weakest_dimension": "Distance to Transit",
         "strongest_dimension": "Diversity",
         "status": "Cukup Siap (Tier 2)",
         "njop_premium": {
@@ -199,8 +201,25 @@ STATIONS_DATA: Dict[str, Dict[str, Any]] = {
     }
 }
 
-# Pre-generate complete H3 GeoJSON FeatureCollection
+# Mapping dari dimension name ke key dalam scores dict
+_DIMENSION_KEY_MAP: Dict[str, str] = {
+    "Density": "density",
+    "Diversity": "diversity",
+    "Design": "design",
+    "Destination Accessibility": "destination_accessibility",
+    "Distance to Transit": "distance_to_transit",
+}
+
+
+def get_weakest_dimension_score(station: Dict[str, Any]) -> float:
+    """Mengembalikan skor numerik dari dimensi terlemah stasiun secara dinamis."""
+    weakest = station.get("weakest_dimension", "Design")
+    key = _DIMENSION_KEY_MAP.get(weakest, "design")
+    return station["scores"].get(key, 0.0)
+
+
 def get_all_h3_features() -> Dict[str, Any]:
+    """Pre-generate GeoJSON FeatureCollection seluruh sel H3 dari semua stasiun."""
     features = []
     for s_id, s_data in STATIONS_DATA.items():
         cluster_features = generate_station_h3_cluster(
@@ -213,38 +232,41 @@ def get_all_h3_features() -> Dict[str, Any]:
             typology=s_data["typology"]
         )
         features.extend(cluster_features)
-    return {
-        "type": "FeatureCollection",
-        "features": features
-    }
+    return {"type": "FeatureCollection", "features": features}
 
-# Mock Survey Points (Activity & Mission: Properti Go, Struk Go, Menu Go)
+
 def get_all_survey_features() -> Dict[str, Any]:
-    features = []
+    """Menghasilkan mock survey points (Activity & Mission) per stasiun untuk fallback lokal."""
     sample_categories = [
-        {"cat": "Pedestrian & Walkability", "type": "activity", "sub": None, "icon": "walk", "desc": "Trotoar lebar dengan tactile paving namun terdapat lubang dekat halte."},
-        {"cat": "Transit Integration", "type": "activity", "sub": None, "icon": "bus", "desc": "Titik drop-off ojek online teratur dekat pintu utara stasiun."},
-        {"cat": "Disamenity & Obstacle", "type": "activity", "sub": None, "icon": "alert", "desc": "PKL memakan 60% badan trotoar pejalan kaki jam sibuk sore."},
-        {"cat": "User Dynamics", "type": "activity", "sub": None, "icon": "users", "desc": "Antrean penumpang feeder WiraWiri padat pukul 07.15 WIB."},
-        {"cat": "Menu Go", "type": "mission", "sub": "menu_go", "icon": "coffee", "desc": "Kedai Kopi Komuter - Menu Rp 18.000 - Rp 32.000. Kondisi ramai."},
-        {"cat": "Struk Go", "type": "mission", "sub": "struk_go", "icon": "receipt", "desc": "Minimarket Stasiun - Rata-rata transaksi Rp 38.500 per pelanggan."},
-        {"cat": "Properti Go", "type": "mission", "sub": "properti_go", "icon": "home", "desc": "Ruko 2 Lantai Disewakan - Rp 65 Juta/tahun radius 300m dari stasiun."}
+        {"cat": "Pedestrian & Walkability", "type": "activity", "sub": None, "icon": "walk",
+         "desc": "Trotoar lebar dengan tactile paving namun terdapat lubang dekat halte."},
+        {"cat": "Transit Integration", "type": "activity", "sub": None, "icon": "bus",
+         "desc": "Titik drop-off ojek online teratur dekat pintu utara stasiun."},
+        {"cat": "Disamenity & Obstacle", "type": "activity", "sub": None, "icon": "alert",
+         "desc": "PKL memakan 60% badan trotoar pejalan kaki jam sibuk sore."},
+        {"cat": "User Dynamics", "type": "activity", "sub": None, "icon": "users",
+         "desc": "Antrean penumpang feeder WiraWiri padat pukul 07.15 WIB."},
+        {"cat": "Menu Go", "type": "mission", "sub": "menu_go", "icon": "coffee",
+         "desc": "Kedai Kopi Komuter - Menu Rp 18.000 - Rp 32.000. Kondisi ramai."},
+        {"cat": "Struk Go", "type": "mission", "sub": "struk_go", "icon": "receipt",
+         "desc": "Minimarket Stasiun - Rata-rata transaksi Rp 38.500 per pelanggan."},
+        {"cat": "Properti Go", "type": "mission", "sub": "properti_go", "icon": "home",
+         "desc": "Ruko 2 Lantai Disewakan - Rp 65 Juta/tahun radius 300m dari stasiun."}
     ]
-    
+
+    features = []
     point_id = 1
     for s_id, s_data in STATIONS_DATA.items():
         base_lon = s_data["longitude"]
         base_lat = s_data["latitude"]
-        
-        # 12 sample points per station across categories
+
         for i in range(12):
             cat_info = sample_categories[i % len(sample_categories)]
-            # Spread points within ~800m
-            angle = (i * 30) * 3.14159 / 180.0
+            angle = (i * 30) * math.pi / 180.0
             radius_deg = 0.002 + (i % 4) * 0.0015
             pt_lon = round(base_lon + radius_deg * 1.2 * math.cos(angle), 6)
             pt_lat = round(base_lat + radius_deg * math.sin(angle), 6)
-            
+
             features.append({
                 "type": "Feature",
                 "id": f"survey_{point_id:04d}",
@@ -264,7 +286,7 @@ def get_all_survey_features() -> Dict[str, Any]:
                     "property_price": 65000000 + (i * 10000000) if cat_info["sub"] == "properti_go" else None,
                     "transaction_type": "sewa" if i % 2 == 0 else "jual",
                     "surveyed_at": "2026-08-16T14:30:00+07:00",
-                    "photo_url": f"https://images.unsplash.com/photo-1577495508048-b635879837f1?w=400&auto=format&fit=crop&q=60"
+                    "photo_url": "https://images.unsplash.com/photo-1577495508048-b635879837f1?w=400&auto=format&fit=crop&q=60"
                 },
                 "geometry": {
                     "type": "Point",
@@ -272,10 +294,5 @@ def get_all_survey_features() -> Dict[str, Any]:
                 }
             })
             point_id += 1
-            
-    return {
-        "type": "FeatureCollection",
-        "features": features
-    }
 
-import math
+    return {"type": "FeatureCollection", "features": features}

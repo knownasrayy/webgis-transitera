@@ -1,12 +1,28 @@
+# TransitERA Backend Dependencies
+# geopandas TIDAK diperlukan — refactored to use requests + json directly
+
+# Web Framework
 fastapi>=0.110.0
 uvicorn[standard]>=0.28.0
+
+# Data validation
 pydantic>=2.6.0
 pydantic-settings>=2.2.0
+
+# Environment & config
 python-dotenv>=1.0.0
+
+# HTTP clients
 httpx>=0.27.0
+requests>=2.31.0
+
+# Spatial / H3
 numpy>=1.26.0
 h3>=3.7.6
-requests>=2.31.0
+
+# Rate limiting
+slowapi>=0.1.9
+
+# Testing
 pytest>=8.0.0
 pytest-asyncio>=0.23.0
-slowapi>=0.1.9
