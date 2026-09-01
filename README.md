@@ -47,26 +47,39 @@ Tampilan dan alat analisis disesuaikan untuk 3 persona spesifik:
 
 ---
 
-## 🚀 Cara Menjalankan Secara Lokal
+## 🚀 Cara Menjalankan Aplikasi
 
-### 1. Prasyarat
-- Node.js (v18+)
-- Python (3.10+) & PostgreSQL (dengan ekstensi PostGIS)
+### Opsi 1: Menggunakan Docker Compose (Direkomendasikan)
+```bash
+cd webdev
+copy .env.example .env   # Di Linux/macOS gunakan: cp .env.example .env
+docker compose up --build
+```
+Akses layanan:
+- 🌐 **Frontend WebGIS**: [http://localhost:3030](http://localhost:3030)
+- 🔌 **Backend API**: [http://localhost:8000](http://localhost:8000) (Swagger docs di `/docs`)
+- 🗄️ **PostGIS Database**: `localhost:5432`
 
-### 2. Menjalankan Frontend
+---
+
+### Opsi 2: Menjalankan Secara Manual
+
+#### 1. Menjalankan Backend
+```bash
+cd webdev/backend
+python -m venv .venv
+# Aktivasi venv (Windows: .\.venv\Scripts\Activate.ps1 | Linux: source .venv/bin/activate)
+pip install -r requirements.txt
+uvicorn app.main:app --reload --port 8000
+```
+
+#### 2. Menjalankan Frontend
 ```bash
 cd webdev/frontend
 npm install
 npm run dev
 ```
-Aplikasi frontend akan berjalan di `http://localhost:3030`.
-
-### 3. Menjalankan Backend (Tahap Pengembangan)
-```bash
-cd webdev/backend
-pip install -r requirements.txt
-uvicorn app.main:app --reload --port 8000
-```
+Aplikasi frontend akan berjalan di [http://localhost:3030](http://localhost:3030).
 
 ---
 

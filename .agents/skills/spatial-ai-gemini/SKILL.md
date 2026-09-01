@@ -1,20 +1,20 @@
 ---
 name: spatial-ai-gemini
-description: Standardized development guide for building the Spatial AI Assistant in TransitERA WebGIS using Google Gemini API Function Calling, FastAPI proxy backend, structured outputs, spatial query mapping, token optimization, and RAG over survey narratives.
+description: Standardized development guide for building the User-Facing Spatial AI Assistant in TransitERA WebGIS using Google Gemini API Function Calling, FastAPI proxy backend, structured dual-outputs, 4 AI patterns (Function Router, Query Filter, Dynamic Web Scraper, Parameter Builder), token optimization, and RAG over survey narratives.
 ---
 
 # Spatial AI Gemini Assistant Guide (TransitERA)
 
-Panduan ini mengatur implementasi **Spatial AI Assistant** berbasis **Google Gemini API** pada platform **TransitERA WebGIS**, mengacu pada arahan teknis Coaching 2 (Mas Mahrus) dan Coaching 3 (Pak Sena - Juri MAPID).
+Panduan teknis resmi implementasi **Spatial AI Assistant** berbasis **Google Gemini API** pada platform **TransitERA WebGIS**, mengadopsi prinsip arsitektur dari **Coaching 2 (Mas Mahrus - Tech Lead MAPID)** dan arahan industri **Coaching 3 (Pak Sena - Juri MAPID)**.
 
 ---
 
-## 1. Prinsip Arsitektur Utama
+## 1. Prinsip Arsitektur Utama & Ekspektasi Juri
 
 ```
 +------------------------------------------------------------------------+
-|                         FRONTEND (Next.js)                              |
-|  - Input teks / Curated Quick Prompts                                  |
+|                         FRONTEND (Next.js 15)                          |
+|  - Input teks / Curated Quick Prompts (Shortcuts)                      |
 |  - Render Chat Bubble (text_response)                                  |
 |  - Eksekusi MapLibre Actions (json_response: filter, zoom, highlight)  |
 +-----------------------------------+------------------------------------+
@@ -22,7 +22,7 @@ Panduan ini mengatur implementasi **Spatial AI Assistant** berbasis **Google Gem
                                     v
 +------------------------------------------------------------------------+
 |                        BACKEND (FastAPI Proxy)                          |
-|  - Ambil prompt & user context (viewport bbox, active layers)          |
+|  - Terima prompt & user context (viewport bbox, active layers)          |
 |  - Panggil Gemini API via JSON Function Calling (Strict Schema)        |
 |  - Eksekusi kueri PostGIS / H3 query builder secara lokal              |
 |  - Bentuk dual output: text_response + json_response                   |
@@ -37,19 +37,39 @@ Panduan ini mengatur implementasi **Spatial AI Assistant** berbasis **Google Gem
     +-------------------------------+   +-----------------------+
 ```
 
-### Aturan Wajib Arsitektur & Keamanan:
-1. **API Key Isolation**: `GEMINI_API_KEY` **WAJIB** disimpan di `.env` server backend (FastAPI) atau Next.js API Routes. **Dilarang keras** mengekspos token di client-side.
-2. **Dual-Output Response**: Output backend selalu memisahkan format data:
-   * `text_response`: Narasi human-readable & rekomendasi kebijakan untuk pengguna.
-   * `json_response`: Perintah terstruktur untuk manipulasi visual peta di MapLibre GL JS.
-3. **Parameter Generator, Bukan Kalkulator Geometri**: AI hanya bertugas mengekstrak parameter (nama stasiun, radius buffer, jenis filter). Perhitungan koordinat dan manipulasi spasial dieksekusi oleh PostGIS / Turf.js.
-4. **Token Optimization**: Jangan pernah mengirimkan *raw GeoJSON* masif ke prompt Gemini. Kirim hanya metadata ringkas atau minta Gemini menghasilkan query filter.
+### Aturan Wajib Arsitektur & Keamanan (Coaching 2):
+1. **AI User-Facing (Front-end Interaktif) adalah Prioritas Utama**: Juri menilai bagaimana AI berinteraksi langsung dengan pengguna dan memanipulasi peta, bukan sekadar preprocessing data offline.
+2. **API Key Isolation**: `GEMINI_API_KEY` **WAJIB** disimpan di environment variable backend (`.env`). Dilarang keras mengekspos token di client-side.
+3. **Pemisahan Dual-Output (Wajib)**:
+   $$\text{AI Response} = \begin{cases} \mathbf{JSON\ Response} & \text{(Data terstruktur untuk manipulasi peta \& eksekusi fungsi)} \\ \mathbf{Text\ Response} & \text{(Penjelasan naratif/konfirmasi human-readable kepada user)} \end{cases}$$
+4. **Parameter Generator, Bukan Kalkulator Geometri**: AI bertugas mengekstrak parameter (nama stasiun, radius buffer, filter). Perhitungan koordinat dan manipulasi spasial dieksekusi oleh PostGIS / Turf.js untuk mencegah halusinasi geometri.
+5. **Token Optimization**: Jangan pernah melempar *raw GeoJSON* masif ke prompt Gemini. Minta Gemini menghasilkan kriteria query filter yang dieksekusi lokal di database.
 
 ---
 
-## 2. Definisi Skema JSON Function Calling
+## 2. Empat Pola Penerapan AI WebGIS (Mas Mahrus)
 
-Daftar tools yang didaftarkan ke Gemini API:
+### Pola 1: AI sebagai *Function Router* (Trigger Function by Name)
+- **Konsep:** Menggunakan AI sebagai shortcut pengganti navigasi UI yang kompleks. User mengetik instruksi bahasa alami, AI memilih fungsi spasial yang tepat.
+- **Contoh:** *"Tampilkan skor TOD stasiun Gubeng"* $\rightarrow$ memicu fungsi `get_tod_score(station="gubeng")`.
+- **Kelebihan:** Sangat stabil dan deterministik karena kalkulasi dijalankan oleh engine WebGIS.
+
+### Pola 2: AI untuk *Filtering* & Manipulasi Data Spasial
+- **Konsep:** AI menerjemahkan bahasa alami menjadi parameter penyaring atribut data tabel / GeoJSON.
+- **Contoh:** *"Tampilkan warung kuliner yang ramai di dekat stasiun"* $\rightarrow$ AI menghasilkan filter `{"kategori": "kuliner", "kondisi": "ramai"}`.
+
+### Pola 3: Integrasi *Web Search API* untuk Data Eksternal Dinamis
+- **Konsep:** Menggabungkan LLM dengan web search API untuk memperkaya konteks data secara real-time.
+- **Guardrail:** Wajib validasi koordinat di frontend untuk menangani koordinat `null` atau `[0, 0]`.
+
+### Pola 4: *Parameter Builder* untuk Geometri Spasial
+- **Konsep:** AI mengekstrak parameter inti ($lat, long, radius$), kemudian library geospasial (*Turf.js*, *h3-js*, atau *Shapely*) menggambar geometrinya secara presisi.
+
+---
+
+## 3. Definisi Skema JSON Function Calling
+
+Daftar tools yang didaftarkan ke Gemini API di FastAPI backend:
 
 ```python
 SPATIAL_TOOLS = [
@@ -104,7 +124,7 @@ SPATIAL_TOOLS = [
     },
     {
         "name": "filter_layer",
-        "description": "Memfilter tampilan layer peta berdasarkan kriteria tertentu (misal titik survei Menu Go, Struk Go, atau Activity).",
+        "description": "Memfilter tampilan layer peta berdasarkan kriteria tertentu (Menu Go, Struk Go, Properti Go, atau Activity).",
         "parameters": {
             "type": "object",
             "properties": {
@@ -159,9 +179,7 @@ SPATIAL_TOOLS = [
 
 ---
 
-## 3. Format Output Standar Backend
-
-Setiap endpoint `/api/ai/query` mengembalikan JSON response dengan format konsisten:
+## 4. Format Output Standar Backend (`/api/ai/query`)
 
 ```json
 {
@@ -197,16 +215,16 @@ Setiap endpoint `/api/ai/query` mengembalikan JSON response dengan format konsis
 
 ---
 
-## 4. Guardrails & Validasi Spasial
+## 5. Guardrails & Validasi Spasial
 
 ### Validasi Bounding Box Surabaya:
 Frontend dan Backend wajib memastikan koordinat berada dalam batas Metropolitan Surabaya:
 ```python
 SURABAYA_BBOX = {
     "min_lon": 112.55,
-    "max_lon": 112.85,
-    "min_lat": -7.38,
-    "max_lat": -7.18
+    "max_lon": 112.90,
+    "min_lat": -7.45,
+    "max_lat": -7.15
 }
 
 def validate_coordinates(lon: float, lat: float) -> bool:
@@ -216,14 +234,14 @@ def validate_coordinates(lon: float, lat: float) -> bool:
 
 ---
 
-## 5. Daftar Curated Prompts (UI Quick Buttons)
+## 6. Curated Prompts (UI Quick Shortcuts)
 
 Sediakan tombol *quick prompt* pada chat panel antarmuka untuk memudahkan juri dan pengguna:
 
 1. *"Tampilkan skor TOD di sekitar Stasiun Gubeng"*
 2. *"Bandingkan skor TOD Gubeng dan Wonokromo"*
 3. *"Apa dimensi TOD terlemah di Stasiun Pasar Turi?"*
-4. *"Berapa estimasi kenaikan nilai tanah di sekitar Waru?"*
+4. *"Berapa estimasi kenaikan nilai tanah di sekitar Wonokromo?"*
 5. *"Tampilkan lokasi warung makan ramai di dekat stasiun"*
 6. *"Jika feeder WiraWiri diperpanjang ke Waru, apa dampaknya?"*
 7. *"Di mana lokasi terbaik untuk buka kedai kopi dekat stasiun?"*
