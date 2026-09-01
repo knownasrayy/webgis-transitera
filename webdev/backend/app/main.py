@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 import uvicorn
 
-from app.api.endpoints import spatial, station, chat
+from app.api.endpoints import router as api_router
 
 from slowapi import Limiter, _rate_limit_exceeded_handler
 from slowapi.util import get_remote_address
@@ -34,14 +34,19 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Include Routers
-app.include_router(spatial.router, tags=["Spatial"])
-app.include_router(station.router, tags=["Station"])
-app.include_router(chat.router, tags=["AI Chat"])
+# Single canonical router with /api prefix
+app.include_router(api_router, prefix="/api")
+
 
 @app.get("/")
 def root():
-    return {"message": "Welcome to TransitERA Backend API. PostGIS & H3 Engine is running."}
+    return {"message": "Welcome to TransitERA Backend API. Spatial H3 Engine is running."}
+
+
+@app.get("/health")
+def health_check():
+    return {"status": "healthy", "version": "1.0.0", "service": "TransitERA API"}
+
 
 if __name__ == "__main__":
     uvicorn.run("app.main:app", host="0.0.0.0", port=8000, reload=True)
