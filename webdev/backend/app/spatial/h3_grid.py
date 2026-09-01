@@ -1,6 +1,61 @@
 import math
 from typing import List, Dict, Any
 
+def classify_tod_typology(scores: Dict[str, float]) -> Dict[str, Any]:
+    """
+    Klasifikasi Tipologi Kawasan TOD berbasis Multi-Criteria Spatial Indicators
+    (Density, Diversity, Design, Destination, Distance).
+    
+    Tipologi Resmi:
+    1. Commercial Transit Hub (Skor TOD >= 78, Diversity >= 80)
+    2. Mixed-Use Heritage Core (Skor TOD >= 70, Diversity >= 75)
+    3. Mixed-Use Residential Area (Skor TOD >= 70, Distance >= 80)
+    4. Low-Accessibility Feeder Zone (Skor TOD < 70 atau Design < 55)
+    """
+    tod = scores.get("tod_readiness_score", 0.0)
+    if tod == 0.0:
+        # Hitung weighted average jika belum ada tod_readiness_score
+        tod = (
+            scores.get("density", 50) * 0.25 +
+            scores.get("diversity", 50) * 0.22 +
+            scores.get("design", 50) * 0.18 +
+            scores.get("destination_accessibility", 50) * 0.18 +
+            scores.get("distance_to_transit", 50) * 0.17
+        )
+
+    diversity = scores.get("diversity", 50.0)
+    distance = scores.get("distance_to_transit", 50.0)
+    design = scores.get("design", 50.0)
+
+    if tod >= 78.0 and diversity >= 80.0:
+        typology = "Commercial Transit Hub"
+        confidence = 0.94
+        description = "Pusat aktivitas komersial transit berkepadatan tinggi dengan daya tarik koridor utama."
+        zoning_advice = "Terapkan insentif FAR bonus dan penataan koridor komersial pejalan kaki berkanopi."
+    elif tod >= 70.0 and diversity >= 75.0 and design < 65.0:
+        typology = "Mixed-Use Heritage Core"
+        confidence = 0.88
+        description = "Kawasan cagar budaya & perdagangan campuran dengan akses transit tinggi namun butuh revitalisasi pedestrian."
+        zoning_advice = "Preservasi fasad bangunan bersejarah terintegrasi rute feeder micro-mobility."
+    elif tod >= 70.0:
+        typology = "Mixed-Use Residential Area"
+        confidence = 0.91
+        description = "Kawasan hunian campuran padat yang terhubung kuat dengan stasiun commuter."
+        zoning_advice = "Kembangkan integrasi transfer antarmoda mikrolet dan penyediaan park & ride terpadu."
+    else:
+        typology = "Low-Accessibility Feeder Zone"
+        confidence = 0.85
+        description = "Zona pengumpan pinggiran dengan keterbatasan konektivitas first/last-mile."
+        zoning_advice = "Prioritaskan ekspansi trayek feeder WiraWiri dan pembangunan trotoar primer."
+
+    return {
+        "typology": typology,
+        "confidence": confidence,
+        "tod_score": round(tod, 1),
+        "description": description,
+        "zoning_advice": zoning_advice
+    }
+
 # Geometric helper to generate hexagon polygon coordinates around a center point
 def generate_hexagon_coords(center_lon: float, center_lat: float, radius_km: float = 0.25) -> List[List[float]]:
     """
@@ -38,8 +93,6 @@ def generate_station_h3_cluster(
     hex_radius_km = 0.18 # ~180 meter side length for resolution 9
     
     # Generate center cell + concentric rings of hexagons
-    h3_id_counter = 1
-    
     # Ring 0: Center
     ring_points = [(0.0, 0.0, 0)]
     

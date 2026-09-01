@@ -67,3 +67,48 @@ class ScenarioSimulationResponse(BaseModel):
     delta_njop_premium_pct: float
     dimension_impacts: Dict[str, float]
     summary_narrative: str
+
+# ── Analytic API Schemas ──
+
+class AHPCalculationRequest(BaseModel):
+    scores: TODDimensionScores
+    pairwise_matrix: Optional[List[List[float]]] = Field(
+        None,
+        description="Optional 5x5 pairwise comparison matrix. If omitted, default calibrated 5D matrix is used."
+    )
+
+class AHPCalculationResponse(BaseModel):
+    tod_readiness_score: float
+    status: str
+    consistency_ratio: float
+    is_consistent: bool
+    weights: Dict[str, float]
+    weakest_dimension: str
+    strongest_dimension: str
+    policy_recommendations: List[str]
+
+class SDMEstimateRequest(BaseModel):
+    tod_score: float = Field(..., ge=0, le=100, description="TOD Readiness Score input")
+    distance_to_station_m: float = Field(250.0, ge=0, le=5000, description="Jarak jaringan jalan kaki ke stasiun (meter)")
+    neighbor_avg_tod: Optional[float] = Field(None, ge=0, le=100, description="Rata-rata skor TOD sel tetangga")
+
+class SDMEstimateResponse(BaseModel):
+    predicted_njop_premium_pct: float
+    direct_effect_pct: float
+    spillover_effect_pct: float
+    ci_lower_pct: float
+    ci_upper_pct: float
+    r_squared: float
+    distance_m: float
+    tod_score_input: float
+
+class TypologyRequest(BaseModel):
+    scores: TODDimensionScores
+    tod_readiness_score: Optional[float] = None
+
+class TypologyResponse(BaseModel):
+    typology: str
+    confidence: float
+    tod_score: float
+    description: str
+    zoning_advice: str
