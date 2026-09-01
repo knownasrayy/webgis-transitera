@@ -2,16 +2,19 @@
 const MAPID_KEY = process.env.NEXT_PUBLIC_MAPID_API_KEY || '6a8fc28753df37905b3a5c56';
 
 export const BASEMAP_STYLES: Record<string, string> = {
-  // Street Mapid (Default: 3D & 2D building)
+  // Street Mapid (Default: 3D & 2D building) [ID: basic]
   street: `https://basemap.mapid.io/styles/basic/style.json?key=${MAPID_KEY}`,
 
-  // Street 2D Building only
+  // Street Mapid - 2D building only [ID: street-2d-building]
   'street-2d': `https://basemap.mapid.io/styles/street-2d-building/style.json?key=${MAPID_KEY}`,
 
-  // Dark mode
+  // Dark Mapid [ID: dark]
   dark: `https://basemap.mapid.io/styles/dark/style.json?key=${MAPID_KEY}`,
 
-  // Satellite
+  // Light Mapid [ID: light]
+  light: `https://basemap.mapid.io/styles/light/style.json?key=${MAPID_KEY}`,
+
+  // Satellite [ID: satellite]
   satellite: `https://basemap.mapid.io/styles/satellite/style.json?key=${MAPID_KEY}`,
 };
 

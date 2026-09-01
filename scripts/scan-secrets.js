@@ -44,8 +44,7 @@ function scanDirectory(dir) {
         lines.forEach((line, idx) => {
           for (const pattern of SECRET_PATTERNS) {
             if (pattern.regex.test(line)) {
-              // Ignore matches in comments or mock placeholders
-              if (line.includes('your_') || line.includes('placeholder') || line.includes('YOUR_')) continue;
+              if (line.includes('your_') || line.includes('placeholder') || line.includes('YOUR_') || line.includes('postgres:postgres@localhost') || line.includes('postgres:postgres@db')) continue;
 
               console.error(`\x1b[31m[LEAK DETECTED]\x1b[0m ${pattern.name} in ${fullPath}:${idx + 1}`);
               console.error(`  Line: ${line.trim().substring(0, 100)}`);

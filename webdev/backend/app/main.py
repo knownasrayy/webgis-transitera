@@ -22,7 +22,13 @@ app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 # Configure CORS for Next.js frontend
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000", "https://transitera.mapid.io"], # Restrict to frontend domain (SEC-G2)
+    allow_origins=[
+        "http://localhost:3000",
+        "http://localhost:3030",
+        "http://127.0.0.1:3000",
+        "http://127.0.0.1:3030",
+        "https://transitera.mapid.io",
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
