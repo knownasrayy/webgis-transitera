@@ -93,13 +93,14 @@ function SectionHeader({ label }: { label: string }) {
 function BasemapGrid({ basemapStyle, onChangeBasemapStyle }: { basemapStyle: BasemapStyleKey; onChangeBasemapStyle: (s: BasemapStyleKey) => void }) {
   return (
     <>
-      <SectionHeader label="Basemap" />
+      <SectionHeader label="MAPID MAPS Basemap" />
       <div className="px-3">
-        <div className="grid grid-cols-2 gap-1">
+        <div className="grid grid-cols-2 gap-1.5">
           {([
+            { key: 'dark', label: 'Dark' },
             { key: 'street', label: 'Street 3D' },
             { key: 'street-2d', label: 'Street 2D' },
-            { key: 'dark', label: 'Dark' },
+            { key: 'light', label: 'Light' },
             { key: 'satellite', label: 'Satellite' },
           ] as const).map(({ key, label }) => (
             <button
@@ -107,8 +108,8 @@ function BasemapGrid({ basemapStyle, onChangeBasemapStyle }: { basemapStyle: Bas
               onClick={() => onChangeBasemapStyle(key)}
               className={`py-1.5 px-2 rounded-lg text-[10px] font-bold transition-all border ${
                 basemapStyle === key
-                  ? 'bg-brand-lime/15 border-brand-lime/40 text-brand-lime'
-                  : 'bg-slate-900/60 border-slate-800 text-slate-500 hover:text-slate-300'
+                  ? 'bg-brand-lime text-slate-950 border-brand-lime shadow-sm'
+                  : 'bg-slate-900/60 border-slate-800 text-slate-400 hover:text-slate-200'
               }`}
             >
               {label}

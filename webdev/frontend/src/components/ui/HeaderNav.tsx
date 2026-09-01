@@ -43,11 +43,13 @@ export const HeaderNav: React.FC<HeaderNavProps> = ({
           <Link href="/" className="flex items-center gap-2 group">
             <Image
               alt="TransitERA Logo"
-              className="h-7 w-auto md:h-8 object-contain group-hover:scale-105 transition-transform"
+              className="h-7 md:h-8 w-auto object-contain group-hover:scale-105 transition-transform"
               src="/assets/landing/LOGO.png"
-              width={32}
-              height={32}
+              width={0}
+              height={0}
+              sizes="64px"
             />
+
             <div className="hidden sm:block">
               <span className="font-bold text-lg tracking-tight text-white">
                 Transit<span className="text-brand-lime">ERA</span>

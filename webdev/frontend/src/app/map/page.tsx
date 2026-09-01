@@ -131,8 +131,11 @@ export default function WebGISPage() {
             onSelectStation={(stId) => setActiveStation(stId)}
             activePersona={activePersona}
             choroplethMode={choroplethMode}
+            onChangeChoroplethMode={setChoroplethMode}
             basemapStyle={basemapStyle}
+            onChangeBasemapStyle={setBasemapStyle}
             showSurveyPoints={showSurveyPoints}
+            onToggleSurveyPoints={() => setShowSurveyPoints(!showSurveyPoints)}
             h3ScoreRange={h3ScoreRange}
             h3RingFilter={h3RingFilter}
             highlightedH3Index={highlightedH3Index}

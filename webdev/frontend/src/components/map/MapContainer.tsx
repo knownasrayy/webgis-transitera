@@ -3,10 +3,11 @@
 import React, { useEffect, useRef, useState } from 'react';
 import * as maplibregl from 'maplibre-gl';
 import { StationId } from '@/types';
-import { BASEMAP_STYLES, SURABAYA_CENTER, SURABAYA_DEFAULT_ZOOM } from '@/lib/mapid';
+import { BASEMAP_STYLES, SURABAYA_DEFAULT_ZOOM } from '@/lib/mapid';
 import { FALLBACK_STATIONS, fetchMapidSurvey } from '@/lib/api';
-import { ChoroplethMode, BasemapStyleKey } from './LayerControl';
+import { ChoroplethMode, BasemapStyleKey, LayerControl } from './LayerControl';
 import { PersonaType } from '@/lib/persona';
+import { Layers } from 'lucide-react';
 
 import { useH3Layer } from './useH3Layer';
 import { useStationMarkers } from './useStationMarkers';
@@ -16,8 +17,11 @@ interface MapContainerProps {
   onSelectStation: (stationId: StationId) => void;
   activePersona: PersonaType;
   choroplethMode: ChoroplethMode;
+  onChangeChoroplethMode?: (mode: ChoroplethMode) => void;
   basemapStyle: BasemapStyleKey;
+  onChangeBasemapStyle?: (style: BasemapStyleKey) => void;
   showSurveyPoints: boolean;
+  onToggleSurveyPoints?: () => void;
   h3ScoreRange?: [number, number];
   h3RingFilter?: number;
   highlightedH3Index?: string | null;
@@ -30,8 +34,11 @@ export const MapContainer: React.FC<MapContainerProps> = ({
   onSelectStation,
   activePersona,
   choroplethMode,
+  onChangeChoroplethMode,
   basemapStyle,
+  onChangeBasemapStyle,
   showSurveyPoints,
+  onToggleSurveyPoints,
   h3ScoreRange,
   h3RingFilter,
   highlightedH3Index,
@@ -41,6 +48,8 @@ export const MapContainer: React.FC<MapContainerProps> = ({
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<maplibregl.Map | null>(null);
   const [isMapLoaded, setIsMapLoaded] = useState(false);
+  const [isLayerControlOpen, setIsLayerControlOpen] = useState(false);
+  const currentStyleRef = useRef<BasemapStyleKey>(basemapStyle);
 
   // 1. Initialize MapLibre GL Map Instance
   useEffect(() => {
@@ -50,7 +59,7 @@ export const MapContainer: React.FC<MapContainerProps> = ({
 
     const map = new maplibregl.Map({
       container: mapContainerRef.current,
-      style: BASEMAP_STYLES[basemapStyle],
+      style: BASEMAP_STYLES[basemapStyle] || BASEMAP_STYLES.street,
       center: [currentStation.longitude, currentStation.latitude],
       zoom: SURABAYA_DEFAULT_ZOOM,
       pitch: 30,
@@ -64,6 +73,21 @@ export const MapContainer: React.FC<MapContainerProps> = ({
       console.error('MAPLIBRE ERROR:', e.error || e);
     });
 
+    // Suppress console spam: provide a silent 1x1 transparent fallback
+    const attachMissingImageHandler = () => {
+      map.on('styleimagemissing', (e: { id: string }) => {
+        if (!map.hasImage(e.id)) {
+          const emptyData = new Uint8Array(4); // RGBA = [0,0,0,0]
+          map.addImage(e.id, { width: 1, height: 1, data: emptyData });
+        }
+      });
+    };
+
+    map.on('style.load', () => {
+      attachMissingImageHandler();
+      setIsMapLoaded(true);
+    });
+
     map.on('load', () => {
       map.resize();
       setTimeout(() => map.resize(), 100);
@@ -72,9 +96,9 @@ export const MapContainer: React.FC<MapContainerProps> = ({
     });
 
     mapRef.current = map;
+    currentStyleRef.current = basemapStyle;
 
     return () => {
-      console.log('Cleaning up MapLibre instance...');
       map.remove();
       mapRef.current = null;
     };
@@ -173,10 +197,14 @@ export const MapContainer: React.FC<MapContainerProps> = ({
     }
   }, [showSurveyPoints, isMapLoaded]);
 
-  // 2.5 Update Map Style when Basemap changes
+  // 2.5 Dynamic Basemap Style Switch
   useEffect(() => {
-    if (!mapRef.current || !isMapLoaded) return;
-    mapRef.current.setStyle(BASEMAP_STYLES[basemapStyle]);
+    if (!mapRef.current || currentStyleRef.current === basemapStyle) return;
+    currentStyleRef.current = basemapStyle;
+    setIsMapLoaded(false);
+
+    const styleUrl = BASEMAP_STYLES[basemapStyle] || BASEMAP_STYLES.street;
+    mapRef.current.setStyle(styleUrl, { diff: false });
   }, [basemapStyle]);
 
   // 4. Fly to station when activeStation changes
@@ -221,8 +249,47 @@ export const MapContainer: React.FC<MapContainerProps> = ({
           <div className="bg-slate-900/80 backdrop-blur-md border border-brand-lime/30 shadow-lg shadow-brand-lime/10 px-4 py-2 rounded-xl text-center">
             <h2 className="text-sm font-bold text-slate-100 flex items-center gap-2">
               <span className="w-2 h-2 rounded-full bg-brand-lime animate-pulse" />
-              Surabaya Gubeng Area - Retail Success H3 Analysis
+              Surabaya Transit Corridor - Commercial H3 Spatial Analysis
             </h2>
+          </div>
+        </div>
+      )}
+
+      {/* Floating Layer & Basemap Control Widget (Top-Left) */}
+      {onChangeBasemapStyle && onChangeChoroplethMode && onToggleSurveyPoints && (
+        <div className="absolute top-4 left-4 z-20">
+          <div className="relative">
+            {/* Trigger Button */}
+            <button
+              onClick={() => setIsLayerControlOpen(!isLayerControlOpen)}
+              className="flex items-center gap-2 bg-slate-900/90 hover:bg-slate-800 text-slate-200 hover:text-brand-lime px-3 py-2 rounded-xl border border-slate-700/70 backdrop-blur-md shadow-xl transition-all font-semibold text-xs"
+              title="Toggle Layer & Basemap Control"
+            >
+              <Layers className="w-4 h-4 text-brand-lime" />
+              <span className="hidden sm:inline">Layers &amp; Basemap</span>
+              <span className="text-[9px] bg-brand-lime/20 text-brand-lime font-bold px-1.5 py-0.5 rounded uppercase">
+                {basemapStyle}
+              </span>
+            </button>
+
+            {/* Dropdown Floating Panel */}
+            {isLayerControlOpen && (
+              <div className="absolute top-12 left-0 z-30 animate-in fade-in zoom-in-95 duration-150">
+                <LayerControl
+                  choroplethMode={choroplethMode}
+                  onChangeChoroplethMode={(mode) => {
+                    onChangeChoroplethMode(mode);
+                  }}
+                  showSurveyPoints={showSurveyPoints}
+                  onToggleSurveyPoints={onToggleSurveyPoints}
+                  basemapStyle={basemapStyle}
+                  onChangeBasemapStyle={(style) => {
+                    onChangeBasemapStyle(style);
+                  }}
+                  onClose={() => setIsLayerControlOpen(false)}
+                />
+              </div>
+            )}
           </div>
         </div>
       )}
