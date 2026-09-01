@@ -232,8 +232,22 @@ export async function fetchStations(): Promise<StationData[]> {
   try {
     const res = await fetch(`${API_BASE_URL}/stations`, { next: { revalidate: 60 } });
     if (res.ok) {
-      const summaries = await res.json();
-      return FALLBACK_STATIONS;
+      const summaries: any[] = await res.json();
+      // Merge backend data with enrichment fields from fallback (menu_go, tenant_mix, etc.)
+      return summaries.map(summary => {
+        const enriched = FALLBACK_STATIONS.find(s => s.id === summary.id);
+        return {
+          ...summary,
+          // Keep backend as source-of-truth for core fields
+          scores: summary.scores,
+          njop_premium: enriched?.njop_premium ?? summary.njop_premium,
+          policy_recommendations: enriched?.policy_recommendations ?? [],
+          // Frontend-only enrichment
+          menu_go_recommendations: enriched?.menu_go_recommendations ?? [],
+          tenant_mix: enriched?.tenant_mix ?? [],
+          travel_estimates: enriched?.travel_estimates ?? [],
+        };
+      });
     }
   } catch (err) {
     console.warn('Backend offline, using fallback dataset:', err);
@@ -242,8 +256,34 @@ export async function fetchStations(): Promise<StationData[]> {
 }
 
 export async function fetchStationTOD(stationId: StationId): Promise<StationData> {
-  const station = FALLBACK_STATIONS.find(s => s.id === stationId);
-  return station || FALLBACK_STATIONS[0];
+  try {
+    const res = await fetch(`${API_BASE_URL}/tod-score/${stationId}`);
+    if (res.ok) {
+      const data = await res.json();
+      const enriched = FALLBACK_STATIONS.find(s => s.id === stationId);
+      return {
+        id: data.station_id,
+        name: data.station_name,
+        latitude: enriched?.latitude ?? 0,
+        longitude: enriched?.longitude ?? 0,
+        tod_readiness_score: data.tod_readiness_score,
+        scores: data.scores,
+        benchmark_scores: data.benchmark_scores,
+        typology: data.typology,
+        weakest_dimension: data.weakest_dimension,
+        strongest_dimension: data.strongest_dimension,
+        status: enriched?.status ?? '',
+        njop_premium: enriched?.njop_premium ?? { avg_njop_premium_pct: 0, ci_lower_pct: 0, ci_upper_pct: 0, affected_h3_count: 0, r_squared: 0, direct_effect_pct: 0, spillover_effect_pct: 0 },
+        policy_recommendations: data.policy_recommendations,
+        menu_go_recommendations: enriched?.menu_go_recommendations ?? [],
+        tenant_mix: enriched?.tenant_mix ?? [],
+        travel_estimates: enriched?.travel_estimates ?? [],
+      };
+    }
+  } catch (err) {
+    console.warn(`fetchStationTOD(${stationId}) failed, using fallback:`, err);
+  }
+  return FALLBACK_STATIONS.find(s => s.id === stationId) ?? FALLBACK_STATIONS[0];
 }
 
 export async function fetchH3Grid(stationId?: StationId): Promise<any> {
@@ -294,6 +334,110 @@ export async function queryAI(prompt: string, activeStation?: StationId): Promis
 
   // Local fallback responder
   return localAIResponder(prompt, activeStation);
+}
+
+export async function simulateScenario(
+  targetStation: StationId,
+  interventionType: 'feeder_extension' | 'pedestrian_upgrade' | 'mixed_use_rezoning',
+  scenarioId: string = 'sim_scenario'
+): Promise<any> {
+  try {
+    const res = await fetch(`${API_BASE_URL}/simulate`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        scenario_id: scenarioId,
+        target_station: targetStation,
+        intervention_type: interventionType
+      })
+    });
+    if (res.ok) {
+      return await res.json();
+    }
+  } catch (err) {
+    console.warn('simulateScenario backend call failed, using client model:', err);
+  }
+
+  // Fallback calculation
+  const impacts: Record<string, { deltaScore: number; deltaNjop: number; impacts: Record<string, number> }> = {
+    feeder_extension: {
+      deltaScore: 7.5,
+      deltaNjop: 3.2,
+      impacts: { distance_to_transit: 12.0, destination_accessibility: 6.5, diversity: 4.0, design: 8.5, density: 2.0 }
+    },
+    pedestrian_upgrade: {
+      deltaScore: 5.2,
+      deltaNjop: 2.1,
+      impacts: { design: 18.0, destination_accessibility: 5.0, diversity: 2.5, density: 1.5, distance_to_transit: 3.0 }
+    },
+    mixed_use_rezoning: {
+      deltaScore: 6.1,
+      deltaNjop: 4.3,
+      impacts: { diversity: 15.0, density: 8.0, destination_accessibility: 7.0, design: 4.0, distance_to_transit: 2.0 }
+    }
+  };
+  const imp = impacts[interventionType] || impacts.feeder_extension;
+  const st = FALLBACK_STATIONS.find(s => s.id === targetStation) || FALLBACK_STATIONS[0];
+  return {
+    scenario_id: scenarioId,
+    target_station: targetStation,
+    baseline_tod_score: st.tod_readiness_score,
+    simulated_tod_score: +(st.tod_readiness_score + imp.deltaScore).toFixed(1),
+    delta_tod_score: imp.deltaScore,
+    baseline_njop_premium_pct: st.njop_premium.avg_njop_premium_pct,
+    simulated_njop_premium_pct: +(st.njop_premium.avg_njop_premium_pct + imp.deltaNjop).toFixed(1),
+    delta_njop_premium_pct: imp.deltaNjop,
+    dimension_impacts: imp.impacts,
+    summary_narrative: `Intervensi ${interventionType.replace('_', ' ')} pada simpul ${st.name} meningkatkan kesiapan TOD dari ${st.tod_readiness_score} ke ${+(st.tod_readiness_score + imp.deltaScore).toFixed(1)} (+${imp.deltaScore} poin).`
+  };
+}
+
+export async function calculateAHP(scores: any, pairwiseMatrix?: number[][]): Promise<any> {
+  try {
+    const res = await fetch(`${API_BASE_URL}/analytics/ahp`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ scores, pairwise_matrix: pairwiseMatrix })
+    });
+    if (res.ok) {
+      return await res.json();
+    }
+  } catch (err) {
+    console.warn('calculateAHP backend call failed:', err);
+  }
+  return null;
+}
+
+export async function estimateSDM(todScore: number, distanceM: number = 250): Promise<any> {
+  try {
+    const res = await fetch(`${API_BASE_URL}/analytics/sdm-estimate`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ tod_score: todScore, distance_to_station_m: distanceM })
+    });
+    if (res.ok) {
+      return await res.json();
+    }
+  } catch (err) {
+    console.warn('estimateSDM backend call failed:', err);
+  }
+  return null;
+}
+
+export async function classifyTypology(scores: any, todScore?: number): Promise<any> {
+  try {
+    const res = await fetch(`${API_BASE_URL}/analytics/typology`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ scores, tod_readiness_score: todScore })
+    });
+    if (res.ok) {
+      return await res.json();
+    }
+  } catch (err) {
+    console.warn('classifyTypology backend call failed:', err);
+  }
+  return null;
 }
 
 function generateClientH3Grid(stationId?: StationId) {

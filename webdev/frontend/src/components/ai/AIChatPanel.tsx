@@ -163,6 +163,46 @@ export const AIChatPanel: React.FC<AIChatPanelProps> = ({
                   __html: sanitizeHtml(msg.text)
                 }}
               />
+
+              {/* Interactive Spatial Action Badge */}
+              {msg.action && msg.sender === 'assistant' && (
+                <div className="mt-2 pt-2 border-t border-slate-800/80 flex items-center justify-between text-[10px]">
+                  <div className="flex items-center gap-1 text-brand-lime font-semibold">
+                    <Compass className="w-3 h-3" />
+                    <span>Aksi Peta: {msg.action.replace('_', ' ')}</span>
+                  </div>
+                  {msg.targetStation && (
+                    <span className="bg-brand-lime/10 text-brand-lime px-1.5 py-0.5 rounded uppercase font-bold text-[9px] border border-brand-lime/30">
+                      {msg.targetStation}
+                    </span>
+                  )}
+                </div>
+              )}
+
+              {/* Interactive Chart Payload Summary Card */}
+              {msg.chartPayload && msg.sender === 'assistant' && (
+                <div className="mt-2 bg-slate-950/60 p-2 rounded-lg border border-slate-800 text-[10px] space-y-1">
+                  <div className="font-bold text-slate-100 flex items-center gap-1">
+                    <span className="w-1.5 h-1.5 rounded-full bg-brand-lime" />
+                    {msg.chartPayload.title || 'Data Analitik Spasial'}
+                  </div>
+                  {msg.chartPayload.type === 'radar_5d' && msg.chartPayload.data?.scores && (
+                    <div className="grid grid-cols-2 gap-1 text-[9px] text-slate-400 pt-1">
+                      <div>Density: <strong className="text-slate-200">{msg.chartPayload.data.scores.density}</strong></div>
+                      <div>Diversity: <strong className="text-slate-200">{msg.chartPayload.data.scores.diversity}</strong></div>
+                      <div>Design: <strong className="text-slate-200">{msg.chartPayload.data.scores.design}</strong></div>
+                      <div>Destination: <strong className="text-slate-200">{msg.chartPayload.data.scores.destination_accessibility}</strong></div>
+                    </div>
+                  )}
+                  {msg.chartPayload.type === 'njop_premium_stats' && msg.chartPayload.data && (
+                    <div className="flex items-center justify-between text-[10px] pt-1">
+                      <span className="text-slate-400">Rerata %ΔNJOP:</span>
+                      <strong className="text-brand-lime font-bold">+{msg.chartPayload.data.avg_njop_premium_pct}%</strong>
+                    </div>
+                  )}
+                </div>
+              )}
+
               <div
                 className={`text-[9px] mt-1 text-right ${
                   msg.sender === 'user' ? 'text-brand-lime' : 'text-slate-500'
