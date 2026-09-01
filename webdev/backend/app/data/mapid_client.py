@@ -1,23 +1,13 @@
 import os
-import json
 import logging
 import random
 import requests
-from datetime import datetime
 
 logger = logging.getLogger(__name__)
 
 MAPID_API_KEY = os.getenv("MAPID_API_KEY", "")
 # GEO MAPID Competition endpoint (POST, polygon + hashtag filter)
 ENDPOINT = "https://server.mapid.io/web/competition/"
-
-
-def _is_maintenance_window() -> bool:
-    """Cek apakah dalam rentang maintenance rutin server MAPID (16:00-17:00 WIB / UTC+7)."""
-    # Server WIB = UTC+7; gunakan utcnow + offset 7 jam
-    from datetime import timezone, timedelta
-    wib = datetime.now(timezone(timedelta(hours=7)))
-    return wib.hour == 16  # 16:00-16:59 WIB
 
 
 def fetch_survey_geojson(polygon_coords: list, hashtag: str = "PakSibukGa") -> dict:
@@ -33,12 +23,6 @@ def fetch_survey_geojson(polygon_coords: list, hashtag: str = "PakSibukGa") -> d
     """
     if not MAPID_API_KEY:
         logger.warning("MAPID_API_KEY tidak diset — menggunakan data dummy survey.")
-        return {"type": "FeatureCollection", "features": _generate_dummy_survey_data()}
-
-    if _is_maintenance_window():
-        logger.warning(
-            "Rentang maintenance server MAPID (16:00-17:00 WIB) — skip request, pakai cache lokal."
-        )
         return {"type": "FeatureCollection", "features": _generate_dummy_survey_data()}
 
     headers = {
